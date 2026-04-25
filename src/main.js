@@ -1,6 +1,8 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
+
+import { exec } from 'node:child_process';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -11,7 +13,7 @@ const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 800,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -54,3 +56,15 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+ipcMain.handle('git-status', async () => {
+  return new Promise((resolve, reject) => {
+    exec('git status --porcelain', { cwd: '/path/to/repo' }, (err, stdout, stderr) => {
+      if (err) {
+        reject(stderr || err.message);
+      } else {
+        resolve(stdout);
+      }
+    });
+  });
+});

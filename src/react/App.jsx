@@ -1,8 +1,17 @@
+import { useEffect } from "react";
 
 const App = () => {
-  return (
-    <div className="font-mono">This is the beginning of your React + Electron Journey</div>
-  )
-}
+  useEffect(() => {
+    window.gitAPI.getStatus().then((status) => {
+      console.log(status);
+    });
+  }, []);
 
-export default App
+  return (
+    <div className="font-mono">
+      This is the beginning of your React + Electron Journey
+    </div>
+  );
+};
+
+export default App;
