@@ -1,8 +1,9 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
-
-import { exec } from 'node:child_process';
+import * as git from "./services/git.service.js";
+import { exec, spawn } from 'node:child_process';
+import { getRepoRoot } from './services/git.service';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -34,6 +35,8 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  registerRepoIPC();
+  registerGitIPC();
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the
@@ -57,14 +60,44 @@ app.on('window-all-closed', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-ipcMain.handle('git-status', async () => {
-  return new Promise((resolve, reject) => {
-    exec('git status --porcelain', { cwd: '/path/to/repo' }, (err, stdout, stderr) => {
-      if (err) {
-        reject(stderr || err.message);
-      } else {
-        resolve(stdout);
-      }
-    });
+export function registerGitIPC() {
+  ipcMain.handle("git:status", (_, repoPath) => {
+    return git.gitStatus(repoPath);
   });
-});
+
+  ipcMain.handle("git:branches", (_, repoPath) => {
+    return git.gitBranches(repoPath);
+  });
+
+  ipcMain.handle("git:commits", (_, repoPath) => {
+    return git.gitCommits(repoPath);
+  });
+
+  ipcMain.handle("git:checkout", (_, { repoPath, branch }) => {
+    return git.gitCheckout(repoPath, branch);
+  });
+
+  ipcMain.handle("git:push", (_, repoPath) => {
+    return git.gitPush(repoPath);
+  });
+}
+
+export function registerRepoIPC() {
+  ipcMain.handle("repo:openDialog", async (event) => {
+    const win = BrowserWindow.getFocusedWindow();
+
+    const result = await dialog.showOpenDialog(win, {
+      properties: ["openDirectory"]
+    });
+
+    if (result.canceled) return null;
+
+    let repoPath = result.filePaths[0];
+    try {
+      const repoRoot = await getRepoRoot(repoPath);
+      return repoRoot;
+    } catch {
+      return { error: "Selected folder is not inside a git repo" };
+    }
+  });
+}
