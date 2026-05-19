@@ -1,21 +1,12 @@
-import { useEffect, useState } from "react";
-import { OpenRepo } from "./components/open-repo";
-import { useRepoStore } from "./state/repo-store";
+import { useState } from "react";
+import OpenRepoLayout from "./components/layouts/open-repo-layout";
+import GitStatus from "./components/git-status";
 
 const App = () => {
-  const repoPath = useRepoStore((state) => state.repoPath);
-  const [status, setStatus] = useState("");
-  
-  useEffect(() => {
-    if (repoPath == null ) { return; }
-
-    window.gitAPI.status(repoPath).then(setStatus);
-  }, [repoPath])
-
   return (
     <div className="">
-      <OpenRepo />
-      <p>Current git status: {status}</p>
+      <OpenRepoLayout />
+      <GitStatus />
     </div>
   );
 };

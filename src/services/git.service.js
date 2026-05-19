@@ -13,6 +13,10 @@ export function gitStatus(repoPath) {
   return execGit(repoPath, "status --porcelain");
 }
 
+export function gitUserLocalEmail(repoPath) {
+  return execGit(repoPath, "config user.email")
+}
+
 // helper
 function execGit(cwd, args) {
   return new Promise((resolve, reject) => {

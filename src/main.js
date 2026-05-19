@@ -65,6 +65,10 @@ export function registerGitIPC() {
     return git.gitStatus(repoPath);
   });
 
+  ipcMain.handle("git:userEmail", (_, repoPath) => {
+    return git.gitUserLocalEmail(repoPath);
+  })
+
   ipcMain.handle("git:branches", (_, repoPath) => {
     return git.gitBranches(repoPath);
   });
