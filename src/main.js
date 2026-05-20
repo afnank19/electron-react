@@ -69,6 +69,10 @@ export function registerGitIPC() {
     return git.gitUserLocalEmail(repoPath);
   })
 
+  ipcMain.handle("git:stageFile", (_, repoPath, filePath) => {
+    return git.stageFile(repoPath, filePath);
+  })
+
   ipcMain.handle("git:branches", (_, repoPath) => {
     return git.gitBranches(repoPath);
   });

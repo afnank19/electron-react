@@ -5,6 +5,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld("gitAPI", {
   status: (repoPath) => ipcRenderer.invoke("git:status", repoPath),
   userEmail: (repoPath) => ipcRenderer.invoke("git:userEmail", repoPath),
+  stageFile: (repoPath, filePath) => ipcRenderer.invoke("git:stageFile", repoPath, filePath),
   branches: (repoPath) => ipcRenderer.invoke("git:branches", repoPath),
   commits: (repoPath) => ipcRenderer.invoke("git:commits", repoPath),
   checkout: (repoPath, branch) =>
