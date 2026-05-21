@@ -32,46 +32,101 @@ const GitStatus = () => {
     window.gitAPI.status(repoPath).then(setStatus);
   }
 
-  // useEffect(() => {
-  //     function handleFocus() {
-  //       console.log("window focused");
+  function handleRestore(currentItem) {
+    const filePath = currentItem.split(" ").pop();
+    console.log("staging ", filePath);
 
-  //       // refresh git status here
-  //       window.gitAPI.status(repoPath).then(setStatus);
-  //     }
+    window.gitAPI.restoreFile(repoPath, filePath);
+    window.gitAPI.status(repoPath).then(setStatus);
+  }
 
-  //     window.addEventListener("focus", handleFocus);
+  function handleStageAll() {
+    window.gitAPI.stageFile(repoPath, ".");
+    window.gitAPI.status(repoPath).then(setStatus);
+  }
 
-  //     return () => {
-  //       window.removeEventListener("focus", handleFocus);
-  //     };
-  //   }, []);
+  function handleRestoreAll() {
+    window.gitAPI.restoreFile(repoPath, ".");
+    window.gitAPI.status(repoPath).then(setStatus);
+  }
 
+  useEffect(() => {
+    function handleFocus() {
+      console.log("window focused");
+
+      console.log("repo path in focus code", repoPath);
+
+      // refresh git status here
+      window.gitAPI.status(repoPath).then(setStatus);
+    }
+
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [repoPath]);
+
+  if (status === "") {
+    return (
+      <div className="m-2">
+        INFO: No changes or modifications to any files.
+      </div>
+    )
+  }
 
   // TODO: handle overflow so it looks good
   return (
     <>
-      <div className="p-2 border rounded-3xl border-neutral-700 m-2 w-fit max-w-1/2">
-        {parsedStatus &&
-          parsedStatus.map((st, idx) => {
-            return (
-              <div className="flex gap-4 items-center mx-2 my-1">
-                <button
-                  className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
-                  onClick={() => {handleStaging(st)}}
-                >
-                  Stage
-                </button>
-                <p
-                  key={idx}
-                  style={{ whiteSpace: "pre-wrap" }}
-                  className="font-mono text-sm"
-                >
-                  {idx === 0 ? "" + st : st}
-                </p>
-              </div>
-            );
-          })}
+      <div className="p-2 border rounded-3xl border-neutral-700 m-2  px-4 flex flex-col gap-4">
+        <div>
+          {parsedStatus &&
+            parsedStatus.map((st, idx) => {
+              return (
+                <div className="flex gap-4 items-center my-1">
+                  <div>
+                    <button
+                      className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
+                      onClick={() => {
+                        handleStaging(st);
+                      }}
+                    >
+                      Stage
+                    </button>
+                    <button
+                      className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
+                      onClick={() => {
+                        handleRestore(st);
+                      }}
+                    >
+                      Restore
+                    </button>
+                  </div>
+                  <p
+                    key={idx}
+                    style={{ whiteSpace: "pre-wrap" }}
+                    className="font-mono text-sm"
+                  >
+                    {idx === 0 ? "" + st : st}
+                  </p>
+                </div>
+              );
+            })}
+        </div>
+        <div className="flex gap-2 border-t border-neutral-700 py-2">
+          <button
+            className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
+            onClick={handleStageAll}
+          >
+            Stage All
+          </button>
+          <button
+            className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
+            onClick={handleRestoreAll}
+          >
+            Restore All
+          </button>
+        </div>
       </div>
     </>
   );

@@ -6,7 +6,9 @@ contextBridge.exposeInMainWorld("gitAPI", {
   status: (repoPath) => ipcRenderer.invoke("git:status", repoPath),
   userEmail: (repoPath) => ipcRenderer.invoke("git:userEmail", repoPath),
   stageFile: (repoPath, filePath) => ipcRenderer.invoke("git:stageFile", repoPath, filePath),
+  restoreFile: (repoPath, filePath) => ipcRenderer.invoke("git:restoreFile", repoPath, filePath),
   branches: (repoPath) => ipcRenderer.invoke("git:branches", repoPath),
+  switchBranch: (repoPath, branch) => ipcRenderer.invoke("git:switchBranch", repoPath, branch),
   commits: (repoPath) => ipcRenderer.invoke("git:commits", repoPath),
   checkout: (repoPath, branch) =>
     ipcRenderer.invoke("git:checkout", { repoPath, branch }),

@@ -10,6 +10,7 @@ export function getRepoRoot(path) {
 }
 
 export function gitStatus(repoPath) {
+  console.log("status for repo path: ", repoPath)
   return execGitRaw(repoPath, "status --porcelain");
 }
 
@@ -19,6 +20,18 @@ export function gitUserLocalEmail(repoPath) {
 
 export function stageFile(repoPath, filePath) {
   return execGit(repoPath, "add "+filePath)
+}
+
+export function restoreFileFromStaging(repoPath, filePath) {
+  return execGit(repoPath, "restore --staged " + filePath)
+}
+
+export function gitBranchLocal(repoPath) {
+  return execGit(repoPath, "branch --format='%(refname:short)'")
+}
+
+export function gitSwitchToBranch(repoPath, branch) {
+  return execGit(repoPath, "switch " + branch);
 }
 
 // helper

@@ -73,8 +73,17 @@ export function registerGitIPC() {
     return git.stageFile(repoPath, filePath);
   })
 
+  ipcMain.handle("git:restoreFile", (_, repoPath, filePath) => {
+    return git.restoreFileFromStaging(repoPath, filePath);
+  })
+
+  // Returns all branches
   ipcMain.handle("git:branches", (_, repoPath) => {
-    return git.gitBranches(repoPath);
+    return git.gitBranchLocal(repoPath);
+  });
+
+  ipcMain.handle("git:switchBranch", (_, repoPath, branch) => {
+    return git.gitSwitchToBranch(repoPath, branch);
   });
 
   ipcMain.handle("git:commits", (_, repoPath) => {
