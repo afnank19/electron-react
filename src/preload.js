@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld("gitAPI", {
   restoreFile: (repoPath, filePath) => ipcRenderer.invoke("git:restoreFile", repoPath, filePath),
   branches: (repoPath) => ipcRenderer.invoke("git:branches", repoPath),
   switchBranch: (repoPath, branch) => ipcRenderer.invoke("git:switchBranch", repoPath, branch),
+  createBranch: (repoPath, branch) => ipcRenderer.invoke("git:createBranch", repoPath, branch),
   commits: (repoPath) => ipcRenderer.invoke("git:commits", repoPath),
   checkout: (repoPath, branch) =>
     ipcRenderer.invoke("git:checkout", { repoPath, branch }),

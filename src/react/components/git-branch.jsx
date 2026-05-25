@@ -8,6 +8,8 @@ const GitBranch = () => {
   const [branches, setBranches] = useState("");
   const parsedBranches = branches ? splitByNewLine(branches) : null;
 
+  const [newBranchName, setNewBranchName] = useState("");
+
   useEffect(() => {
     if (repoPath == null) {
       return;
@@ -19,6 +21,12 @@ const GitBranch = () => {
   function handleBranchSwitch(branch) {
     console.log("switching branch to ", branch);
     window.gitAPI.switchBranch(repoPath, branch);
+  }
+
+  function handleNewBranchCreationClick() {
+    console.log(newBranchName, 'creating')
+    window.gitAPI.createBranch(repoPath, newBranchName);
+    window.gitAPI.branches(repoPath).then(setBranches);
   }
 
   // TODO: try to move local state to the global state in zustand, so that
@@ -36,7 +44,9 @@ const GitBranch = () => {
               <p className="py-1">{branch}</p>
               <button
                 className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-600 hidden group-hover:block"
-                onClick={() => {handleBranchSwitch(branch)}}
+                onClick={() => {
+                  handleBranchSwitch(branch);
+                }}
               >
                 Switch
               </button>
@@ -44,8 +54,15 @@ const GitBranch = () => {
           );
         })}
       <div className="flex gap-4">
-        <input placeholder="branch name" className="border border-neutral-700 rounded-lg px-2 text-sm"></input>
-        <button className="font-bold text-xs border rounded-lg px-2  border-neutral-700 hover:bg-neutral-600">Create and Switch to Branch</button>
+        <input
+          placeholder="Branch name"
+          className="border border-neutral-700 rounded-lg px-2 text-sm"
+          value={newBranchName}
+          onChange={(e) => setNewBranchName(e.target.value)}
+        ></input>
+        <button onClick={handleNewBranchCreationClick} className="font-bold text-xs border rounded-lg px-2  border-neutral-700 hover:bg-neutral-600">
+          Create and Switch to Branch
+        </button>
       </div>
     </div>
   );

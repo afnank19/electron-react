@@ -34,6 +34,10 @@ export function gitSwitchToBranch(repoPath, branch) {
   return execGit(repoPath, "switch " + branch);
 }
 
+export function gitCreateAndSwitchToBranch(repoPath, branchname) {
+  return execGit(repoPath, "switch -c" + branchname);
+}
+
 // helper
 function execGit(cwd, args) {
   return new Promise((resolve, reject) => {
