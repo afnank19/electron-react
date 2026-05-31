@@ -38,6 +38,10 @@ export function gitCreateAndSwitchToBranch(repoPath, branchname) {
   return execGit(repoPath, "switch -c" + branchname);
 }
 
+export function gitGetActiveBranch(repoPath) {
+  return execGit(repoPath, "branch --show-current")
+}
+
 // helper
 function execGit(cwd, args) {
   return new Promise((resolve, reject) => {

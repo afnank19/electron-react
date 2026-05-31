@@ -7,6 +7,7 @@ const GitBranch = () => {
 
   const [branches, setBranches] = useState("");
   const parsedBranches = branches ? splitByNewLine(branches) : null;
+  const [activeBranch, setActiveBranch] = useState("");
 
   const [newBranchName, setNewBranchName] = useState("");
 
@@ -16,17 +17,20 @@ const GitBranch = () => {
     }
 
     window.gitAPI.branches(repoPath).then(setBranches);
+    window.gitAPI.branch(repoPath).then(setActiveBranch);
   }, [repoPath]);
 
   function handleBranchSwitch(branch) {
     console.log("switching branch to ", branch);
     window.gitAPI.switchBranch(repoPath, branch);
+    window.gitAPI.branch(repoPath).then(setActiveBranch);
   }
 
   function handleNewBranchCreationClick() {
     console.log(newBranchName, 'creating')
     window.gitAPI.createBranch(repoPath, newBranchName);
     window.gitAPI.branches(repoPath).then(setBranches);
+    window.gitAPI.branch(repoPath).then(setActiveBranch);
   }
 
   // TODO: try to move local state to the global state in zustand, so that
@@ -34,6 +38,8 @@ const GitBranch = () => {
   // kind of like an event driven system?
   return (
     <div className="m-3">
+      <div className="text-purple-300">Active Branch = { activeBranch }</div>
+
       {parsedBranches &&
         parsedBranches.map((branch, idx) => {
           return (

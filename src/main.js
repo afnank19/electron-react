@@ -90,6 +90,10 @@ export function registerGitIPC() {
     return git.gitCreateAndSwitchToBranch(repoPath, branch);
   });
 
+  ipcMain.handle("git:branch", (_, repoPath) => {
+    return git.gitGetActiveBranch(repoPath);
+  } )
+
   ipcMain.handle("git:commits", (_, repoPath) => {
     return git.gitCommits(repoPath);
   });
