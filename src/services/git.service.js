@@ -46,6 +46,11 @@ export function getCommits(repoPath) {
   return execGit(repoPath, `log --pretty=format:"%h %cr %an %s"`)
 }
 
+export function commitChanges(repoPath, message) {
+  console.log("commiting with message", message)
+  return execGit(repoPath, `commit -m "` + message + `"`)
+}
+
 // helper
 function execGit(cwd, args) {
   return new Promise((resolve, reject) => {

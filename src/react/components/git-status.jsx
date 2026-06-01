@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useRepoStore } from "../state/repo-store";
+import { useAppStore, useRepoStore } from "../state/repo-store";
 
 const GitStatus = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
@@ -7,6 +7,14 @@ const GitStatus = () => {
   const [status, setStatus] = useState("");
 
   const parsedStatus = status ? processStatus(status) : null;
+
+  const refreshCounter = useAppStore((s) => s.refreshCounter);
+
+  useEffect(() => {
+    // reload data
+    console.log("refresh triggered");
+    window.gitAPI.status(repoPath).then(setStatus);
+  }, [refreshCounter]);
 
   useEffect(() => {
     if (repoPath == null) {
@@ -69,10 +77,8 @@ const GitStatus = () => {
 
   if (status === "") {
     return (
-      <div className="m-2">
-        INFO: No changes or modifications to any files.
-      </div>
-    )
+      <div className="m-2">INFO: No changes or modifications to any files.</div>
+    );
   }
 
   // TODO: handle overflow so it looks good
@@ -85,8 +91,8 @@ const GitStatus = () => {
           {parsedStatus &&
             parsedStatus.map((st, idx) => {
               return (
-                <div className="flex gap-4 items-center my-1">
-                  <div>
+                <div className="flex gap-2 items-center my-1">
+                  <div className="flex gap-1">
                     <button
                       className="font-bold text-xs border rounded-lg px-2 py-1 border-green-900 hover:bg-green-800"
                       onClick={() => {
@@ -115,7 +121,7 @@ const GitStatus = () => {
               );
             })}
         </div>
-        <div className="flex gap-2 border-t border-neutral-700 p-2">
+        <div className="flex gap-1 border-t border-neutral-700 p-2">
           <button
             className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
             onClick={handleStageAll}

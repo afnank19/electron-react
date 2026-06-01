@@ -98,6 +98,10 @@ export function registerGitIPC() {
     return git.getCommits(repoPath);
   });
 
+  ipcMain.handle("git:commitChange", (_, repoPath, message) => {
+    return git.commitChanges(repoPath, message);
+  });
+
   ipcMain.handle("git:checkout", (_, { repoPath, branch }) => {
     return git.gitCheckout(repoPath, branch);
   });
