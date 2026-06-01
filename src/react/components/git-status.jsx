@@ -78,15 +78,17 @@ const GitStatus = () => {
   // TODO: handle overflow so it looks good
   return (
     <>
-      <div className="p-2 border rounded-3xl border-neutral-700 m-2  px-4 flex flex-col gap-4">
-        <div>
+      <div className="py-1 border rounded-2xl border-neutral-800 m-2  flex flex-col gap-2">
+        <h1 className="font-bold px-2 pt-1">Files // Status</h1>
+
+        <div className="px-2">
           {parsedStatus &&
             parsedStatus.map((st, idx) => {
               return (
                 <div className="flex gap-4 items-center my-1">
                   <div>
                     <button
-                      className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
+                      className="font-bold text-xs border rounded-lg px-2 py-1 border-green-900 hover:bg-green-800"
                       onClick={() => {
                         handleStaging(st);
                       }}
@@ -94,7 +96,7 @@ const GitStatus = () => {
                       Stage
                     </button>
                     <button
-                      className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
+                      className="font-bold text-xs border rounded-lg px-2 py-1 border-red-900 hover:bg-red-800"
                       onClick={() => {
                         handleRestore(st);
                       }}
@@ -113,7 +115,7 @@ const GitStatus = () => {
               );
             })}
         </div>
-        <div className="flex gap-2 border-t border-neutral-700 py-2">
+        <div className="flex gap-2 border-t border-neutral-700 p-2">
           <button
             className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
             onClick={handleStageAll}

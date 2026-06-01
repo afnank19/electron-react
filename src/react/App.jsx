@@ -3,6 +3,7 @@ import OpenRepoLayout from "./components/layouts/open-repo-layout";
 import GitStatus from "./components/git-status";
 import GitBranch from "./components/git-branch";
 import Tabs from "./components/tabs";
+import { GitCommits } from "./components/git-commits";
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <OpenRepoLayout />
       <GitStatus />
       <GitBranch />
+      <GitCommits />
     </div>
   );
 };

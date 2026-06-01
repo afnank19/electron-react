@@ -95,7 +95,7 @@ export function registerGitIPC() {
   } )
 
   ipcMain.handle("git:commits", (_, repoPath) => {
-    return git.gitCommits(repoPath);
+    return git.getCommits(repoPath);
   });
 
   ipcMain.handle("git:checkout", (_, { repoPath, branch }) => {

@@ -42,6 +42,10 @@ export function gitGetActiveBranch(repoPath) {
   return execGit(repoPath, "branch --show-current")
 }
 
+export function getCommits(repoPath) {
+  return execGit(repoPath, `log --pretty=format:"%h %cr %an %s"`)
+}
+
 // helper
 function execGit(cwd, args) {
   return new Promise((resolve, reject) => {
