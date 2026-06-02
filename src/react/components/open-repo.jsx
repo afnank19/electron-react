@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useRepoStore } from "../state/repo-store";
+import { useRepoStore, useTabStore } from "../state/repo-store";
 
 export const OpenRepo = ({ pathErr, setPathErr}) => {
   const setRepoPath = useRepoStore((state) => state.setRepoPath);
   const repoPath = useRepoStore((state) => state.repoPath);
+
+  const addTab = useTabStore((state) => state.addTab);
 
   // const [pathErr, setPathErr] = useState("");
 
@@ -23,6 +25,10 @@ export const OpenRepo = ({ pathErr, setPathErr}) => {
     console.log(path);
     localStorage.setItem("repo-path", path);
     setRepoPath(path);
+    addTab({
+      id: crypto.randomUUID(),
+      repoPath: path
+    })
   };
 
   useEffect(() => {

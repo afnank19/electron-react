@@ -1,6 +1,9 @@
-import { useRepoStore } from "../state/repo-store";
+import { useRepoStore, useTabStore } from "../state/repo-store";
+import { Tab } from "./primitives/tab";
 
 const Tabs = () => {
+  const tabs = useTabStore((state) => state.tabs);
+
   const setRepoPath = useRepoStore((state) => state.setRepoPath);
 
   const handleTab1 = () => {
@@ -18,10 +21,31 @@ const Tabs = () => {
   }
 
   return (
-    <div className="p-4 flex gap-4">
-      <button onClick={handleTab1} className="hover:bg-gray-600 border">app-test-repo</button>
-      <button onClick={handleTab2} className="hover:bg-gray-600 border">my-app</button>
-    </div>
+    <>
+      <div className="p-4 items-center flex gap-1 border-b border-neutral-700">
+        <p className="font-bold mr-4">GitSage</p>
+        <button onClick={handleTab1} className="hover:bg-gray-600 border">app-test-repo</button>
+        <button onClick={handleTab2} className="hover:bg-gray-600 border">my-app</button>
+
+        {/* <Tab repoName={"/gitsage"} />
+        <Tab repoName={"/gitsage"} />
+        <Tab repoName={"/gitsage"} />*/}
+        {tabs.map((tab, idx) => {
+          return (
+            <div key={idx}>
+              <Tab repoName={tab.repoPath} tabId={tab.id} />
+            </div>
+          )
+        })}
+      </div>
+      {/* {tabs.map((tab, idx) => {
+        return (
+          <div key={idx}>
+            {tab.repoPath}
+          </div>
+        )
+      })}*/}
+    </>
   );
 };
 
