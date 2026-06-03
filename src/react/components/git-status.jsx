@@ -87,7 +87,7 @@ const GitStatus = () => {
       <div className="py-1 border rounded-2xl border-neutral-800 m-2  flex flex-col gap-2">
         <h1 className="font-bold px-2 pt-1">Files // Status</h1>
 
-        <div className="px-2">
+        <div className="px-2 overflow-auto">
           {parsedStatus &&
             parsedStatus.map((st, idx) => {
               return (
@@ -113,7 +113,7 @@ const GitStatus = () => {
                   <p
                     key={idx}
                     style={{ whiteSpace: "pre-wrap" }}
-                    className="font-mono text-sm"
+                    className="font-mono text-sm text-nowrap"
                   >
                     {idx === 0 ? "" + st : st}
                   </p>

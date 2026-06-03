@@ -18,13 +18,13 @@ const OpenRepoLayout = () => {
   }, [repoPath]);
 
   return (
-    <div className="flex justify-between m-2">
+    <div className="flex m-2">
       <div>
+        <p className="font-bold">{"Active Repository: " + repoPath}</p>
         <MaskedText text={userEmail} />
-        <p className="text-neutral-400">{"Active Repository: " + repoPath}</p>
-        <ErrorMsg prefix={"INFO"} message={pathErr} type={"error"}/>
+        {/* <ErrorMsg prefix={"INFO"} message={pathErr} type={"error"}/>*/}
       </div>
-      <OpenRepo pathErr={pathErr} setPathErr={setPathErr} />
+      {/* <OpenRepo pathErr={pathErr} setPathErr={setPathErr} />*/}
     </div>
   );
 };

@@ -38,9 +38,9 @@ export const OpenRepo = ({ pathErr, setPathErr}) => {
   }, []);
 
   return (
-    <div className="text-white">
+    <div className="text-white text-nowrap">
       <button
-        className="font-bold text-xs border rounded-xl px-4 py-2 my-2 border-neutral-700 hover:bg-neutral-800"
+        className="font-bold text-xs border rounded-xl px-4 py-2 border-neutral-700 hover:bg-neutral-800"
         onClick={handleClick}
       >
         {" "}

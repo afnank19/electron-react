@@ -6,12 +6,18 @@ export const GitCommits = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
   const setRepoPath = useRepoStore((state) => state.setRepoPath);
   const triggerRefresh = useAppStore((s) => s.triggerRefresh)
-
+  const refreshCounter = useAppStore((s) => s.refreshCounter);
 
   const [commits, setCommits] = useState("");
   const parsedCommits = commits ? splitByNewLine(commits) : null;
 
   const [commitMsg, setCommitMsg] = useState("");
+
+  useEffect(() => {
+    // reload data
+    console.log("commit refresh triggered");
+    window.gitAPI.commits(repoPath).then(setCommits);
+  }, [refreshCounter]);
 
   useEffect(() => {
     if (repoPath == null) {
@@ -50,11 +56,11 @@ export const GitCommits = () => {
         </button>
       </div>
 
-      <div>
+      <div className="overflow-auto max-h-60">
         {parsedCommits &&
           parsedCommits.map((commit, idx) => {
             return (
-              <div id={idx} className="text-sm font-mono bg-[#0000ff]">
+              <div id={idx} className="text-sm font-mono bg-[#000000] text-nowrap">
                 {commit}
               </div>
             );
