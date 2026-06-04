@@ -21,11 +21,12 @@ const GitBranch = () => {
 
     window.gitAPI.branches(repoPath).then(setBranches);
     window.gitAPI.branch(repoPath).then(setActiveBranch);
-    setNewBranchName("");
   }, [repoPath]);
 
   function handleBranchSwitch(branch) {
     console.log("switching branch to ", branch);
+    setNewBranchName("");
+
     window.gitAPI.switchBranch(repoPath, branch).then(setTest).catch((error) => { console.log("caught err",error)});
     window.gitAPI.branch(repoPath).then(setActiveBranch);
     triggerRefresh();
@@ -33,6 +34,8 @@ const GitBranch = () => {
 
   function handleNewBranchCreationClick() {
     console.log(newBranchName, 'creating')
+    setNewBranchName("");
+
     window.gitAPI.createBranch(repoPath, newBranchName);
     window.gitAPI.branches(repoPath).then(setBranches);
     window.gitAPI.branch(repoPath).then(setActiveBranch);
