@@ -51,6 +51,10 @@ export function commitChanges(repoPath, message) {
   return execGit(repoPath, `commit -m "` + message + `"`)
 }
 
+export function getFileDiff(repoPath, filePath) {
+  return execGitRaw(repoPath, "diff " + filePath)
+}
+
 // helper
 function execGit(cwd, args) {
   return new Promise((resolve, reject) => {

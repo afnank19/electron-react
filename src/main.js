@@ -102,6 +102,10 @@ export function registerGitIPC() {
     return git.commitChanges(repoPath, message);
   });
 
+  ipcMain.handle("git:showFileDiff", (_, repoPath, filePath) => {
+    return git.getFileDiff(repoPath, filePath);
+  });
+
   ipcMain.handle("git:checkout", (_, { repoPath, branch }) => {
     return git.gitCheckout(repoPath, branch);
   });

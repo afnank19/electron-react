@@ -56,7 +56,7 @@ export const GitCommits = () => {
         </button>
       </div>
 
-      <div className="overflow-auto max-h-60">
+      <div className="overflow-auto max-h-52">
         {parsedCommits &&
           parsedCommits.map((commit, idx) => {
             return (

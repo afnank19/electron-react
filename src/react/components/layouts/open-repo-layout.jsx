@@ -18,8 +18,8 @@ const OpenRepoLayout = () => {
   }, [repoPath]);
 
   return (
-    <div className="flex m-2">
-      <div>
+    <div className="flex px-2 border-b">
+      <div className="my-1">
         <p className="font-bold">{"Active Repository: " + repoPath}</p>
         <MaskedText text={userEmail} />
         {/* <ErrorMsg prefix={"INFO"} message={pathErr} type={"error"}/>*/}

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useAppStore, useRepoStore } from "../state/repo-store";
+import { useAppStore, useRepoStore, useViewerStore } from "../state/repo-store";
 
 const GitStatus = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
-
   const [status, setStatus] = useState("");
-
   const parsedStatus = status ? processStatus(status) : null;
-
   const refreshCounter = useAppStore((s) => s.refreshCounter);
+
+  const setFileDiff = useViewerStore((s) => s.setFileDiff);
 
   useEffect(() => {
     // reload data
@@ -58,6 +57,15 @@ const GitStatus = () => {
     window.gitAPI.status(repoPath).then(setStatus);
   }
 
+  function handleStatusItemClick(rawItem) {
+    const rawItemSplit = rawItem.trim().split(" ")
+    console.log("rISplit", rawItemSplit)
+    const filePath = rawItemSplit[rawItemSplit.length - 1]
+    console.log("fp", filePath)
+
+    window.gitAPI.showFileDiff(repoPath, filePath).then(setFileDiff)
+  }
+
   useEffect(() => {
     function handleFocus() {
       console.log("window focused");
@@ -87,14 +95,14 @@ const GitStatus = () => {
       <div className="py-1 border rounded-2xl border-neutral-800 m-2  flex flex-col gap-2">
         <h1 className="font-bold px-2 pt-1">Files // Status</h1>
 
-        <div className="px-2 overflow-auto">
+        <div className="px-2 overflow-auto  max-h-52">
           {parsedStatus &&
             parsedStatus.map((st, idx) => {
               return (
                 <div className="flex gap-2 items-center my-1">
                   <div className="flex gap-1">
                     <button
-                      className="font-bold text-xs border rounded-lg px-2 py-1 border-green-900 hover:bg-green-800"
+                      className="font-bold text-xs border rounded-md px-2  border-[#008800] hover:bg-[#008800]"
                       onClick={() => {
                         handleStaging(st);
                       }}
@@ -102,7 +110,7 @@ const GitStatus = () => {
                       Stage
                     </button>
                     <button
-                      className="font-bold text-xs border rounded-lg px-2 py-1 border-red-900 hover:bg-red-800"
+                      className="font-bold text-xs border rounded-md px-2  border-[#990000] hover:bg-[#990000]"
                       onClick={() => {
                         handleRestore(st);
                       }}
@@ -110,13 +118,18 @@ const GitStatus = () => {
                       Restore
                     </button>
                   </div>
-                  <p
-                    key={idx}
-                    style={{ whiteSpace: "pre-wrap" }}
-                    className="font-mono text-sm text-nowrap"
+                  <button className="w-full group flex gap-4 items-center hover:bg-yellow-500 hover:text-black cursor-pointer"
+                    onClick={() => {handleStatusItemClick(st)}}
                   >
-                    {idx === 0 ? "" + st : st}
-                  </p>
+                    <p
+                      key={idx}
+                      style={{ whiteSpace: "pre" }}
+                      className="font-mono text-sm "
+                    >
+                      {idx === 0 ? "" + st : st}
+                    </p>
+                    <p className="italic text-sm text-black hidden group-hover:block text-nowrap">Click to view diff</p>
+                  </button>
                 </div>
               );
             })}

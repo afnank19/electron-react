@@ -43,3 +43,12 @@ export const useAppStore = create((set) => ({
       refreshCounter: state.refreshCounter + 1,
     })),
 }))
+
+// Don't know how this will look, but I'm gonna build it for
+// the file diff viewer use case first
+// Probably a viewer mode, default will be commit viewer which uses show instead of diff
+// and based on the interaction, the mode switches
+export const useViewerStore = create((set) => ({
+  fileDiff: null,
+  setFileDiff: (fileDiff) => set({fileDiff: fileDiff})
+}))

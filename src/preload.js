@@ -13,6 +13,7 @@ contextBridge.exposeInMainWorld("gitAPI", {
   branch: (repoPath) => ipcRenderer.invoke("git:branch", repoPath),
   commits: (repoPath) => ipcRenderer.invoke("git:commits", repoPath),
   commitChange: (repoPath, message) => ipcRenderer.invoke("git:commitChange", repoPath, message),
+  showFileDiff: (repoPath, filePath) => ipcRenderer.invoke("git:showFileDiff", repoPath, filePath),
   checkout: (repoPath, branch) =>
     ipcRenderer.invoke("git:checkout", { repoPath, branch }),
   push: (repoPath) => ipcRenderer.invoke("git:push", repoPath)

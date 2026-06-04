@@ -26,7 +26,7 @@ const GitBranch = () => {
 
   function handleBranchSwitch(branch) {
     console.log("switching branch to ", branch);
-    window.gitAPI.switchBranch(repoPath, branch)
+    window.gitAPI.switchBranch(repoPath, branch).then(setTest).catch((error) => { console.log("caught err",error)});
     window.gitAPI.branch(repoPath).then(setActiveBranch);
     triggerRefresh();
   }
@@ -42,9 +42,10 @@ const GitBranch = () => {
   // updating one, can lead to the others refreshing themselves with new data
   // kind of like an event driven system?
   return (
-    <div className="m-3 flex flex-col gap-2">
-      <p>{test }</p>
-      <div className="text-purple-300">Active Branch = { activeBranch }</div>
+    <div className="flex flex-col gap-2 py-1 px-2 border rounded-2xl border-neutral-800 m-2">
+      {/* <p>{test }</p>*/}
+      <div className="font-bold">Branch Management</div>
+      <div className="font-bold text-sm">Currently On: { activeBranch }</div>
 
       <div className="flex gap-4">
         <input
@@ -58,22 +59,23 @@ const GitBranch = () => {
         </button>
       </div>
 
-      <div className="max-h-60 overflow-auto">
+      <div className="max-h-40 overflow-auto">
         {parsedBranches &&
           parsedBranches.map((branch, idx) => {
             return (
               <div
                 key={idx}
-                className="flex gap-4 items-center group relative hover:bg-neutral-800"
+                className="flex gap-4 items-center group justify-between relative hover:bg-neutral-800"
               >
                 <p className=" text-sm">- {branch}</p>
                 <button
-                  className="font-bold text-xs border rounded-md px-2 border-neutral-700 hover:bg-neutral-600 hidden group-hover:block"
+                  // className="font-bold text-xs border rounded-md px-2 border-neutral-700 hover:bg-neutral-600 hidden group-hover:block"
+                  className="font-bold text-xs border rounded-md px-2 border-neutral-700 hover:bg-neutral-600"
                   onClick={() => {
                     handleBranchSwitch(branch);
                   }}
                 >
-                  Switch
+                  Checkout
                 </button>
               </div>
             );
