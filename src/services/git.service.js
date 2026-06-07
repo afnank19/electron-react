@@ -68,7 +68,7 @@ function execGit(cwd, args) {
 // Not trimming the output, helpful for parsing, may remove the upper function if its not needed
 function execGitRaw(cwd, args) {
   return new Promise((resolve, reject) => {
-    exec(`git ${args}`, { cwd }, (err, stdout, stderr) => {
+    exec(`git -c color.ui=always ${args}`, { cwd }, (err, stdout, stderr) => {
       if (err) return reject(stderr || err.message);
       resolve(stdout);
     });
