@@ -16,6 +16,7 @@ contextBridge.exposeInMainWorld("gitAPI", {
   showFileDiff: (repoPath, filePath) => ipcRenderer.invoke("git:showFileDiff", repoPath, filePath),
   checkout: (repoPath, branch) =>
     ipcRenderer.invoke("git:checkout", { repoPath, branch }),
+  getRemotes: (repoPath) => ipcRenderer.invoke("git:getRemotes", repoPath),
   push: (repoPath) => ipcRenderer.invoke("git:push", repoPath)
 });
 

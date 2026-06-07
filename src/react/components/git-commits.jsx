@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { splitByNewLine } from "../utils/utils";
-import { useAppStore, useRepoStore } from "../state/repo-store";
+import { useAppStore, useGitLogStore, useRepoStore } from "../state/repo-store";
 
 export const GitCommits = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
   const setRepoPath = useRepoStore((state) => state.setRepoPath);
   const triggerRefresh = useAppStore((s) => s.triggerRefresh)
   const refreshCounter = useAppStore((s) => s.refreshCounter);
+  const addLog = useGitLogStore((s) => s.addLog);
 
   const [commits, setCommits] = useState("");
   const parsedCommits = commits ? splitByNewLine(commits) : null;
@@ -29,14 +30,14 @@ export const GitCommits = () => {
 
   function handleOnCommit() {
     setCommitMsg("");
-    window.gitAPI.commitChange(repoPath, commitMsg);
+    window.gitAPI.commitChange(repoPath, commitMsg).then(addLog);
     window.gitAPI.commits(repoPath).then(setCommits);
 
     triggerRefresh();
   }
 
   return (
-    <div className="text-white flex flex-col gap-4 m-4">
+    <div className="text-white flex flex-col gap-4 m-2 border rounded-2xl border-neutral-800 py-1 px-2">
       <h1 className="font-bold">Commits</h1>
 
       <div className="flex gap-4">
@@ -56,7 +57,7 @@ export const GitCommits = () => {
         </button>
       </div>
 
-      <div className="overflow-auto max-h-52">
+      <div className="overflow-auto min-h-52 max-h-52">
         {parsedCommits &&
           parsedCommits.map((commit, idx) => {
             return (

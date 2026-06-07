@@ -13,6 +13,7 @@ export const Viewer = () => {
 
   const convert = new Convert();
 
+
   const fileDiffHtml = fileDiff ? convert.toHtml(escapeHtml(fileDiff)) : null;
   const cleanFileDiffHtml = fileDiffHtml ? DOMPurify.sanitize(fileDiffHtml) : null;
   console.log(fileDiffHtml)

@@ -110,6 +110,10 @@ export function registerGitIPC() {
     return git.gitCheckout(repoPath, branch);
   });
 
+  ipcMain.handle("git:getRemotes", (_, repoPath) => {
+    return git.getRemotes(repoPath);
+  });
+
   ipcMain.handle("git:push", (_, repoPath) => {
     return git.gitPush(repoPath);
   });

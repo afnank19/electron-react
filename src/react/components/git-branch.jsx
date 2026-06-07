@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useAppStore, useRepoStore } from "../state/repo-store";
+import { useAppStore, useGitLogStore, useRepoStore } from "../state/repo-store";
 import { splitByNewLine } from "../utils/utils";
 
 const GitBranch = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
   const triggerRefresh = useAppStore((s) => s.triggerRefresh)
+  const addLog = useGitLogStore((s) => s.addLog);
 
   const [branches, setBranches] = useState("");
   const parsedBranches = branches ? splitByNewLine(branches) : null;
@@ -27,7 +28,7 @@ const GitBranch = () => {
     console.log("switching branch to ", branch);
     setNewBranchName("");
 
-    window.gitAPI.switchBranch(repoPath, branch).then(setTest).catch((error) => { console.log("caught err",error)});
+    window.gitAPI.switchBranch(repoPath, branch).then(addLog).catch((error) => { console.log("caught err",error)});
     window.gitAPI.branch(repoPath).then(setActiveBranch);
     triggerRefresh();
   }
@@ -36,7 +37,7 @@ const GitBranch = () => {
     console.log(newBranchName, 'creating')
     setNewBranchName("");
 
-    window.gitAPI.createBranch(repoPath, newBranchName);
+    window.gitAPI.createBranch(repoPath, newBranchName).then(addLog);
     window.gitAPI.branches(repoPath).then(setBranches);
     window.gitAPI.branch(repoPath).then(setActiveBranch);
   }
@@ -62,7 +63,7 @@ const GitBranch = () => {
         </button>
       </div>
 
-      <div className="max-h-40 overflow-auto">
+      <div className="max-h-40 min-h-40 overflow-auto">
         {parsedBranches &&
           parsedBranches.map((branch, idx) => {
             return (

@@ -6,6 +6,7 @@ const GitStatus = () => {
   const [status, setStatus] = useState("");
   const parsedStatus = status ? processStatus(status) : null;
   const refreshCounter = useAppStore((s) => s.refreshCounter);
+  const triggerRefresh = useAppStore((s) => s.triggerRefresh)
 
   const setFileDiff = useViewerStore((s) => s.setFileDiff);
 
@@ -74,6 +75,7 @@ const GitStatus = () => {
 
       // refresh git status here
       window.gitAPI.status(repoPath).then(setStatus);
+      triggerRefresh();
     }
 
     window.addEventListener("focus", handleFocus);
@@ -85,17 +87,22 @@ const GitStatus = () => {
 
   if (status === "") {
     return (
-      <div className="m-2">INFO: No changes or modifications to any files.</div>
+      <div className="min-h-72 border rounded-2xl border-neutral-800 m-2">
+        <h1 className="font-bold px-2 pt-1">Files // Status</h1>
+        <p className="px-2 pt-1 italic text-center">
+          Nothing to commit, working tree clean.
+        </p>
+      </div>
     );
   }
 
   // TODO: handle overflow so it looks good
   return (
     <>
-      <div className="py-1 border rounded-2xl border-neutral-800 m-2  flex flex-col gap-2">
+      <div className="py-1 border rounded-2xl border-neutral-800 m-2  flex flex-col gap-2 min-h-72">
         <h1 className="font-bold px-2 pt-1">Files // Status</h1>
 
-        <div className="px-2 overflow-auto  max-h-52">
+        <div className="px-2 overflow-auto min-h-50  max-h-50">
           {parsedStatus &&
             parsedStatus.map((st, idx) => {
               return (

@@ -31,11 +31,11 @@ export function gitBranchLocal(repoPath) {
 }
 
 export function gitSwitchToBranch(repoPath, branch) {
-  return execGit(repoPath, "switch " + branch);
+  return execGitWithOutput(repoPath, "switch " + branch);
 }
 
 export function gitCreateAndSwitchToBranch(repoPath, branchname) {
-  return execGit(repoPath, "switch -c" + branchname);
+  return execGitWithOutput(repoPath, "switch -c" + branchname);
 }
 
 export function gitGetActiveBranch(repoPath) {
@@ -43,17 +43,25 @@ export function gitGetActiveBranch(repoPath) {
 }
 
 export function getCommits(repoPath) {
-  return execGit(repoPath, `log --pretty=format:"%h %cr %an %s"`)
+  return execGitWithOutput(repoPath, `log --pretty=format:"%h %cr %an %s"`)
 }
 
 export function commitChanges(repoPath, message) {
   console.log("commiting with message", message)
-  return execGit(repoPath, `commit -m "` + message + `"`)
+  return execGitWithOutput(repoPath, `commit -m "` + message + `"`)
 }
 
 export function getFileDiff(repoPath, filePath) {
   return execGitRaw(repoPath, "diff " + filePath)
 }
+
+export function getRemotes(repoPath) {
+  return execGitWithOutput(repoPath, "remote")
+}
+
+// export function pushToRemote(repoPath) {
+//   return execGitWithOutput(repoPath, "push -u ")
+// }
 
 // helper
 function execGit(cwd, args) {
@@ -61,6 +69,25 @@ function execGit(cwd, args) {
     exec(`git ${args}`, { cwd }, (err, stdout, stderr) => {
       if (err) return reject(stderr || err.message);
       resolve(stdout.trim());
+    });
+  });
+}
+
+// this function returns all output that git throws
+function execGitWithOutput(cwd, args) {
+  return new Promise((resolve, reject) => {
+    exec(`git ${args}`, { cwd }, (err, stdout, stderr) => {
+      const output = [stdout, stderr]
+        .filter(Boolean)
+        .join("")
+        .trim();
+
+      if (err) {
+        reject(output || err.message);
+        return;
+      }
+
+      resolve(output);
     });
   });
 }

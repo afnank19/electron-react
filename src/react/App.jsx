@@ -7,6 +7,7 @@ import { GitCommits } from "./components/git-commits";
 import { useRepoStore } from "./state/repo-store";
 import { Viewer } from "./components/viewer";
 import { Logs } from "./components/logs";
+import { GitRemote } from "./components/git-remote";
 
 const App = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
@@ -19,11 +20,12 @@ const App = () => {
         <div className="flex">
           <div className="flex-1 max-w-1/2">
             <GitStatus />
-            <GitBranch />
             <GitCommits />
+            <GitBranch />
           </div>
           <div className="flex-1 max-w-1/2">
             <div className="">
+              <GitRemote />
               <div className="max-h-96 overflow-auto border">
                 <Viewer/>
               </div>

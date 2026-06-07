@@ -52,3 +52,14 @@ export const useViewerStore = create((set) => ({
   fileDiff: null,
   setFileDiff: (fileDiff) => set({fileDiff: fileDiff})
 }))
+
+export const useGitLogStore = create((set) => ({
+  gitLogs: [],
+  addLog: (log) =>
+      set((state) => ({
+        gitLogs: [...state.gitLogs, log],
+      })),
+  resetLogs: () => set((s) => ({
+    gitLogs: []
+  }))
+}))
