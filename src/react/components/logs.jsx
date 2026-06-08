@@ -21,7 +21,7 @@ export const Logs = () => {
   return (
     <div className="border p-2">
       <h1 className="font-bold">Logs</h1>
-      <div>
+      <div className="overflow-auto">
         {gitLogs.map((log) => {
           return (
             <div style={{ whiteSpace: "pre" }} className="font-mono text-sm ">

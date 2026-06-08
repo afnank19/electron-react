@@ -10,17 +10,25 @@ export const Viewer = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
   const fileDiff = useViewerStore((s) => s.fileDiff);
   const setFileDiff = useViewerStore((s) => s.setFileDiff);
+  const viewerMode = useViewerStore((s) => s.viewerMode);
+  const setCommitLog = useViewerStore((s) => s.setCommitLog);
+  const commitLog = useViewerStore((s) => s.commitLog);
 
   const convert = new Convert();
 
 
   const fileDiffHtml = fileDiff ? convert.toHtml(escapeHtml(fileDiff)) : null;
   const cleanFileDiffHtml = fileDiffHtml ? DOMPurify.sanitize(fileDiffHtml) : null;
-  console.log(fileDiffHtml)
+
+  const commitLogHtml = commitLog ? convert.toHtml(escapeHtml(commitLog)) : null;
+
+  // console.log(fileDiffHtml)
 
   // useEffect(() => {
   //   console.log("updated file diff", fileDiff)
   // }, [fileDiff])
+
+  console.count("viewer refreshed")
 
   useEffect(() => {
     if (repoPath == null) {
@@ -28,12 +36,20 @@ export const Viewer = () => {
     }
 
     setFileDiff("");
+    setCommitLog("");
   }, [repoPath]);
 
   return (
-    <div className=" p-2">
+    <div className="p-2 ">
       {/* <p className="whitespace-pre font-mono text-sm">{fileDiff}</p>*/}
+      {viewerMode === "commit" ?
+        <>
+          <p>COMMIT MODE</p>
+        <p className="whitespace-pre overflow-x-auto font-mono text-sm" dangerouslySetInnerHTML={{ __html: commitLogHtml }}></p>
+        </>
+        :
       <p className="whitespace-pre overflow-x-auto font-mono text-sm" dangerouslySetInnerHTML={{ __html: cleanFileDiffHtml }}></p>
+      }
     </div>
   );
 };

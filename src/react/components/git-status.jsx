@@ -9,6 +9,7 @@ const GitStatus = () => {
   const triggerRefresh = useAppStore((s) => s.triggerRefresh)
 
   const setFileDiff = useViewerStore((s) => s.setFileDiff);
+  const setViewerMode = useViewerStore((s) => s.setViewerMode);
 
   useEffect(() => {
     // reload data
@@ -64,6 +65,7 @@ const GitStatus = () => {
     const filePath = rawItemSplit[rawItemSplit.length - 1]
     console.log("fp", filePath)
 
+    setViewerMode("file")
     window.gitAPI.showFileDiff(repoPath, filePath).then(setFileDiff)
   }
 

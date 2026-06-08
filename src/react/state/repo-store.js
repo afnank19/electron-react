@@ -49,8 +49,13 @@ export const useAppStore = create((set) => ({
 // Probably a viewer mode, default will be commit viewer which uses show instead of diff
 // and based on the interaction, the mode switches
 export const useViewerStore = create((set) => ({
+  viewerMode: "commit",
   fileDiff: null,
-  setFileDiff: (fileDiff) => set({fileDiff: fileDiff})
+  commitLog: null,
+
+  setFileDiff: (fileDiff) => set({ fileDiff: fileDiff }),
+  setCommitLog: (commitLog) => set({ commitLog: commitLog }),
+  setViewerMode: (viewerMode) => set({viewerMode: viewerMode })
 }))
 
 export const useGitLogStore = create((set) => ({

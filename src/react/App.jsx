@@ -23,7 +23,7 @@ const App = () => {
             <GitCommits />
             <GitBranch />
           </div>
-          <div className="flex-1 max-w-1/2">
+          <div className="flex-1 max-w-1/2 h-full flex flex-col">
             <div className="">
               <GitRemote />
               <div className="max-h-96 overflow-auto border">

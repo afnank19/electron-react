@@ -28,7 +28,7 @@ const GitBranch = () => {
     console.log("switching branch to ", branch);
     setNewBranchName("");
 
-    window.gitAPI.switchBranch(repoPath, branch).then(addLog).catch((error) => { console.log("caught err",error)});
+    window.gitAPI.switchBranch(repoPath, branch).then(addLog).catch((error) => { addLog(error.message)});
     window.gitAPI.branch(repoPath).then(setActiveBranch);
     triggerRefresh();
   }

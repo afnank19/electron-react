@@ -106,6 +106,10 @@ export function registerGitIPC() {
     return git.getFileDiff(repoPath, filePath);
   });
 
+  ipcMain.handle("git:getCommitLog", (_, repoPath, commitHash) => {
+    return git.getCommitLog(repoPath, commitHash);
+  });
+
   ipcMain.handle("git:checkout", (_, { repoPath, branch }) => {
     return git.gitCheckout(repoPath, branch);
   });

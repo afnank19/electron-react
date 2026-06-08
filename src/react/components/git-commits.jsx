@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import { splitByNewLine } from "../utils/utils";
-import { useAppStore, useGitLogStore, useRepoStore } from "../state/repo-store";
+import { useAppStore, useGitLogStore, useRepoStore, useViewerStore } from "../state/repo-store";
 
 export const GitCommits = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
   const setRepoPath = useRepoStore((state) => state.setRepoPath);
-  const triggerRefresh = useAppStore((s) => s.triggerRefresh)
+  const triggerRefresh = useAppStore((s) => s.triggerRefresh);
   const refreshCounter = useAppStore((s) => s.refreshCounter);
   const addLog = useGitLogStore((s) => s.addLog);
 
   const [commits, setCommits] = useState("");
   const parsedCommits = commits ? splitByNewLine(commits) : null;
+
+  const setCommitLog = useViewerStore((s) => s.setCommitLog);
+  const setViewerMode = useViewerStore((s) => s.setViewerMode);
 
   const [commitMsg, setCommitMsg] = useState("");
 
@@ -34,6 +37,15 @@ export const GitCommits = () => {
     window.gitAPI.commits(repoPath).then(setCommits);
 
     triggerRefresh();
+  }
+
+  function handleOnCommitClick(commitItem) {
+    console.log("clicking the commit", commitItem);
+    const commitItemSplit = commitItem.split(" ");
+    const commitHash = commitItemSplit[0];
+
+    setViewerMode("commit");
+    window.gitAPI.getCommitLog(repoPath, commitHash).then(setCommitLog);
   }
 
   return (
@@ -61,9 +73,13 @@ export const GitCommits = () => {
         {parsedCommits &&
           parsedCommits.map((commit, idx) => {
             return (
-              <div id={idx} className="text-sm font-mono bg-[#000000] text-nowrap">
+              <button
+                id={idx}
+                className="text-sm w-full text-left font-mono bg-[#000000] text-nowrap hover:bg-yellow-500 hover:text-black cursor-pointer select-text"
+                onClick={() => handleOnCommitClick(commit)}
+              >
                 {commit}
-              </div>
+              </button>
             );
           })}
       </div>

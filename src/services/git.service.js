@@ -55,6 +55,10 @@ export function getFileDiff(repoPath, filePath) {
   return execGitRaw(repoPath, "diff " + filePath)
 }
 
+export function getCommitLog(repoPath, commitHash) {
+  return execGitRaw(repoPath, "show " + commitHash)
+}
+
 export function getRemotes(repoPath) {
   return execGitWithOutput(repoPath, "remote")
 }
