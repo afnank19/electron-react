@@ -18,7 +18,8 @@ contextBridge.exposeInMainWorld("gitAPI", {
   checkout: (repoPath, branch) =>
     ipcRenderer.invoke("git:checkout", { repoPath, branch }),
   getRemotes: (repoPath) => ipcRenderer.invoke("git:getRemotes", repoPath),
-  push: (repoPath) => ipcRenderer.invoke("git:push", repoPath)
+  push: (repoPath, remote) => ipcRenderer.invoke("git:push", repoPath, remote),
+  pull: (repoPath, remote) => ipcRenderer.invoke("git:pull", repoPath, remote)
 });
 
 contextBridge.exposeInMainWorld("repoAPI", {

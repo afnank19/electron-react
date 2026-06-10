@@ -34,8 +34,11 @@ const GitBranch = () => {
   }
 
   function handleNewBranchCreationClick() {
-    console.log(newBranchName, 'creating')
     setNewBranchName("");
+
+    if (newBranchName === "") {
+      return;
+    }
 
     window.gitAPI.createBranch(repoPath, newBranchName).then(addLog);
     window.gitAPI.branches(repoPath).then(setBranches);
@@ -58,7 +61,7 @@ const GitBranch = () => {
           value={newBranchName}
           onChange={(e) => setNewBranchName(e.target.value)}
         ></input>
-        <button onClick={handleNewBranchCreationClick} className="font-bold text-xs border rounded-lg px-2  border-neutral-700 hover:bg-neutral-600">
+        <button onClick={handleNewBranchCreationClick} className="font-bold text-xs border rounded-lg px-2  border-blue-600 hover:bg-blue-600">
           Create and Switch to Branch
         </button>
       </div>

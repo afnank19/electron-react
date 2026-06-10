@@ -52,7 +52,7 @@ export function commitChanges(repoPath, message) {
 }
 
 export function getFileDiff(repoPath, filePath) {
-  return execGitRaw(repoPath, "diff " + filePath)
+  return execGitRaw(repoPath, "diff HEAD -- " + filePath)
 }
 
 export function getCommitLog(repoPath, commitHash) {
@@ -63,9 +63,23 @@ export function getRemotes(repoPath) {
   return execGitWithOutput(repoPath, "remote")
 }
 
-// export function pushToRemote(repoPath) {
-//   return execGitWithOutput(repoPath, "push -u ")
-// }
+export function pushToRemote(repoPath, remote) {
+  let activeBranch = "";
+  gitBranchLocal(repoPath).then((out) => { activeBranch = out; });
+  console.log("pushing to remote branch", activeBranch)
+
+  // git push -u <remote> <active-branch>
+  return execGitWithOutput(repoPath, "push -u " + remote + " " + activeBranch);
+}
+
+export function pullFromRemote(repoPath, remote) {
+  let activeBranch = "";
+  gitBranchLocal(repoPath).then((out) => { activeBranch = out; });
+  console.log("pulling from remote branch", remote, activeBranch);
+
+  // git pull <remote> <active-branch>
+  return execGitWithOutput(repoPath, "pull " + remote + " " + activeBranch);
+}
 
 // helper
 function execGit(cwd, args) {

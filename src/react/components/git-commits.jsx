@@ -20,7 +20,12 @@ export const GitCommits = () => {
   useEffect(() => {
     // reload data
     console.log("commit refresh triggered");
-    window.gitAPI.commits(repoPath).then(setCommits);
+    window.gitAPI
+      .commits(repoPath)
+      .then(setCommits)
+      .catch((err) => {
+        setCommits("");
+      });
   }, [refreshCounter]);
 
   useEffect(() => {
@@ -28,12 +33,17 @@ export const GitCommits = () => {
       return;
     }
 
-    window.gitAPI.commits(repoPath).then(setCommits);
+    window.gitAPI
+      .commits(repoPath)
+      .then(setCommits)
+      .catch((err) => {
+        setCommits("");
+      });
   }, [repoPath]);
 
   function handleOnCommit() {
     setCommitMsg("");
-    window.gitAPI.commitChange(repoPath, commitMsg).then(addLog);
+    window.gitAPI.commitChange(repoPath, commitMsg).then(addLog).catch((err) => {addLog(err.message)});
     window.gitAPI.commits(repoPath).then(setCommits);
 
     triggerRefresh();
@@ -49,7 +59,7 @@ export const GitCommits = () => {
   }
 
   return (
-    <div className="text-white flex flex-col gap-4 m-2 border rounded-2xl border-neutral-800 py-1 px-2">
+    <div className="text-white flex flex-col gap-4 m-2 border rounded-2xl border-neutral-700 py-1 px-2">
       <h1 className="font-bold">Commits</h1>
 
       <div className="flex gap-4">
@@ -62,7 +72,7 @@ export const GitCommits = () => {
           }}
         ></input>
         <button
-          className="font-bold text-xs border rounded-lg px-2  border-neutral-700 hover:bg-neutral-600"
+          className="font-bold text-xs border rounded-lg px-2  border-blue-600 hover:bg-blue-600"
           onClick={handleOnCommit}
         >
           Commit with message
@@ -74,7 +84,7 @@ export const GitCommits = () => {
           parsedCommits.map((commit, idx) => {
             return (
               <button
-                id={idx}
+                key={idx}
                 className="text-sm w-full text-left font-mono bg-[#000000] text-nowrap hover:bg-yellow-500 hover:text-black cursor-pointer select-text"
                 onClick={() => handleOnCommitClick(commit)}
               >

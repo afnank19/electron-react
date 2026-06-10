@@ -118,8 +118,12 @@ export function registerGitIPC() {
     return git.getRemotes(repoPath);
   });
 
-  ipcMain.handle("git:push", (_, repoPath) => {
-    return git.gitPush(repoPath);
+  ipcMain.handle("git:push", (_, repoPath, remote) => {
+    return git.pushToRemote(repoPath, remote);
+  });
+
+  ipcMain.handle("git:pull", (_, repoPath, remote) => {
+    return git.pullFromRemote(repoPath, remote);
   });
 }
 

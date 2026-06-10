@@ -89,7 +89,7 @@ const GitStatus = () => {
 
   if (status === "") {
     return (
-      <div className="min-h-72 border rounded-2xl border-neutral-800 m-2">
+      <div className="min-h-72 border rounded-2xl border-neutral-700 m-2">
         <h1 className="font-bold px-2 pt-1">Files // Status</h1>
         <p className="px-2 pt-1 italic text-center">
           Nothing to commit, working tree clean.
@@ -101,7 +101,7 @@ const GitStatus = () => {
   // TODO: handle overflow so it looks good
   return (
     <>
-      <div className="py-1 border rounded-2xl border-neutral-800 m-2  flex flex-col gap-2 min-h-72">
+      <div className="py-1 border rounded-2xl border-neutral-700 m-2  flex flex-col gap-2 min-h-72">
         <h1 className="font-bold px-2 pt-1">Files // Status</h1>
 
         <div className="px-2 overflow-auto min-h-50  max-h-50">
