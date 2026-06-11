@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { splitByNewLine } from "../utils/utils";
 import { useAppStore, useGitLogStore, useRepoStore, useViewerStore } from "../state/repo-store";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { generateCommitMessage } from "./services/llm/service";
 
 export const GitCommits = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
@@ -33,6 +35,7 @@ export const GitCommits = () => {
       return;
     }
 
+    setCommitMsg("");
     window.gitAPI
       .commits(repoPath)
       .then(setCommits)
@@ -58,11 +61,27 @@ export const GitCommits = () => {
     window.gitAPI.getCommitLog(repoPath, commitHash).then(setCommitLog);
   }
 
-  return (
-    <div className="text-white flex flex-col gap-4 m-2 border rounded-2xl border-neutral-700 py-1 px-2">
-      <h1 className="font-bold">Commits</h1>
+  // TODO: work on making it more robust
+  const { mutate, mutateAsync, data, isPending, isError } = useMutation({
+    mutationFn: async () => {
+      const headDiff = await window.gitAPI.getHeadDiff(repoPath);
+      console.log("head diff", headDiff);
+      return generateCommitMessage(headDiff);
+    },
+    onSuccess: (data) => {
+      console.log("succeeded in generation", data)
+      setCommitMsg(data);
+    },
+    onError: (error) => {
+      console.error("failed generation", error)
+    }
+  });
 
-      <div className="flex gap-4">
+  return (
+    <div className="text-white flex flex-col gap-2 m-2 border rounded-2xl border-neutral-700 py-1">
+      <h1 className="font-bold px-2">Commits</h1>
+
+      <div className="flex gap-2 border-b border-neutral-700 pb-4 px-2">
         <input
           placeholder="eg. feat: update README.md"
           className="border border-neutral-700 rounded-lg px-2 text-sm flex-1"
@@ -71,6 +90,12 @@ export const GitCommits = () => {
             setCommitMsg(e.target.value);
           }}
         ></input>
+        <button
+          className="font-bold text-xs border rounded-lg px-2  border-neutral-700 hover:bg-neutral-700"
+          onClick={() => { mutate(); }}
+        >
+          {isPending ? "Generating " : "Generate with LLM"}
+        </button>
         <button
           className="font-bold text-xs border rounded-lg px-2  border-blue-600 hover:bg-blue-600"
           onClick={handleOnCommit}
@@ -85,7 +110,7 @@ export const GitCommits = () => {
             return (
               <button
                 key={idx}
-                className="text-sm w-full text-left font-mono bg-[#000000] text-nowrap hover:bg-yellow-500 hover:text-black cursor-pointer select-text"
+                className="text-sm px-2 w-full text-left font-mono bg-[#000000] text-nowrap hover:bg-yellow-500 hover:text-black cursor-pointer select-text border-b border-neutral-800"
                 onClick={() => handleOnCommitClick(commit)}
               >
                 {commit}

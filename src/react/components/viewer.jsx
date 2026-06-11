@@ -46,19 +46,21 @@ export const Viewer = () => {
     <div className="">
       {/* <p className="whitespace-pre font-mono text-sm">{fileDiff}</p>*/}
       <h1 className="font-bold border-b p-2 border-neutral-800">Viewer</h1>
-      {viewerMode === "commit" ? (
-        <>
+      <div className="overflow-auto min-h-100 max-h-100">
+        {viewerMode === "commit" ? (
+          <>
+            <p
+              className="whitespace-pre overflow-x-auto font-mono text-sm p-2"
+              dangerouslySetInnerHTML={{ __html: commitLogHtml }}
+            ></p>
+          </>
+        ) : (
           <p
             className="whitespace-pre overflow-x-auto font-mono text-sm p-2"
-            dangerouslySetInnerHTML={{ __html: commitLogHtml }}
+            dangerouslySetInnerHTML={{ __html: cleanFileDiffHtml }}
           ></p>
-        </>
-      ) : (
-        <p
-          className="whitespace-pre overflow-x-auto font-mono text-sm p-2"
-          dangerouslySetInnerHTML={{ __html: cleanFileDiffHtml }}
-        ></p>
-      )}
+        )}
+      </div>
     </div>
   );
 };

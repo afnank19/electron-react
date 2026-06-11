@@ -125,6 +125,10 @@ export function registerGitIPC() {
   ipcMain.handle("git:pull", (_, repoPath, remote) => {
     return git.pullFromRemote(repoPath, remote);
   });
+
+  ipcMain.handle("git:headDiff", (_, repoPath) => {
+    return git.getHeadDiff(repoPath);
+  });
 }
 
 export function registerRepoIPC() {
