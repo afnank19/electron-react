@@ -42,6 +42,8 @@ export const Viewer = () => {
     setCommitLog("");
   }, [repoPath]);
 
+  // Current changes, goes through an agent that decides which files it has to explore.
+
   return (
     <div className="">
       {/* <p className="whitespace-pre font-mono text-sm">{fileDiff}</p>*/}
@@ -65,7 +67,7 @@ export const Viewer = () => {
               </button>
             </div>
           ) : (
-            <p>Nothing to view</p>
+            <p className="p-2 italic">Select an file or commit to view</p>
           )
         ) : (
           <div>

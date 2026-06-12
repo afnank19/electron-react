@@ -119,7 +119,7 @@ export const GitCommits = () => {
             return (
               <button
                 key={idx}
-                className="text-sm px-2 w-full text-left font-mono bg-[#000000] text-nowrap hover:bg-yellow-500 hover:text-black cursor-pointer select-text border-b border-neutral-800"
+                className="text-sm px-2 w-full text-left font-mono  text-nowrap hover:bg-yellow-500 hover:text-black cursor-pointer select-text border-b border-neutral-800"
                 onClick={() => handleOnCommitClick(commit)}
               >
                 {commit}

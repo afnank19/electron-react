@@ -47,7 +47,7 @@ const Tabs = () => {
 
   return (
     <>
-      <div className="px-2 py-1 items-center flex gap-1 border-b border-neutral-700 select-none">
+      <div className="px-2 py-1 items-center flex gap-1 border-b border-neutral-700 select-none bg-black">
         <p className="font-bold mr-4">GitSage</p>
         {/* <button onClick={handleTab1} className="hover:bg-gray-600 border">app-test-repo</button>
         <button onClick={handleTab2} className="hover:bg-gray-600 border">my-app</button>*/}

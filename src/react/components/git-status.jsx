@@ -104,7 +104,7 @@ const GitStatus = () => {
   return (
     <>
       <div className="py-1 border rounded-2xl border-neutral-700 m-2  flex flex-col gap-2 min-h-72">
-        <h1 className="font-bold px-2 pt-1">Files // Status</h1>
+        <h1 className="font-bold px-2 pt-1 ">Files // Status</h1>
 
         <div className="px-2 overflow-auto min-h-50  max-h-50">
           {parsedStatus &&
