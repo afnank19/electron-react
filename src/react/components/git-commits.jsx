@@ -58,11 +58,12 @@ export const GitCommits = () => {
     const commitHash = commitItemSplit[0];
 
     setViewerMode("commit");
-    window.gitAPI.getCommitLog(repoPath, commitHash).then(setCommitLog);
+    window.gitAPI.getCommitLog(repoPath, commitHash).then((res) => {
+      setCommitLog(res, commitHash);
+    });
   }
 
-  // TODO: work on making it more robust
-  const { mutate, mutateAsync, data, isPending, isError } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       const headDiff = await window.gitAPI.getHeadDiff(repoPath);
       console.log("head diff", headDiff);
@@ -71,9 +72,11 @@ export const GitCommits = () => {
     onSuccess: (data) => {
       console.log("succeeded in generation", data)
       setCommitMsg(data);
+      addLog("INFO: Generated commit message for current changes");
     },
     onError: (error) => {
       console.error("failed generation", error)
+      addLog("FATAL: Failed to generate commit message through LLM: " + error.message);
     }
   });
 
@@ -82,19 +85,25 @@ export const GitCommits = () => {
       <h1 className="font-bold px-2">Commits</h1>
 
       <div className="flex gap-2 border-b border-neutral-700 pb-4 px-2">
-        <input
+        <textarea
           placeholder="eg. feat: update README.md"
-          className="border border-neutral-700 rounded-lg px-2 text-sm flex-1"
+          className="border border-neutral-700 rounded-lg px-2 text-sm flex-1 resize-none overflow-hidden"
           value={commitMsg}
           onChange={(e) => {
             setCommitMsg(e.target.value);
           }}
-        ></input>
+          rows={1}
+          onInput={(e) => {
+              const el = e.currentTarget;
+              el.style.height = "auto";
+              el.style.height = `${el.scrollHeight}px`;
+          }}
+        ></textarea>
         <button
           className="font-bold text-xs border rounded-lg px-2  border-neutral-700 hover:bg-neutral-700"
           onClick={() => { mutate(); }}
         >
-          {isPending ? "Generating " : "Generate with LLM"}
+          {isPending ? "Generating" : "Generate with LLM"}
         </button>
         <button
           className="font-bold text-xs border rounded-lg px-2  border-blue-600 hover:bg-blue-600"

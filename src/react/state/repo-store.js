@@ -51,10 +51,12 @@ export const useAppStore = create((set) => ({
 export const useViewerStore = create((set) => ({
   viewerMode: "commit",
   fileDiff: null,
+  filePath: null,
   commitLog: null,
+  commitHash: null,
 
-  setFileDiff: (fileDiff) => set({ fileDiff: fileDiff }),
-  setCommitLog: (commitLog) => set({ commitLog: commitLog }),
+  setFileDiff: (fileDiff, filePath) => set({ fileDiff: fileDiff, filePath: filePath }),
+  setCommitLog: (commitLog, commitHash) => set({ commitLog: commitLog, commitHash: commitHash }),
   setViewerMode: (viewerMode) => set({viewerMode: viewerMode })
 }))
 

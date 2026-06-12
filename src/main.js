@@ -129,6 +129,10 @@ export function registerGitIPC() {
   ipcMain.handle("git:headDiff", (_, repoPath) => {
     return git.getHeadDiff(repoPath);
   });
+
+  ipcMain.handle("git:diffStat", (_, repoPath) => {
+    return git.gitDiffStat(repoPath);
+  });
 }
 
 export function registerRepoIPC() {

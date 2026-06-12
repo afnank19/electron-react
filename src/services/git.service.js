@@ -73,6 +73,10 @@ export function getRemotes(repoPath) {
   return execGitWithOutput(repoPath, "remote");
 }
 
+export function gitDiffStat(repoPath) {
+  return execGitWithOutput(repoPath, "diff --stat")
+}
+
 export function pushToRemote(repoPath, remote) {
   let activeBranch = "";
   gitBranchLocal(repoPath).then((out) => {

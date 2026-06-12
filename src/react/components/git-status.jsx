@@ -66,7 +66,9 @@ const GitStatus = () => {
     console.log("fp", filePath)
 
     setViewerMode("file")
-    window.gitAPI.showFileDiff(repoPath, filePath).then(setFileDiff)
+    window.gitAPI.showFileDiff(repoPath, filePath).then((res) => {
+      setFileDiff(res, filePath);
+    })
   }
 
   useEffect(() => {

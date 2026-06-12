@@ -21,6 +21,7 @@ contextBridge.exposeInMainWorld("gitAPI", {
   push: (repoPath, remote) => ipcRenderer.invoke("git:push", repoPath, remote),
   pull: (repoPath, remote) => ipcRenderer.invoke("git:pull", repoPath, remote),
   getHeadDiff: (repoPath) => ipcRenderer.invoke("git:headDiff", repoPath),
+  diffStat: (repoPath) => ipcRenderer.invoke("git:diffStat", repoPath),
 });
 
 contextBridge.exposeInMainWorld("repoAPI", {
