@@ -27,3 +27,7 @@ contextBridge.exposeInMainWorld("gitAPI", {
 contextBridge.exposeInMainWorld("repoAPI", {
   openRepo: () => ipcRenderer.invoke("repo:openDialog")
 });
+
+contextBridge.exposeInMainWorld("ai", {
+  commitMsg: (diff) => ipcRenderer.invoke("llm:commitMsg", diff),
+})

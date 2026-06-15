@@ -37,6 +37,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "ansi-to-html": "^0.7.2",
     "dompurify": "^3.4.8",
+    "dotenv": "^17.4.2",
     "electron-squirrel-startup": "^1.0.1",
     "lucide-react": "^1.18.0",
     "openai": "^6.42.0",
