@@ -88,7 +88,7 @@ export const GitRemote = () => {
           <div className="flex items-center justify-between gap-1">
             <div className="flex gap-2 items-center">
               <p className="text-sm font-bold">Active Remote</p>
-              <select className="border rounded-md border-neutral-500 px-2 text-sm">
+              <select className="px-2 text-base">
                 {parsedRemotes &&
                   parsedRemotes.map((remote, idx) => {
                     return (
