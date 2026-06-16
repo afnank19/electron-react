@@ -5,7 +5,7 @@ import started from 'electron-squirrel-startup';
 import * as git from "./services/git.service.js";
 import { exec, spawn } from 'node:child_process';
 import { getRepoRoot } from './services/git.service';
-import { generateCommitMessage } from './services/llm.service.js';
+import { diffSummaryAgent, generateCommitMessage } from './services/llm.service.js';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -161,5 +161,9 @@ export function registerRepoIPC() {
 export function registerLLMIPC() {
   ipcMain.handle("llm:commitMsg", (_, diff) => {
     return generateCommitMessage(diff);
+  })
+
+  ipcMain.handle("llm:diffSummary", (_, repoPath) => {
+    return diffSummaryAgent(repoPath);
   })
 }

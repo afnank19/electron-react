@@ -1,4 +1,7 @@
+// TODO: Re think architecture, the first time is probably going to be horrible
+
 import OpenAI from "openai";
+import { getFileDiffNoANSIIColor, gitDiffNumStat } from "./git.service";
 
 export const PROMPTS = {
   commitMessage: `
@@ -54,4 +57,98 @@ export async function generateCommitMessage(diff) {
 
   console.log("Result from LLM", res);
   return res.choices[0].message.content;
+}
+
+const SYSTEM_PROMPT = `You are a concise code-change summarizer.
+You will receive "git diff --numstat" output: lines of "<added> <removed> <filename>".
+Decide if the numstat alone is enough to write a useful summary.
+If some files need closer inspection (significant logic changes, ambiguous purpose), call get_diffs for ONLY those files - be selective, this is expensive.
+Once you have enough information, respond with a short summary of what changed and why it likely matters, grouped by area/feature. Do not include raw diffs in your output.
+If file diff count from --numstat is extremely huge, 1000+ changes, ignore and do not explore that file.`;
+
+const tools = [
+  {
+    type: "function",
+    function: {
+      name: "get_diffs",
+      description: "Get git diff for specific files...",
+      parameters: {
+        type: "object",
+        properties: {
+          files: { type: "array", items: { type: "string" } },
+        },
+        required: ["files"],
+      },
+    },
+  },
+];
+
+export async function diffSummaryAgent(repoPath) {
+  let numStatDiff = "";
+  try {
+    numStatDiff = await gitDiffNumStat(repoPath);
+  } catch (e) {
+    console.error("err", e);
+  }
+
+  if (numStatDiff === "") {
+    return "No changes to summarize";
+  }
+
+  const messages = [
+    { role: "system", content: SYSTEM_PROMPT },
+    { role: "user", content: "git diff --numstat: \n\n" + numStatDiff },
+  ];
+
+  const res = await client.chat.completions.create({
+    model: MODEL,
+    messages: messages,
+    tools: tools,
+    tool_choice: "auto",
+  });
+
+  let message = res.choices[0].message;
+  messages.push(message);
+
+  let rounds = 0;
+  // rounds are 1 for now, testing hardcoded behavior, TODO: update loop handling
+  while (message.tool_calls?.length && rounds < 1) {
+    console.log("tools cals len", message.tool_calls?.length);
+
+    for (const toolCall of message.tool_calls) {
+      if (toolCall.function.name == "get_diffs") {
+        const { files } = JSON.parse(toolCall.function.arguments);
+
+        console.log("files", files, rounds);
+        const parsedFilePaths = files.join(" ");
+
+        let diffs = "(No diff content returned)";
+        try {
+          diffs = await getFileDiffNoANSIIColor(repoPath, parsedFilePaths);
+          console.log("All Diffs", diffs);
+        } catch (e) {
+          console.error("AAAAAAA", e);
+        }
+
+        messages.push({
+          role: "tool",
+          tool_call_id: toolCall.id,
+          content: diffs,
+        });
+      }
+    }
+
+    const res = await client.chat.completions.create({
+      model: MODEL,
+      messages: messages,
+      tools: tools,
+      tool_choice: "auto",
+    });
+
+    message = res.choices[0].message;
+    messages.push(message);
+    rounds++;
+  }
+
+  return message.content;
 }

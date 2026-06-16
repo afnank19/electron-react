@@ -9,6 +9,7 @@ import { Viewer } from "./components/viewer";
 import { Logs } from "./components/logs";
 import { GitRemote } from "./components/git-remote";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ChatPanel } from "./components/chat-panel";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,9 @@ const App = () => {
                 </div>
               </div>
             </div>
+            {/* <div className="flex-1 max-w-1/3 h-full flex flex-col mr-2">
+              <ChatPanel />
+            </div>*/}
           </div>
           :
           <div>

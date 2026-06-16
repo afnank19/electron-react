@@ -30,4 +30,5 @@ contextBridge.exposeInMainWorld("repoAPI", {
 
 contextBridge.exposeInMainWorld("ai", {
   commitMsg: (diff) => ipcRenderer.invoke("llm:commitMsg", diff),
+  diffSummary: (repoPath) => ipcRenderer.invoke("llm:diffSummary", repoPath),
 })

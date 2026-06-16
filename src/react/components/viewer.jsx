@@ -4,6 +4,7 @@ import Convert from "ansi-to-html";
 import DOMPurify from "dompurify";
 import { escapeHtml } from "../utils/utils";
 import { Bot } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
 
 export const Viewer = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
@@ -42,6 +43,18 @@ export const Viewer = () => {
     setCommitLog("");
   }, [repoPath]);
 
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => {
+      return window.ai.diffSummary(repoPath);
+    },
+    onSuccess: (data) => {
+      console.log("successfully ran, numstat=", data)
+    },
+    onError: (error) => {
+      console.error("couldn't run", error);
+    }
+  })
+
   // Current changes, goes through an agent that decides which files it has to explore.
 
   return (
@@ -49,20 +62,20 @@ export const Viewer = () => {
       {/* <p className="whitespace-pre font-mono text-sm">{fileDiff}</p>*/}
       <div className="font-bold border-b p-2 border-neutral-800 flex gap-2 justify-between">
         <h1 className="font-bold">Diff Viewer</h1>
-        <button className="font-bold text-xs border rounded-lg px-2  border-neutral-700 hover:bg-neutral-700 flex gap-1 items-center">
+        <button onClick={() => { mutate(); }} className="font-bold text-xs border rounded-lg px-2  border-neutral-700 hover:bg-neutral-700 flex gap-1 items-center">
           <Bot size={16} />
-          Summarize current changes
+          {!isPending ? "Summarize current changes" : "Beep Boop"}
         </button>
       </div>
-      <div className="overflow-auto min-h-100 max-h-100">
+      <div className="h-100 overflow-auto relative">
         {viewerMode === "commit" ? (
           commitLog != "" ? (
             <div className="relative">
               <p
-                className="whitespace-pre overflow-x-auto font-mono text-sm p-2"
+                className="whitespace-pre font-mono text-sm p-2"
                 dangerouslySetInnerHTML={{ __html: commitLogHtml }}
               ></p>
-              <button className="font-bold text-xs border rounded-md px-2  border-teal-700 hover:bg-teal-700 absolute top-2 right-2">
+              <button className="font-bold text-xs border rounded-md px-2  border-teal-700 hover:bg-teal-700 sticky top-2 right-2">
                 Summarize
               </button>
             </div>
@@ -70,12 +83,12 @@ export const Viewer = () => {
             <p className="p-2 italic">Select an file or commit to view</p>
           )
         ) : (
-          <div>
+          <div className="relative">
             <p
-              className="whitespace-pre overflow-x-auto font-mono text-sm p-2"
+              className="whitespace-pre font-mono text-sm p-2"
               dangerouslySetInnerHTML={{ __html: cleanFileDiffHtml }}
             ></p>
-            <button className="font-bold text-xs border rounded-lg px-2  border-neutral-700 hover:bg-neutral-700">
+            <button className="font-bold text-xs border rounded-md px-2  border-teal-700 hover:bg-teal-700 absolute top-2 right-2">
               Summarize
             </button>
           </div>
