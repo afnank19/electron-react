@@ -37,6 +37,8 @@ const client = new OpenAI({
 
 const MODEL = "gemini-3.1-flash-lite";
 
+// Could move this to the agent with a separate prompt for commit message generation
+// Advantage would be that we won't burn as much tokens as before
 export async function generateCommitMessage(diff) {
   console.log("diff for commit msg", diff);
   console.log("env", process.env.GITSAGE_KEY);
@@ -61,7 +63,7 @@ export async function generateCommitMessage(diff) {
 
 const SYSTEM_PROMPT = `You are a concise code-change summarizer.
 You will receive "git diff --numstat" output: lines of "<added> <removed> <filename>".
-Decide if the numstat alone is enough to write a useful summary.
+Decide if the numstat alone is enough to write a useful summary in Markdown.
 If some files need closer inspection (significant logic changes, ambiguous purpose), call get_diffs for ONLY those files - be selective, this is expensive.
 Once you have enough information, respond with a short summary of what changed and why it likely matters, grouped by area/feature. Do not include raw diffs in your output.
 If file diff count from --numstat is extremely huge, 1000+ changes, ignore and do not explore that file.`;
@@ -88,7 +90,7 @@ export async function diffSummaryAgent(repoPath) {
   try {
     numStatDiff = await gitDiffNumStat(repoPath);
   } catch (e) {
-    console.error("err", e);
+    throw new Error(e.message);
   }
 
   if (numStatDiff === "") {
@@ -113,21 +115,18 @@ export async function diffSummaryAgent(repoPath) {
   let rounds = 0;
   // rounds are 1 for now, testing hardcoded behavior, TODO: update loop handling
   while (message.tool_calls?.length && rounds < 1) {
-    console.log("tools cals len", message.tool_calls?.length);
 
     for (const toolCall of message.tool_calls) {
       if (toolCall.function.name == "get_diffs") {
         const { files } = JSON.parse(toolCall.function.arguments);
 
-        console.log("files", files, rounds);
         const parsedFilePaths = files.join(" ");
 
         let diffs = "(No diff content returned)";
         try {
           diffs = await getFileDiffNoANSIIColor(repoPath, parsedFilePaths);
-          console.log("All Diffs", diffs);
         } catch (e) {
-          console.error("AAAAAAA", e);
+          throw new Error(e.message);
         }
 
         messages.push({

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppStore, useGitLogStore, useRepoStore } from "../state/repo-store";
 import { splitByNewLine } from "../utils/utils";
+import { GitBranchIcon } from "lucide-react";
 
 const GitBranch = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
@@ -62,7 +63,8 @@ const GitBranch = () => {
             value={newBranchName}
             onChange={(e) => setNewBranchName(e.target.value)}
           ></input>
-          <button onClick={handleNewBranchCreationClick} className="font-bold text-xs border rounded-lg px-2  border-blue-600 hover:bg-blue-600">
+          <button onClick={handleNewBranchCreationClick} className="font-bold text-xs flex items-center gap-1 border rounded-lg px-2  border-blue-600 hover:bg-blue-600">
+            <GitBranchIcon size={16} />
             Create and Switch to Branch
           </button>
         </div>

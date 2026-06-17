@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAppStore, useRepoStore, useViewerStore } from "../state/repo-store";
+import { VIEWER_MODE, useAppStore, useRepoStore, useViewerStore } from "../state/repo-store";
 
 const GitStatus = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
@@ -65,7 +65,7 @@ const GitStatus = () => {
     const filePath = rawItemSplit[rawItemSplit.length - 1]
     console.log("fp", filePath)
 
-    setViewerMode("file")
+    setViewerMode(VIEWER_MODE.FILE);
     window.gitAPI.showFileDiff(repoPath, filePath).then((res) => {
       setFileDiff(res, filePath);
     })
@@ -110,7 +110,7 @@ const GitStatus = () => {
           {parsedStatus &&
             parsedStatus.map((st, idx) => {
               return (
-                <div className="flex gap-2 items-center my-1">
+                <div key={st} className="flex gap-2 items-center my-1">
                   <div className="flex gap-1">
                     <button
                       className="font-bold text-xs border rounded-md px-2  border-[#008800] hover:bg-[#008800]"

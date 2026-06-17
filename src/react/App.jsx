@@ -18,7 +18,7 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="">
+      <div className="font-display">
         <Tabs />
         <OpenRepoLayout />
         {repoPath !== null ?
