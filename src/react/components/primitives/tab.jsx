@@ -20,7 +20,7 @@ export const Tab = ({ repoName, tabId, handleCloseTab }) => {
         {repoPath === repoName && (
           <span className="w-2 h-2 rounded-full bg-red-500" />
         )}
-        <button className="cursor-pointer text-nowrap overflow-hidden" onClick={handleClick}>
+        <button className="cursor-pointer truncate max-w-[16ch]" onClick={handleClick}>
           {parsedName}
         </button>
       </div>

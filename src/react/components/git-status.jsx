@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAppStore, useRepoStore, useViewerStore } from "../state/repo-store";
+import { VIEWER_MODE, useAppStore, useRepoStore, useViewerStore } from "../state/repo-store";
 
 const GitStatus = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
@@ -65,7 +65,7 @@ const GitStatus = () => {
     const filePath = rawItemSplit[rawItemSplit.length - 1]
     console.log("fp", filePath)
 
-    setViewerMode("file")
+    setViewerMode(VIEWER_MODE.FILE);
     window.gitAPI.showFileDiff(repoPath, filePath).then((res) => {
       setFileDiff(res, filePath);
     })
@@ -91,7 +91,7 @@ const GitStatus = () => {
 
   if (status === "") {
     return (
-      <div className="min-h-72 border rounded-2xl border-neutral-700 m-2">
+      <div className="min-h-72 border rounded-2xl border-neutral-800 m-2">
         <h1 className="font-bold px-2 pt-1">Files // Status</h1>
         <p className="px-2 pt-1 italic text-center">
           Nothing to commit, working tree clean.
@@ -103,14 +103,14 @@ const GitStatus = () => {
   // TODO: handle overflow so it looks good
   return (
     <>
-      <div className="py-1 border rounded-2xl border-neutral-700 m-2  flex flex-col gap-2 min-h-72">
-        <h1 className="font-bold px-2 pt-1">Files // Status</h1>
+      <div className="py-1 border rounded-2xl border-neutral-800 m-2  flex flex-col gap-2 min-h-72">
+        <h1 className="font-bold px-2 pt-1 ">Files // Status</h1>
 
         <div className="px-2 overflow-auto min-h-50  max-h-50">
           {parsedStatus &&
             parsedStatus.map((st, idx) => {
               return (
-                <div className="flex gap-2 items-center my-1">
+                <div key={st} className="flex gap-2 items-center my-1">
                   <div className="flex gap-1">
                     <button
                       className="font-bold text-xs border rounded-md px-2  border-[#008800] hover:bg-[#008800]"
@@ -145,7 +145,7 @@ const GitStatus = () => {
               );
             })}
         </div>
-        <div className="flex gap-1 border-t border-neutral-700 p-2">
+        <div className="flex gap-1 border-t border-neutral-800 p-2">
           <button
             className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
             onClick={handleStageAll}

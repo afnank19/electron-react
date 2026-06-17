@@ -1,3 +1,7 @@
+// Problems in this file
+// - The git functions are too specific especially the diff ones
+// - different git runners
+
 import { exec } from "child_process";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
@@ -75,6 +79,14 @@ export function getRemotes(repoPath) {
 
 export function gitDiffStat(repoPath) {
   return execGitWithOutput(repoPath, "diff --stat")
+}
+
+export function gitDiffNumStat(repoPath) {
+  return execGitWithOutput(repoPath, "diff --numstat");
+}
+
+export function getFileDiffNoANSIIColor(repoPath, filePaths) {
+  return execGitWithOutput(repoPath, "diff HEAD -- " + filePaths);
 }
 
 export function pushToRemote(repoPath, remote) {

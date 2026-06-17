@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { splitByNewLine } from "../utils/utils";
-import { useAppStore, useGitLogStore, useRepoStore, useViewerStore } from "../state/repo-store";
+import { VIEWER_MODE, useAppStore, useGitLogStore, useRepoStore, useViewerStore } from "../state/repo-store";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { generateCommitMessage } from "./services/llm/service";
 
@@ -57,7 +57,7 @@ export const GitCommits = () => {
     const commitItemSplit = commitItem.split(" ");
     const commitHash = commitItemSplit[0];
 
-    setViewerMode("commit");
+    setViewerMode(VIEWER_MODE.COMMIT);
     window.gitAPI.getCommitLog(repoPath, commitHash).then((res) => {
       setCommitLog(res, commitHash);
     });
@@ -67,7 +67,8 @@ export const GitCommits = () => {
     mutationFn: async () => {
       const headDiff = await window.gitAPI.getHeadDiff(repoPath);
       console.log("head diff", headDiff);
-      return generateCommitMessage(headDiff);
+      // return generateCommitMessage(headDiff);
+      return window.ai.commitMsg(headDiff);
     },
     onSuccess: (data) => {
       console.log("succeeded in generation", data)
@@ -81,7 +82,7 @@ export const GitCommits = () => {
   });
 
   return (
-    <div className="text-white flex flex-col gap-2 m-2 border rounded-2xl border-neutral-700 py-1">
+    <div className="text-white flex flex-col gap-2 m-2 border rounded-2xl border-neutral-800 py-1">
       <h1 className="font-bold px-2">Commits</h1>
 
       <div className="flex gap-2 border-b border-neutral-700 pb-4 px-2">
@@ -119,7 +120,7 @@ export const GitCommits = () => {
             return (
               <button
                 key={idx}
-                className="text-sm px-2 w-full text-left font-mono bg-[#000000] text-nowrap hover:bg-yellow-500 hover:text-black cursor-pointer select-text border-b border-neutral-800"
+                className="text-sm px-2 w-full text-left font-mono  text-nowrap hover:bg-yellow-500 hover:text-black cursor-pointer select-text border-b border-neutral-800"
                 onClick={() => handleOnCommitClick(commit)}
               >
                 {commit}

@@ -1,9 +1,11 @@
+import 'dotenv/config';
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import * as git from "./services/git.service.js";
 import { exec, spawn } from 'node:child_process';
 import { getRepoRoot } from './services/git.service';
+import { diffSummaryAgent, generateCommitMessage } from './services/llm.service.js';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -37,6 +39,7 @@ const createWindow = () => {
 app.whenReady().then(() => {
   registerRepoIPC();
   registerGitIPC();
+  registerLLMIPC();
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the
@@ -153,4 +156,14 @@ export function registerRepoIPC() {
       return { error: "Selected folder is not inside a git repo" };
     }
   });
+}
+
+export function registerLLMIPC() {
+  ipcMain.handle("llm:commitMsg", (_, diff) => {
+    return generateCommitMessage(diff);
+  })
+
+  ipcMain.handle("llm:diffSummary", (_, repoPath) => {
+    return diffSummaryAgent(repoPath);
+  })
 }

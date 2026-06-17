@@ -48,16 +48,34 @@ export const useAppStore = create((set) => ({
 // the file diff viewer use case first
 // Probably a viewer mode, default will be commit viewer which uses show instead of diff
 // and based on the interaction, the mode switches
+
+export const VIEWER_MODE = {
+  NONE: "none",
+  COMMIT: "commit",
+  FILE: "file",
+  SUMMARY: "summary"
+}
+
 export const useViewerStore = create((set) => ({
-  viewerMode: "commit",
+  viewerMode: VIEWER_MODE.NONE,
   fileDiff: null,
   filePath: null,
   commitLog: null,
   commitHash: null,
+  summary: null,
 
   setFileDiff: (fileDiff, filePath) => set({ fileDiff: fileDiff, filePath: filePath }),
   setCommitLog: (commitLog, commitHash) => set({ commitLog: commitLog, commitHash: commitHash }),
-  setViewerMode: (viewerMode) => set({viewerMode: viewerMode })
+  setSummary: (summary) => set({ summary: summary}),
+  setViewerMode: (viewerMode) => set({ viewerMode: viewerMode }),
+  resetViewer: () => set({
+    viewerMode: VIEWER_MODE.NONE,
+    fileDiff: null,
+    filePath: null,
+    commitLog: null,
+    commitHash: null,
+    summary: null,
+  })
 }))
 
 export const useGitLogStore = create((set) => ({
