@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { splitByNewLine } from "../utils/utils";
 import { VIEWER_MODE, useAppStore, useGitLogStore, useRepoStore, useViewerStore } from "../state/repo-store";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { generateCommitMessage } from "./services/llm/service";
+// import { generateCommitMessage } from "./services/llm/service";
 
 export const GitCommits = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
