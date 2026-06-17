@@ -1,58 +1,114 @@
+// Problems in this file
+// - The git functions are too specific especially the diff ones
+// - different git runners
+
 import { exec } from "child_process";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 
 export function getRepoRoot(path) {
   return new Promise((resolve, reject) => {
-    exec("git rev-parse --show-toplevel", { cwd: path }, (err, stdout, stderr) => {
-      if (err) return reject("Not a git repository");
-      resolve(stdout.trim());
-    });
+    exec(
+      "git rev-parse --show-toplevel",
+      { cwd: path },
+      (err, stdout, stderr) => {
+        if (err) return reject("Not a git repository");
+        resolve(stdout.trim());
+      },
+    );
   });
 }
 
 export function gitStatus(repoPath) {
-  console.log("status for repo path: ", repoPath)
-  return execGitRaw(repoPath, "status --porcelain");
+  console.log("status for repo path: ", repoPath);
+  return execGitRaw(repoPath, "status --porcelain -uall");
 }
 
 export function gitUserLocalEmail(repoPath) {
-  return execGit(repoPath, "config user.email")
+  return execGit(repoPath, "config user.email");
 }
 
 export function stageFile(repoPath, filePath) {
-  return execGit(repoPath, "add "+filePath)
+  return execGit(repoPath, "add " + filePath);
 }
 
 export function restoreFileFromStaging(repoPath, filePath) {
-  return execGit(repoPath, "restore --staged " + filePath)
+  return execGit(repoPath, "restore --staged " + filePath);
 }
 
 export function gitBranchLocal(repoPath) {
-  return execGit(repoPath, "branch --format='%(refname:short)'")
+  return execGit(repoPath, "branch --format='%(refname:short)'");
 }
 
 export function gitSwitchToBranch(repoPath, branch) {
-  return execGit(repoPath, "switch " + branch);
+  return execGitWithOutput(repoPath, "switch " + branch);
 }
 
 export function gitCreateAndSwitchToBranch(repoPath, branchname) {
-  return execGit(repoPath, "switch -c" + branchname);
+  return execGitWithOutput(repoPath, "switch -c " + branchname);
 }
 
 export function gitGetActiveBranch(repoPath) {
-  return execGit(repoPath, "branch --show-current")
+  return execGit(repoPath, "branch --show-current");
 }
 
 export function getCommits(repoPath) {
-  return execGit(repoPath, `log --pretty=format:"%h %cr %an %s"`)
+  return execGitWithOutput(repoPath, `log --pretty=format:"%h %cr %an %s"`);
 }
 
 export function commitChanges(repoPath, message) {
-  console.log("commiting with message", message)
-  return execGit(repoPath, `commit -m "` + message + `"`)
+  console.log("commiting with message", message);
+  return execGitWithOutput(repoPath, `commit -m "` + message + `"`);
+}
+
+export function getHeadDiff(repoPath) {
+  return execGitWithOutput(repoPath, "diff HEAD");
 }
 
 export function getFileDiff(repoPath, filePath) {
-  return execGitRaw(repoPath, "diff " + filePath)
+  return execGitRaw(repoPath, "diff HEAD -- " + filePath);
+}
+
+export function getCommitLog(repoPath, commitHash) {
+  return execGitRaw(repoPath, "show " + commitHash);
+}
+
+export function getRemotes(repoPath) {
+  return execGitWithOutput(repoPath, "remote");
+}
+
+export function gitDiffStat(repoPath) {
+  return execGitWithOutput(repoPath, "diff --stat")
+}
+
+export function gitDiffNumStat(repoPath) {
+  return execGitWithOutput(repoPath, "diff --numstat");
+}
+
+export function getFileDiffNoANSIIColor(repoPath, filePaths) {
+  return execGitWithOutput(repoPath, "diff HEAD -- " + filePaths);
+}
+
+export function pushToRemote(repoPath, remote) {
+  let activeBranch = "";
+  gitBranchLocal(repoPath).then((out) => {
+    activeBranch = out;
+  });
+  console.log("pushing to remote branch", activeBranch);
+
+  // git push -u <remote> <active-branch>
+  return execGitWithOutput(repoPath, "push -u " + remote + " " + activeBranch);
+}
+
+export function pullFromRemote(repoPath, remote) {
+  let activeBranch = "";
+  gitBranchLocal(repoPath).then((out) => {
+    activeBranch = out;
+  });
+  console.log("pulling from remote branch", remote, activeBranch);
+
+  // git pull <remote> <active-branch>
+  return execGitWithOutput(repoPath, "pull " + remote + " " + activeBranch);
 }
 
 // helper
@@ -65,6 +121,22 @@ function execGit(cwd, args) {
   });
 }
 
+// this function returns all output that git throws
+function execGitWithOutput(cwd, args) {
+  return new Promise((resolve, reject) => {
+    exec(`git ${args}`, { cwd }, (err, stdout, stderr) => {
+      const output = [stdout, stderr].filter(Boolean).join("").trim();
+
+      if (err) {
+        reject(output || err.message);
+        return;
+      }
+
+      resolve(output);
+    });
+  });
+}
+
 // Not trimming the output, helpful for parsing, may remove the upper function if its not needed
 function execGitRaw(cwd, args) {
   return new Promise((resolve, reject) => {
@@ -73,4 +145,18 @@ function execGitRaw(cwd, args) {
       resolve(stdout);
     });
   });
+}
+
+// This is a better approach, which i'll integrate soon, after testing it separately
+const execFileAsync = promisify(execFile);
+
+async function runGit(cwd, args, { raw = false } = {}) {
+  try {
+    const { stdout, stderr } = await execFileAsync("git", args, { cwd });
+    const output = `${stdout}${stderr}`;
+    return raw ? stdout : output.trim();
+  } catch (err) {
+    const output = `${err.stdout || ""}${err.stderr || ""}`.trim();
+    throw new Error(output || err.message);
+  }
 }

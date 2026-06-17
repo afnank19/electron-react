@@ -7,36 +7,49 @@ import { GitCommits } from "./components/git-commits";
 import { useRepoStore } from "./state/repo-store";
 import { Viewer } from "./components/viewer";
 import { Logs } from "./components/logs";
+import { GitRemote } from "./components/git-remote";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ChatPanel } from "./components/chat-panel";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
 
   return (
-    <div className="">
-      <Tabs />
-      <OpenRepoLayout />
-      {repoPath !== null ?
-        <div className="flex">
-          <div className="flex-1 max-w-1/2">
-            <GitStatus />
-            <GitBranch />
-            <GitCommits />
-          </div>
-          <div className="flex-1 max-w-1/2">
-            <div className="">
-              <div className="max-h-96 overflow-auto border">
-                <Viewer/>
-              </div>
-              <Logs />
+    <QueryClientProvider client={queryClient}>
+      <div className="font-display">
+        <Tabs />
+        <OpenRepoLayout />
+        {repoPath !== null ?
+          <div className="flex">
+            <div className="flex-1 max-w-1/2">
+              <GitStatus />
+              <GitCommits />
+              <GitBranch />
             </div>
+            <div className="flex-1 max-w-1/2 h-full flex flex-col mr-2">
+              <div className="flex flex-col gap-2">
+                <GitRemote />
+                <div className="flex flex-col gap-2">
+                  <div className=" border rounded-2xl border-neutral-800 min-h-115 max-h-115">
+                    <Viewer/>
+                  </div>
+                  <Logs />
+                </div>
+              </div>
+            </div>
+            {/* <div className="flex-1 max-w-1/3 h-full flex flex-col mr-2">
+              <ChatPanel />
+            </div>*/}
           </div>
-        </div>
-        :
-        <div>
-          <p>No repository opened</p>
-        </div>
-      }
-    </div>
+          :
+          <div>
+            <p>No repository opened</p>
+          </div>
+        }
+      </div>
+    </QueryClientProvider>
   );
 };
 

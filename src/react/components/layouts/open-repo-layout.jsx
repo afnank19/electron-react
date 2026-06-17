@@ -18,7 +18,7 @@ const OpenRepoLayout = () => {
   }, [repoPath]);
 
   return (
-    <div className="flex px-2 border-b">
+    <div className="flex px-2 border-b border-neutral-700">
       <div className="my-1">
         <p className="font-bold">{"Active Repository: " + repoPath}</p>
         <MaskedText text={userEmail} />

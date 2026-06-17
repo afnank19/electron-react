@@ -1,9 +1,11 @@
+import 'dotenv/config';
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import * as git from "./services/git.service.js";
 import { exec, spawn } from 'node:child_process';
 import { getRepoRoot } from './services/git.service';
+import { diffSummaryAgent, generateCommitMessage } from './services/llm.service.js';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -37,6 +39,7 @@ const createWindow = () => {
 app.whenReady().then(() => {
   registerRepoIPC();
   registerGitIPC();
+  registerLLMIPC();
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the
@@ -106,12 +109,32 @@ export function registerGitIPC() {
     return git.getFileDiff(repoPath, filePath);
   });
 
+  ipcMain.handle("git:getCommitLog", (_, repoPath, commitHash) => {
+    return git.getCommitLog(repoPath, commitHash);
+  });
+
   ipcMain.handle("git:checkout", (_, { repoPath, branch }) => {
     return git.gitCheckout(repoPath, branch);
   });
 
-  ipcMain.handle("git:push", (_, repoPath) => {
-    return git.gitPush(repoPath);
+  ipcMain.handle("git:getRemotes", (_, repoPath) => {
+    return git.getRemotes(repoPath);
+  });
+
+  ipcMain.handle("git:push", (_, repoPath, remote) => {
+    return git.pushToRemote(repoPath, remote);
+  });
+
+  ipcMain.handle("git:pull", (_, repoPath, remote) => {
+    return git.pullFromRemote(repoPath, remote);
+  });
+
+  ipcMain.handle("git:headDiff", (_, repoPath) => {
+    return git.getHeadDiff(repoPath);
+  });
+
+  ipcMain.handle("git:diffStat", (_, repoPath) => {
+    return git.gitDiffStat(repoPath);
   });
 }
 
@@ -133,4 +156,14 @@ export function registerRepoIPC() {
       return { error: "Selected folder is not inside a git repo" };
     }
   });
+}
+
+export function registerLLMIPC() {
+  ipcMain.handle("llm:commitMsg", (_, diff) => {
+    return generateCommitMessage(diff);
+  })
+
+  ipcMain.handle("llm:diffSummary", (_, repoPath) => {
+    return diffSummaryAgent(repoPath);
+  })
 }

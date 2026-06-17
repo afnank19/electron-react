@@ -14,11 +14,21 @@ contextBridge.exposeInMainWorld("gitAPI", {
   commits: (repoPath) => ipcRenderer.invoke("git:commits", repoPath),
   commitChange: (repoPath, message) => ipcRenderer.invoke("git:commitChange", repoPath, message),
   showFileDiff: (repoPath, filePath) => ipcRenderer.invoke("git:showFileDiff", repoPath, filePath),
+  getCommitLog: (repoPath, commitHash) => ipcRenderer.invoke("git:getCommitLog", repoPath, commitHash),
   checkout: (repoPath, branch) =>
     ipcRenderer.invoke("git:checkout", { repoPath, branch }),
-  push: (repoPath) => ipcRenderer.invoke("git:push", repoPath)
+  getRemotes: (repoPath) => ipcRenderer.invoke("git:getRemotes", repoPath),
+  push: (repoPath, remote) => ipcRenderer.invoke("git:push", repoPath, remote),
+  pull: (repoPath, remote) => ipcRenderer.invoke("git:pull", repoPath, remote),
+  getHeadDiff: (repoPath) => ipcRenderer.invoke("git:headDiff", repoPath),
+  diffStat: (repoPath) => ipcRenderer.invoke("git:diffStat", repoPath),
 });
 
 contextBridge.exposeInMainWorld("repoAPI", {
   openRepo: () => ipcRenderer.invoke("repo:openDialog")
 });
+
+contextBridge.exposeInMainWorld("ai", {
+  commitMsg: (diff) => ipcRenderer.invoke("llm:commitMsg", diff),
+  diffSummary: (repoPath) => ipcRenderer.invoke("llm:diffSummary", repoPath),
+})
