@@ -1,7 +1,11 @@
 // TODO: Re think architecture, the first time is probably going to be horrible
+// TODO: API key loader from the UI somehow, baseUrl as well
+// TODO: Ensure no errors on brand new launc
+// TODO: Fix errors in builds
 
 import OpenAI from "openai";
 import { getFileDiffNoANSIIColor, gitDiffNumStat } from "./git.service";
+import { getSettings } from "./settings.service";
 
 export const PROMPTS = {
   commitMessage: `
@@ -29,11 +33,31 @@ Be thorough but skip obvious boilerplate. Use plain prose or short bullets.
 `.trim(),
 };
 
-const client = new OpenAI({
-  apiKey: process.env.GITSAGE_KEY,
-  baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
-  // dangerouslyAllowBrowser: true,
-});
+function getLLMClient() {
+  const apiConfig = getSettings();
+
+  if (!apiConfig.apiKey) {
+    throw new Error("Please configure your API KEY from the settings");
+  }
+
+  if (!apiConfig.baseURL) {
+    throw new Error("Please configure your BASE URL from the settings");
+  }
+
+  // Testing
+  // "https://generativelanguage.googleapis.com/v1beta/openai/"
+  return new OpenAI({
+    apiKey: apiConfig.apiKey,
+    baseURL: apiConfig.baseURL,
+    // dangerouslyAllowBrowser: true,
+  });
+}
+
+// const client = new OpenAI({
+//   apiKey: process.env.GITSAGE_KEY,
+//   baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
+//   // dangerouslyAllowBrowser: true,
+// });
 
 const MODEL = "gemini-3.1-flash-lite";
 
@@ -42,6 +66,7 @@ const MODEL = "gemini-3.1-flash-lite";
 export async function generateCommitMessage(diff) {
   console.log("diff for commit msg", diff);
   console.log("env", process.env.GITSAGE_KEY);
+  const client = getLLMClient();
 
   const res = await client.chat.completions.create({
     model: MODEL,
@@ -86,6 +111,8 @@ const tools = [
 ];
 
 export async function diffSummaryAgent(repoPath) {
+  const client = getLLMClient();
+
   let numStatDiff = "";
   try {
     numStatDiff = await gitDiffNumStat(repoPath);
