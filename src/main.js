@@ -1,4 +1,4 @@
-import 'dotenv/config';
+// import 'dotenv/config';
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
@@ -6,6 +6,7 @@ import * as git from "./services/git.service.js";
 import { exec, spawn } from 'node:child_process';
 import { getRepoRoot } from './services/git.service';
 import { diffSummaryAgent, generateCommitMessage } from './services/llm.service.js';
+import { registerSettingsIPC } from './ipc/settings.ipc.js';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -15,8 +16,9 @@ if (started) {
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
+    width: 1200,
     height: 800,
+    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -30,7 +32,7 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -40,6 +42,7 @@ app.whenReady().then(() => {
   registerRepoIPC();
   registerGitIPC();
   registerLLMIPC();
+  registerSettingsIPC();
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the

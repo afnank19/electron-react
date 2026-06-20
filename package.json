@@ -1,8 +1,8 @@
 {
-  "name": "my-app",
-  "productName": "my-app",
-  "version": "1.0.0",
-  "description": "My Electron application description",
+  "name": "gitsage-gui",
+  "productName": "gitsage-gui",
+  "version": "0.0.1",
+  "description": "A Graphical user interface to speed up working with multiple repositories easier, powered by AI!",
   "main": ".vite/build/main.js",
   "private": true,
   "scripts": {
@@ -39,6 +39,7 @@
     "dompurify": "^3.4.8",
     "dotenv": "^17.4.2",
     "electron-squirrel-startup": "^1.0.1",
+    "electron-store": "^11.0.2",
     "lucide-react": "^1.18.0",
     "openai": "^6.42.0",
     "react": "^19.2.5",

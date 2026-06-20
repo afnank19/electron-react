@@ -32,3 +32,8 @@ contextBridge.exposeInMainWorld("ai", {
   commitMsg: (diff) => ipcRenderer.invoke("llm:commitMsg", diff),
   diffSummary: (repoPath) => ipcRenderer.invoke("llm:diffSummary", repoPath),
 })
+
+contextBridge.exposeInMainWorld("settings", {
+  getSettings: () => ipcRenderer.invoke("cfg:getSettings"),
+  setSettings: (settings) => ipcRenderer.invoke("cfg:setSettings", settings)
+})
