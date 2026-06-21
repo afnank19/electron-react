@@ -65,7 +65,11 @@ const MODEL = "gemini-3.1-flash-lite";
 // Advantage would be that we won't burn as much tokens as before
 export async function generateCommitMessage(diff) {
   console.log("diff for commit msg", diff);
-  console.log("env", process.env.GITSAGE_KEY);
+
+  if (diff === "") {
+    throw new Error("No changes yet!")
+  }
+
   const client = getLLMClient();
 
   const res = await client.chat.completions.create({

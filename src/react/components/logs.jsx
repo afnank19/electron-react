@@ -19,7 +19,7 @@ export const Logs = () => {
   }, [repoPath]);
 
   return (
-    <div className="border rounded-2xl border-neutral-800 min-h-78 max-h-78 overflow-auto">
+    <div className="border rounded-2xl border-neutral-800 min-h-82 max-h-82 overflow-auto">
       <h1 className="font-bold border-b p-2 border-neutral-800">Logs</h1>
       <div className="">
         {gitLogs.map((log) => {

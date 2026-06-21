@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRepoStore, useTabStore } from "../state/repo-store";
+import { Plus, PlusSquare } from "lucide-react";
 
 export const OpenRepo = ({ pathErr, setPathErr}) => {
   const setRepoPath = useRepoStore((state) => state.setRepoPath);
@@ -40,11 +41,10 @@ export const OpenRepo = ({ pathErr, setPathErr}) => {
   return (
     <div className="text-white text-nowrap">
       <button
-        className="cursor-pointer font-bold text-xs border rounded-lg px-4 py-1 border-neutral-700 hover:bg-neutral-800"
+        className="cursor-pointer font-bold text-xs rounded-lg p-1 my-1  hover:bg-neutral-600"
         onClick={handleClick}
       >
-        {" "}
-        Open Repository
+        <Plus size={20} />
       </button>
     </div>
   );

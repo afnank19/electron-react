@@ -30,7 +30,7 @@ export const SettingsModal = ({ onClose }) => {
     <div className="text-white bg-neutral-900 border border-neutral-800 rounded-2xl w-[40vw] h-auto p-4 flex flex-col gap-4">
       <h1 className="font-bold text-lg">Settings</h1>
 
-      <p className="text-sm text-gray-600">Please use OpenAI library compatible API keys and Base Urls </p>
+      <p className="text-sm text-neutral-400">Please use OpenAI library compatible API keys and Base Urls </p>
       <div className="flex flex-col gap-2">
         <label className="text-sm">API Key</label>
         <div className="flex gap-2">

@@ -1,3 +1,4 @@
+import { Eye, EyeOff } from "lucide-react";
 import React, { useState } from "react";
 
 const MaskedText = ({ text }) => {
@@ -9,14 +10,13 @@ const MaskedText = ({ text }) => {
 
   return (
     <div className="flex gap-2 items-center">
-      <p>Local Email: </p>
-      <p>{revealed ? text : "*".repeat(text.length)}</p>
+      <p className="text-sm font-medium">{revealed ? text : "*".repeat(text.length)}</p>
       <button
         onClick={handleRevealClick}
-        className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
+        className="font-bold text-xs border rounded-md px-2 border-neutral-700 hover:bg-neutral-600"
       >
         {" "}
-        {revealed ? "Hide" : "Show"}{" "}
+        {revealed ? <Eye size={16}/> : <EyeOff size={16} />}{" "}
       </button>
     </div>
   );
