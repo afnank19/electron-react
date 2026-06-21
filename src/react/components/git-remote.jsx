@@ -61,7 +61,7 @@ export const GitRemote = () => {
   }
 
   return (
-    <div className="border rounded-2xl border-neutral-700 p-2 mt-2 min-h-18">
+    <div className="border rounded-2xl border-neutral-800 p-2 mt-2 min-h-18">
       {remotes === "" ? (
         <div>No remotes set</div>
       ) : (

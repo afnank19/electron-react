@@ -54,7 +54,7 @@ const GitBranch = () => {
       {/* <p>{test }</p>*/}
       <div className="border-b border-neutral-700 pb-2 px-2 flex flex-col gap-2">
         <div className="font-bold">Branch Management</div>
-        <div className="font-bold text-sm">Currently On: { activeBranch }</div>
+        <div className="font-bold text-sm">Currently on: { activeBranch }</div>
 
         <div className="flex gap-4">
           <input
