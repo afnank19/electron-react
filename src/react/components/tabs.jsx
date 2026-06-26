@@ -39,10 +39,12 @@ const Tabs = () => {
 
       localStorage.setItem("repo-path", latestOpenedTab.repoPath);
       setRepoPath(latestOpenedTab.repoPath);
+      window.app.setRepoPath(latestOpenedTab.repoPath);
     } else {
       console.log("no more tabs");
       localStorage.removeItem("repo-path");
       setRepoPath(null);
+      window.app.setRepoPath(null);
     }
   }, [tabs]);
 

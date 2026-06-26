@@ -1,11 +1,9 @@
 // TODO: Re think architecture, the first time is probably going to be horrible
-// TODO: API key loader from the UI somehow, baseUrl as well
-// TODO: Ensure no errors on brand new launc
-// TODO: Fix errors in builds
 
 import OpenAI from "openai";
 import { getFileDiffNoANSIIColor, gitDiffNumStat } from "./git.service";
 import { getSettings } from "./settings.service";
+import { getAgent } from "../agent/agent";
 
 export const PROMPTS = {
   commitMessage: `
@@ -33,7 +31,7 @@ Be thorough but skip obvious boilerplate. Use plain prose or short bullets.
 `.trim(),
 };
 
-function getLLMClient() {
+export function getLLMClient() {
   const apiConfig = getSettings();
 
   if (!apiConfig.apiKey) {
@@ -181,4 +179,19 @@ export async function diffSummaryAgent(repoPath) {
   }
 
   return message.content;
+}
+
+
+export async function summarizeCurrentChanges() {
+  const requestPrompt = `Can you help me summarize my current changes? In order to achieve this do the following:
+    Use the numstat diff tool to get an overview of the repository changes.
+    Decide if the numstat alone is enough to write a useful summary in Markdown.
+    If some files need closer inspection (significant logic changes, ambiguous purpose), call get_diffs for ONLY those files - be selective, this is expensive.
+    Once you have enough information, respond with a short summary of what changed and why it likely matters, grouped by area/feature. Do not include raw diffs in your output.
+    If file diff count from --numstat is extremely huge, 1000+ changes, ignore and do not explore that file.
+    `
+
+  const agent = getAgent();
+
+  return agent.run(requestPrompt);
 }

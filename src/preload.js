@@ -2,6 +2,11 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 const { contextBridge, ipcRenderer } = require('electron');
 
+contextBridge.exposeInMainWorld("app", {
+  getRepoPath: () => ipcRenderer.invoke("app:getRepoPath"),
+  setRepoPath: (repoPath) => ipcRenderer.invoke("app:setRepoPath", repoPath)
+})
+
 contextBridge.exposeInMainWorld("gitAPI", {
   status: (repoPath) => ipcRenderer.invoke("git:status", repoPath),
   userEmail: (repoPath) => ipcRenderer.invoke("git:userEmail", repoPath),

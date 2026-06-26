@@ -1,12 +1,15 @@
-// import 'dotenv/config';
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import * as git from "./services/git.service.js";
 import { exec, spawn } from 'node:child_process';
 import { getRepoRoot } from './services/git.service';
-import { diffSummaryAgent, generateCommitMessage } from './services/llm.service.js';
+import { diffSummaryAgent, generateCommitMessage, summarizeCurrentChanges } from './services/llm.service.js';
 import { registerSettingsIPC } from './ipc/settings.ipc.js';
+import { appState } from './main/app-state.js';
+import { registerAppStateIPC } from './ipc/app-state.ipc.js';
+import { initializeToolRegistry } from './agent/tools/registry.js';
+import { initializeAgent } from './agent/agent.js';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -39,10 +42,13 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  registerAppStateIPC();
   registerRepoIPC();
   registerGitIPC();
   registerLLMIPC();
   registerSettingsIPC();
+  initializeToolRegistry();
+  initializeAgent();
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the
@@ -100,8 +106,13 @@ export function registerGitIPC() {
     return git.gitGetActiveBranch(repoPath);
   } )
 
+  // Debugging with the app state path here
+  // if this breaks, path are not synced
   ipcMain.handle("git:commits", (_, repoPath) => {
-    return git.getCommits(repoPath);
+    const electronPath = appState.getRepoPath();
+    console.log('repo path', repoPath);
+    console.log('elec path', electronPath);
+    return git.getCommits(electronPath);
   });
 
   ipcMain.handle("git:commitChange", (_, repoPath, message) => {
@@ -154,6 +165,7 @@ export function registerRepoIPC() {
     let repoPath = result.filePaths[0];
     try {
       const repoRoot = await getRepoRoot(repoPath);
+      appState.setRepoPath(repoRoot);
       return repoRoot;
     } catch {
       return { error: "Selected folder is not inside a git repo" };
@@ -167,6 +179,7 @@ export function registerLLMIPC() {
   })
 
   ipcMain.handle("llm:diffSummary", (_, repoPath) => {
-    return diffSummaryAgent(repoPath);
+    // return diffSummaryAgent(repoPath);
+    return summarizeCurrentChanges();
   })
 }

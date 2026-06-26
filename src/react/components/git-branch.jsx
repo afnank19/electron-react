@@ -52,7 +52,7 @@ const GitBranch = () => {
   return (
     <div className="flex flex-col gap-2 py-1 border rounded-2xl border-neutral-800 m-2">
       {/* <p>{test }</p>*/}
-      <div className="border-b border-neutral-700 pb-2 px-2 flex flex-col gap-2">
+      <div className="border-b border-neutral-800 pb-2 px-2 flex flex-col gap-2">
         <div className="font-bold">Branch Management</div>
         <div className="font-bold text-sm">Currently on: { activeBranch }</div>
 

@@ -84,7 +84,7 @@ export const GitCommits = () => {
     <div className="text-white flex flex-col gap-2 m-2 border rounded-2xl border-neutral-800 py-1">
       <h1 className="font-bold px-2">Commits</h1>
 
-      <div className="flex gap-2 border-b border-neutral-700 pb-4 px-2">
+      <div className="flex gap-2 border-b border-neutral-800 pb-4 px-2">
         <textarea
           placeholder="eg. feat: update README.md"
           className="border border-neutral-700 rounded-lg px-2 text-sm flex-1 resize-none overflow-hidden"
