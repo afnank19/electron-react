@@ -70,7 +70,7 @@ export function getFileDiff(repoPath, filePath) {
 }
 
 export function getCommitLog(repoPath, commitHash) {
-  return execGitRaw(repoPath, "show " + commitHash);
+  return runGit(repoPath, ["show", commitHash], { raw: true, color: true});
 }
 
 export function getRemotes(repoPath) {
@@ -150,7 +150,12 @@ function execGitRaw(cwd, args) {
 // This is a better approach, which i'll integrate soon, after testing it separately
 const execFileAsync = promisify(execFile);
 
-async function runGit(cwd, args, { raw = false } = {}) {
+async function runGit(cwd, args, { raw = false, color = false } = {}) {
+  // Enable forced ANSII color for viewer
+  if (color) {
+    args = ["-c", "color.ui=always", ...args];
+  }
+
   try {
     const { stdout, stderr } = await execFileAsync("git", args, { cwd });
     const output = `${stdout}${stderr}`;

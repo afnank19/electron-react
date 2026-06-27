@@ -87,7 +87,7 @@ export const GitCommits = () => {
       <div className="flex gap-2 border-b border-neutral-800 pb-4 px-2">
         <textarea
           placeholder="eg. feat: update README.md"
-          className="border border-neutral-700 rounded-lg px-2 text-sm flex-1 resize-none overflow-hidden"
+          className="border border-neutral-700 rounded-lg px-2 text-sm flex-1 resize-none overflow-hidden min-w-20"
           value={commitMsg}
           onChange={(e) => {
             setCommitMsg(e.target.value);

@@ -77,7 +77,7 @@ export const Viewer = () => {
           {!isPending ? "Summarize current changes" : "Clanking"}
         </button>
       </div>
-      <div className="h-100 overflow-auto relative">
+      <div className="h-105 overflow-auto relative">
         <ViewerPanel />
         {/* {viewerMode === "commit" ? (
           commitLog != "" ? (

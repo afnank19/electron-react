@@ -23,12 +23,12 @@ const App = () => {
         <OpenRepoLayout />
         {repoPath !== null ?
           <div className="flex">
-            <div className="flex-1 max-w-1/2">
+            <div className="flex-1 max-w-1/3">
               <GitStatus />
               <GitCommits />
               <GitBranch />
             </div>
-            <div className="flex-1 max-w-1/2 h-full flex flex-col mr-2">
+            <div className="flex-1 max-w-1/3 h-full flex flex-col mr-2">
               <div className="flex flex-col gap-2">
                 <GitRemote />
                 <div className="flex flex-col gap-2">
@@ -39,9 +39,9 @@ const App = () => {
                 </div>
               </div>
             </div>
-            {/* <div className="flex-1 max-w-1/3 h-full flex flex-col mr-2">
+            <div className="flex-1 max-w-1/3 h-full flex flex-col mr-2">
               <ChatPanel />
-            </div>*/}
+            </div>
           </div>
           :
           <div>
