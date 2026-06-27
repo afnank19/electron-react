@@ -18,7 +18,7 @@ export const gitDiffTool = {
     },
   },
 
-  async execute( files ) {
+  async execute({ files }) {
     const cwd = appState.getRepoPath();
     console.log("running diff for files", files);
 

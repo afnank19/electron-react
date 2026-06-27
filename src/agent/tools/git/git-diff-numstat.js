@@ -11,7 +11,7 @@ export const gitDiffNumStatTool = {
     },
   },
 
-  async execute({ args }) {
+  async execute(args) {
     const cwd = appState.getRepoPath();
 
     return await gitDiffNumStat(cwd);

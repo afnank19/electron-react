@@ -5,7 +5,7 @@ export async function executeToolCall(call) {
   console.log("[TOOL EXECUTER] getting", call.function.name, "from registry")
   const tool = registry.get(call.function.name);
 
-  const { args = {} } = JSON.parse(call.function.arguments);
+  const args = JSON.parse(call.function.arguments);
 
   return await tool.execute(args);
 }
