@@ -5,7 +5,7 @@ import { GitBranchIcon } from "lucide-react";
 
 const GitBranch = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
-  const triggerRefresh = useAppStore((s) => s.triggerRefresh)
+  const triggerRefresh = useAppStore((s) => s.triggerRefresh);
   const addLog = useGitLogStore((s) => s.addLog);
 
   const [branches, setBranches] = useState("");
@@ -29,7 +29,12 @@ const GitBranch = () => {
     console.log("switching branch to ", branch);
     setNewBranchName("");
 
-    window.gitAPI.switchBranch(repoPath, branch).then(addLog).catch((error) => { addLog(error.message)});
+    window.gitAPI
+      .switchBranch(repoPath, branch)
+      .then(addLog)
+      .catch((error) => {
+        addLog(error.message);
+      });
     window.gitAPI.branch(repoPath).then(setActiveBranch);
     triggerRefresh();
   }
@@ -50,20 +55,23 @@ const GitBranch = () => {
   // updating one, can lead to the others refreshing themselves with new data
   // kind of like an event driven system?
   return (
-    <div className="flex flex-col gap-2 py-1 border rounded-2xl border-neutral-800 m-2">
+    <div className="flex flex-col gap-2 py-1 border rounded-2xl border-neutral-800 bg-[#111111] m-2">
       {/* <p>{test }</p>*/}
       <div className="border-b border-neutral-800 pb-2 px-2 flex flex-col gap-2">
         <div className="font-bold">Branch Management</div>
-        <div className="font-bold text-sm">Currently on: { activeBranch }</div>
+        <div className="font-bold text-sm">Currently on: {activeBranch}</div>
 
         <div className="flex gap-4">
           <input
             placeholder="Branch name"
-            className="border border-neutral-700 rounded-lg px-2 text-sm flex-1"
+            className="border border-neutral-800 bg-neutral-900 rounded-lg px-2 text-sm flex-1"
             value={newBranchName}
             onChange={(e) => setNewBranchName(e.target.value)}
           ></input>
-          <button onClick={handleNewBranchCreationClick} className="font-bold text-xs flex items-center gap-1 border rounded-lg px-2  border-blue-600 hover:bg-blue-600">
+          <button
+            onClick={handleNewBranchCreationClick}
+            className="font-bold text-xs flex items-center gap-1 border rounded-lg px-2  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-xl"
+          >
             <GitBranchIcon size={16} />
             Create and Switch to Branch
           </button>
@@ -76,12 +84,12 @@ const GitBranch = () => {
             return (
               <div
                 key={idx}
-                className="flex gap-4 items-center group justify-between relative hover:bg-neutral-800 px-2"
+                className="flex gap-4 items-center group justify-between relative hover:bg-neutral-800 px-2 my-0.5"
               >
                 <p className=" text-sm">- {branch}</p>
                 <button
                   // className="font-bold text-xs border rounded-md px-2 border-neutral-700 hover:bg-neutral-600 hidden group-hover:block"
-                  className="font-bold text-xs border rounded-md px-2 border-neutral-700 hover:bg-neutral-600"
+                  className="font-bold text-xs border rounded-md px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
                   onClick={() => {
                     handleBranchSwitch(branch);
                   }}

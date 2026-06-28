@@ -40,7 +40,9 @@ export const GitRemote = () => {
       .catch((err) => {
         addLog(err.message);
       })
-      .finally(() => {setIsPending(false)});
+      .finally(() => {
+        setIsPending(false);
+      });
 
     triggerRefresh();
   }
@@ -55,13 +57,15 @@ export const GitRemote = () => {
       .catch((err) => {
         addLog(err.message);
       })
-      .finally(() => {setIsPending(false)});
+      .finally(() => {
+        setIsPending(false);
+      });
 
     triggerRefresh();
   }
 
   return (
-    <div className="border rounded-2xl border-neutral-800 p-2 mt-2 min-h-18">
+    <div className="border rounded-2xl border-neutral-800 bg-[#111111] p-2 mt-2 min-h-18">
       {remotes === "" ? (
         <div>No remotes set</div>
       ) : (
@@ -70,7 +74,7 @@ export const GitRemote = () => {
             <p className="text-sm font-bold">Quick Actions</p>
             <div>
               <button
-                className="font-bold text-xs border rounded-md px-2  border-blue-600 hover:bg-blue-600 mx-1"
+                className="font-bold text-xs border rounded-md px-2  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-xl mx-1"
                 onClick={() => pushToRemote("origin")}
                 disabled={isPending}
               >
@@ -78,7 +82,7 @@ export const GitRemote = () => {
               </button>
               <button
                 onClick={() => pullFromRemote("origin")}
-                className="font-bold text-xs border rounded-md px-2  border-blue-600 hover:bg-blue-600"
+                className="font-bold text-xs border rounded-md px-2  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-xl"
                 disabled={isPending}
               >
                 Pull from Origin
@@ -103,14 +107,14 @@ export const GitRemote = () => {
               <button
                 onClick={() => pushToRemote(activeRemote)}
                 disabled={isPending}
-                className="font-bold text-xs border rounded-md px-2  border-neutral-700 hover:bg-neutral-600 mx-1"
+                className="font-bold text-xs border rounded-md px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 mx-1"
               >
                 Push to Remote
               </button>
               <button
                 disabled={isPending}
                 onClick={() => pullFromRemote(activeRemote)}
-                className="font-bold text-xs border rounded-md px-2  border-neutral-700 hover:bg-neutral-600"
+                className="font-bold text-xs border rounded-md px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
               >
                 Pull from Remote
               </button>

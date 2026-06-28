@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { VIEWER_MODE, useAppStore, useRepoStore, useViewerStore } from "../state/repo-store";
+import {
+  VIEWER_MODE,
+  useAppStore,
+  useRepoStore,
+  useViewerStore,
+} from "../state/repo-store";
 
 const GitStatus = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
   const [status, setStatus] = useState("");
   const parsedStatus = status ? processStatus(status) : null;
   const refreshCounter = useAppStore((s) => s.refreshCounter);
-  const triggerRefresh = useAppStore((s) => s.triggerRefresh)
+  const triggerRefresh = useAppStore((s) => s.triggerRefresh);
 
   const setFileDiff = useViewerStore((s) => s.setFileDiff);
   const setViewerMode = useViewerStore((s) => s.setViewerMode);
@@ -60,15 +65,15 @@ const GitStatus = () => {
   }
 
   function handleStatusItemClick(rawItem) {
-    const rawItemSplit = rawItem.trim().split(" ")
-    console.log("rISplit", rawItemSplit)
-    const filePath = rawItemSplit[rawItemSplit.length - 1]
-    console.log("fp", filePath)
+    const rawItemSplit = rawItem.trim().split(" ");
+    console.log("rISplit", rawItemSplit);
+    const filePath = rawItemSplit[rawItemSplit.length - 1];
+    console.log("fp", filePath);
 
     setViewerMode(VIEWER_MODE.FILE);
     window.gitAPI.showFileDiff(repoPath, filePath).then((res) => {
       setFileDiff(res, filePath);
-    })
+    });
   }
 
   useEffect(() => {
@@ -103,7 +108,7 @@ const GitStatus = () => {
   // TODO: handle overflow so it looks good
   return (
     <>
-      <div className="py-1 border rounded-2xl border-neutral-800 m-2  flex flex-col gap-2 min-h-72">
+      <div className="py-1 border rounded-2xl border-neutral-800 bg-[#111111] m-2  flex flex-col gap-2 min-h-72">
         <h1 className="font-bold px-2 pt-1 ">Files // Status</h1>
 
         <div className="px-2 overflow-auto min-h-50  max-h-50">
@@ -113,7 +118,7 @@ const GitStatus = () => {
                 <div key={st} className="flex gap-2 items-center my-1">
                   <div className="flex gap-1">
                     <button
-                      className="font-bold text-xs border rounded-md px-2  border-[#008800] hover:bg-[#008800]"
+                      className="font-bold text-xs border rounded-md px-2  border-[#00aa00] bg-[#008800] hover:bg-[#00aa00] hover:border-[#00cc00]"
                       onClick={() => {
                         handleStaging(st);
                       }}
@@ -121,7 +126,7 @@ const GitStatus = () => {
                       Stage
                     </button>
                     <button
-                      className="font-bold text-xs border rounded-md px-2  border-[#990000] hover:bg-[#990000]"
+                      className="font-bold text-xs border rounded-md px-2  border-[#bb0000] bg-[#990000] hover:bg-[#bb0000] hover:border-[#dd0000]"
                       onClick={() => {
                         handleRestore(st);
                       }}
@@ -129,8 +134,11 @@ const GitStatus = () => {
                       Restore
                     </button>
                   </div>
-                  <button className="w-full group flex gap-4 items-center hover:bg-yellow-500 hover:text-black cursor-pointer"
-                    onClick={() => {handleStatusItemClick(st)}}
+                  <button
+                    className="w-full group flex gap-4 items-center hover:bg-yellow-500 hover:text-black cursor-pointer"
+                    onClick={() => {
+                      handleStatusItemClick(st);
+                    }}
                   >
                     <p
                       key={idx}
@@ -139,7 +147,9 @@ const GitStatus = () => {
                     >
                       {idx === 0 ? "" + st : st}
                     </p>
-                    <p className="italic text-sm text-black hidden group-hover:block text-nowrap">Click to view diff</p>
+                    <p className="italic text-sm text-black hidden group-hover:block text-nowrap">
+                      Click to view diff
+                    </p>
                   </button>
                 </div>
               );
@@ -147,13 +157,13 @@ const GitStatus = () => {
         </div>
         <div className="flex gap-1 border-t border-neutral-800 p-2">
           <button
-            className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
+            className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
             onClick={handleStageAll}
           >
             Stage All
           </button>
           <button
-            className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 hover:bg-neutral-800"
+            className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
             onClick={handleRestoreAll}
           >
             Restore All

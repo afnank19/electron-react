@@ -19,7 +19,7 @@ export const Logs = () => {
   }, [repoPath]);
 
   return (
-    <div className="border rounded-2xl border-neutral-800 min-h-82 max-h-82 overflow-auto">
+    <div className="border rounded-2xl border-neutral-800 bg-[#111111] min-h-82 max-h-82 overflow-auto">
       <h1 className="font-bold border-b p-2 border-neutral-800 flex justify-between items-center">
         <span>Logs</span>
         <div className="flex gap-1.5">
@@ -31,7 +31,10 @@ export const Logs = () => {
       <div className="">
         {gitLogs.map((log) => {
           return (
-            <div style={{ whiteSpace: "pre-wrap" }} className="font-mono text-sm px-2 m-1 border-l border-orange-500">
+            <div
+              style={{ whiteSpace: "pre-wrap" }}
+              className="font-mono text-sm px-2 m-1 border-l border-orange-500"
+            >
               {log}
             </div>
           );
