@@ -1,5 +1,6 @@
 import { FolderGit, Info } from "lucide-react";
 import { OpenRepo } from "./open-repo";
+import { RecentRepos } from "./onboarding/recent-repos";
 
 export const Onboarding = () => {
   return (
@@ -18,7 +19,7 @@ export const Onboarding = () => {
             <p>You currently have NO REPOSITORY opened.</p>
           </div>
           <OpenRepo>
-            <p className="flex items-center gap-2 px-2 py-1 rounded-xl bg-orange-700 border border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-xl text-sm">
+            <p className="flex items-center gap-2 px-2 py-1 rounded-xl border bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-xl text-sm">
               <FolderGit size={18} />
               Open Repository
             </p>
@@ -43,6 +44,7 @@ export const Onboarding = () => {
             </div>
           ))}
         </div>
+        <RecentRepos />
       </div>
     </div>
   );
