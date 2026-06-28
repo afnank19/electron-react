@@ -10,6 +10,9 @@ import { Logs } from "./components/logs";
 import { GitRemote } from "./components/git-remote";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChatPanel } from "./components/chat-panel";
+import { OpenRepo } from "./components/open-repo";
+import { FolderGit } from "lucide-react";
+import { Onboarding } from "./components/onboarding";
 
 const queryClient = new QueryClient();
 
@@ -18,36 +21,36 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="font-display">
+      <div className="font-display h-screen">
         <Tabs />
-        <OpenRepoLayout />
-        {repoPath !== null ?
-          <div className="flex">
-            <div className="flex-1 max-w-1/3">
-              <GitStatus />
-              <GitCommits />
-              <GitBranch />
-            </div>
-            <div className="flex-1 max-w-1/3 h-full flex flex-col mr-2">
-              <div className="flex flex-col gap-2">
-                <GitRemote />
+        {repoPath !== null ? (
+          <>
+            <OpenRepoLayout />
+            <div className="flex">
+              <div className="flex-1 max-w-1/3">
+                <GitStatus />
+                <GitCommits />
+                <GitBranch />
+              </div>
+              <div className="flex-1 max-w-1/3 h-full flex flex-col mr-2">
                 <div className="flex flex-col gap-2">
-                  <div className=" border rounded-2xl border-neutral-800 min-h-115 max-h-115">
-                    <Viewer/>
+                  <GitRemote />
+                  <div className="flex flex-col gap-2">
+                    <div className=" border rounded-2xl border-neutral-800 min-h-115 max-h-115">
+                      <Viewer />
+                    </div>
+                    <Logs />
                   </div>
-                  <Logs />
                 </div>
               </div>
+              <div className="flex-1 max-w-1/3 h-full flex flex-col mr-2">
+                <ChatPanel />
+              </div>
             </div>
-            <div className="flex-1 max-w-1/3 h-full flex flex-col mr-2">
-              <ChatPanel />
-            </div>
-          </div>
-          :
-          <div>
-            <p>No repository opened</p>
-          </div>
-        }
+          </>
+        ) : (
+          <Onboarding />
+        )}
       </div>
     </QueryClientProvider>
   );

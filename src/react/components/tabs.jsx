@@ -11,7 +11,6 @@ const Tabs = () => {
 
   const [pathErr, setPathErr] = useState("");
 
-
   const handleTab1 = () => {
     const path = "/home/afnan/Desktop/dev/gitsage-gui/app-test-repo";
     console.log("hand coded");
@@ -69,9 +68,11 @@ const Tabs = () => {
             );
           })}
         </div>
-        <div>
-          <OpenRepo pathErr={pathErr} setPathErr={setPathErr}/>
-        </div>
+        <OpenRepo pathErr={pathErr} setPathErr={setPathErr}>
+          <div className="p-1  rounded-lg  hover:bg-neutral-600">
+            <Plus size={18} />
+          </div>
+        </OpenRepo>
         {/* <div className="ml-auto pl-2">
           <OpenRepo pathErr={pathErr} setPathErr={setPathErr}/>
         </div>*/}
