@@ -1,15 +1,20 @@
-import { app, BrowserWindow, dialog, ipcMain } from 'electron';
-import path from 'node:path';
-import started from 'electron-squirrel-startup';
+import { app, BrowserWindow, dialog, ipcMain } from "electron";
+import path from "node:path";
+import started from "electron-squirrel-startup";
 import * as git from "./services/git.service.js";
-import { exec, spawn } from 'node:child_process';
-import { getRepoRoot } from './services/git.service';
-import { diffSummaryAgent, generateCommitMessage, summarizeCurrentChanges } from './services/llm.service.js';
-import { registerSettingsIPC } from './ipc/settings.ipc.js';
-import { appState } from './main/app-state.js';
-import { registerAppStateIPC } from './ipc/app-state.ipc.js';
-import { initializeToolRegistry } from './agent/tools/registry.js';
-import { initializeAgent } from './agent/agent.js';
+import { exec, spawn } from "node:child_process";
+import { getRepoRoot } from "./services/git.service";
+import {
+  diffSummaryAgent,
+  generateCommitMessage,
+  summarizeCurrentChanges,
+} from "./services/llm.service.js";
+import { registerSettingsIPC } from "./ipc/settings.ipc.js";
+import { appState } from "./main/app-state.js";
+import { registerAppStateIPC } from "./ipc/app-state.ipc.js";
+import { initializeToolRegistry } from "./agent/tools/registry.js";
+import { initializeAgent } from "./agent/agent.js";
+import { getLocalBranches, gitLog } from "./services/git/repo-inspection.js";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -23,7 +28,7 @@ const createWindow = () => {
     height: 800,
     autoHideMenuBar: true,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
@@ -31,7 +36,9 @@ const createWindow = () => {
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
-    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    mainWindow.loadFile(
+      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
+    );
   }
 
   // Open the DevTools.
@@ -53,7 +60,7 @@ app.whenReady().then(() => {
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  app.on('activate', () => {
+  app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }
@@ -63,8 +70,8 @@ app.whenReady().then(() => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
@@ -79,19 +86,19 @@ export function registerGitIPC() {
 
   ipcMain.handle("git:userEmail", (_, repoPath) => {
     return git.gitUserLocalEmail(repoPath);
-  })
+  });
 
   ipcMain.handle("git:stageFile", (_, repoPath, filePath) => {
     return git.stageFile(repoPath, filePath);
-  })
+  });
 
   ipcMain.handle("git:restoreFile", (_, repoPath, filePath) => {
     return git.restoreFileFromStaging(repoPath, filePath);
-  })
+  });
 
   // Returns all branches
   ipcMain.handle("git:branches", (_, repoPath) => {
-    return git.gitBranchLocal(repoPath);
+    return getLocalBranches(repoPath);
   });
 
   ipcMain.handle("git:switchBranch", (_, repoPath, branch) => {
@@ -104,15 +111,15 @@ export function registerGitIPC() {
 
   ipcMain.handle("git:branch", (_, repoPath) => {
     return git.gitGetActiveBranch(repoPath);
-  } )
+  });
 
   // Debugging with the app state path here
   // if this breaks, path are not synced
   ipcMain.handle("git:commits", (_, repoPath) => {
     const electronPath = appState.getRepoPath();
-    console.log('repo path', repoPath);
-    console.log('elec path', electronPath);
-    return git.getCommits(electronPath);
+    console.log("repo path", repoPath);
+    console.log("elec path", electronPath);
+    return gitLog(electronPath, null);
   });
 
   ipcMain.handle("git:commitChange", (_, repoPath, message) => {
@@ -157,7 +164,7 @@ export function registerRepoIPC() {
     const win = BrowserWindow.getFocusedWindow();
 
     const result = await dialog.showOpenDialog(win, {
-      properties: ["openDirectory"]
+      properties: ["openDirectory"],
     });
 
     if (result.canceled) return null;
@@ -176,10 +183,10 @@ export function registerRepoIPC() {
 export function registerLLMIPC() {
   ipcMain.handle("llm:commitMsg", (_, diff) => {
     return generateCommitMessage(diff);
-  })
+  });
 
   ipcMain.handle("llm:diffSummary", (_, repoPath) => {
     // return diffSummaryAgent(repoPath);
     return summarizeCurrentChanges();
-  })
+  });
 }
