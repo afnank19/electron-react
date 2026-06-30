@@ -67,7 +67,7 @@ export async function runLoop(messages, model) {
       messages.push({
         role: "tool",
         tool_call_id: toolCall.id,
-        content: toolResult,
+        content: JSON.stringify(toolResult),
       });
     }
     // while (message.tool_calls?.length || rounds > 10) {

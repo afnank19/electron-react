@@ -7,6 +7,7 @@ import { getRepoRoot } from "./services/git.service";
 import {
   diffSummaryAgent,
   generateCommitMessage,
+  handleAgentRequest,
   summarizeCurrentChanges,
 } from "./services/llm.service.js";
 import { registerSettingsIPC } from "./ipc/settings.ipc.js";
@@ -189,4 +190,8 @@ export function registerLLMIPC() {
     // return diffSummaryAgent(repoPath);
     return summarizeCurrentChanges();
   });
+
+  ipcMain.handle("llm:agentRequest", (_, request) => {
+    return handleAgentRequest(request);
+  })
 }

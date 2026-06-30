@@ -1,6 +1,7 @@
 import { gitDiffTool } from "./git/git-diff";
 import { gitDiffNumStatTool } from "./git/git-diff-numstat";
 import { gitStatusTool } from "./git/git-status";
+import { stageAllTool, stageFilesTool, unstageFilesTool } from "./git/staging";
 
 class ToolRegistry {
   tools = new Map();
@@ -27,6 +28,9 @@ export function initializeToolRegistry() {
   registry.register(gitDiffTool);
   registry.register(gitDiffNumStatTool);
   registry.register(gitStatusTool);
+  registry.register(stageFilesTool);
+  registry.register(stageAllTool);
+  registry.register(unstageFilesTool);
 }
 
 export function getRegistry() {

@@ -195,3 +195,9 @@ export async function summarizeCurrentChanges() {
 
   return agent.run(requestPrompt);
 }
+
+export async function handleAgentRequest(request) {
+  const agent = getAgent();
+
+  return agent.run(request);
+}

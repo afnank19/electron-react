@@ -7,18 +7,26 @@ import { runGit } from "./git-runner";
 export async function getRepoStatus() {
   const cwd = appState.getRepoPath();
 
-  let repoState = "";
+  let repoState = "Here is the git status --porcelain result \n";
 
   try {
     const statusResult = await gitStatus(cwd);
+    repoState += statusResult + "\n"
   } catch (e) {
     throw new Error(e.message);
   }
 
   try {
     const currentBranch = await getCurrentBranch(cwd);
+    repoState += "Current branch is " + currentBranch;
   } catch (e) {
     throw new Error(e.message);
+  }
+
+  return {
+    success: true,
+    message: "Operation succeeded",
+    output: repoState
   }
 }
 
