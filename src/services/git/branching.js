@@ -49,4 +49,5 @@ export async function gitCreateBranch(repoPath, branchName) {
   return runGit(repoPath, ["switch", "-c", branchName]);
 }
 
+// TODO
 export async function deleteBranch(repoPath) {}

@@ -1,3 +1,5 @@
+import { createBranchTool, switchBranchTool } from "./git/branch";
+import { commitTool } from "./git/commit";
 import { gitDiffTool } from "./git/git-diff";
 import { gitDiffNumStatTool } from "./git/git-diff-numstat";
 import { gitStatusTool } from "./git/git-status";
@@ -16,12 +18,12 @@ class ToolRegistry {
 
   // For openai npm lib to use
   definitions() {
-    return [...this.tools.values()].map(t => t.definition);
+    return [...this.tools.values()].map((t) => t.definition);
   }
 }
 
 export function initializeToolRegistry() {
-  console.log("Creating registry!")
+  console.log("Creating registry!");
   registry = new ToolRegistry();
 
   // register all tool calls here
@@ -31,10 +33,16 @@ export function initializeToolRegistry() {
   registry.register(stageFilesTool);
   registry.register(stageAllTool);
   registry.register(unstageFilesTool);
+  registry.register(commitTool);
+  registry.register(switchBranchTool);
+  registry.register(createBranchTool);
 }
 
 export function getRegistry() {
-  if (!registry) throw new Error("Registry not initialized — call initializeToolRegistry() first");
+  if (!registry)
+    throw new Error(
+      "Registry not initialized — call initializeToolRegistry() first",
+    );
   return registry;
 }
 

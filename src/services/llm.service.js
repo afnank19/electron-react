@@ -10,7 +10,6 @@ export const PROMPTS = {
 You are a senior engineer. Write a git commit message for the diff below.
 - Use Conventional Commits format: <type>(<scope>): <subject>
 - Subject: imperative mood, no period
-- Add a body only if the change needs context (skip otherwise)
 - Output the commit message only. No explanation.
 - Keep the commit message shorter than 80 characters
 `.trim(),
@@ -65,7 +64,7 @@ export async function generateCommitMessage(diff) {
   console.log("diff for commit msg", diff);
 
   if (diff === "") {
-    throw new Error("No changes yet!")
+    throw new Error("No changes yet!");
   }
 
   const client = getLLMClient();
@@ -144,7 +143,6 @@ export async function diffSummaryAgent(repoPath) {
   let rounds = 0;
   // rounds are 1 for now, testing hardcoded behavior, TODO: update loop handling
   while (message.tool_calls?.length && rounds < 1) {
-
     for (const toolCall of message.tool_calls) {
       if (toolCall.function.name == "get_diffs") {
         const { files } = JSON.parse(toolCall.function.arguments);
@@ -181,7 +179,6 @@ export async function diffSummaryAgent(repoPath) {
   return message.content;
 }
 
-
 export async function summarizeCurrentChanges() {
   const requestPrompt = `Can you help me summarize my current changes? In order to achieve this do the following:
     Use the numstat diff tool to get an overview of the repository changes.
@@ -189,7 +186,7 @@ export async function summarizeCurrentChanges() {
     If some files need closer inspection (significant logic changes, ambiguous purpose), call get_diffs for ONLY those files - be selective, this is expensive.
     Once you have enough information, respond with a short summary of what changed and why it likely matters, grouped by area/feature. Do not include raw diffs in your output.
     If file diff count from --numstat is extremely huge, 1000+ changes, ignore and do not explore that file.
-    `
+    `;
 
   const agent = getAgent();
 

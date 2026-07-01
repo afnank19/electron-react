@@ -54,7 +54,7 @@ export async function runLoop(messages, model) {
       try {
         toolResult = await executeToolCall(toolCall);
         console.log(
-          `[Runner] Tool ${toolCall.function?.name} result: ${String(toolResult).slice(0, 200)}`,
+          `[Runner] Tool ${toolCall.function?.name} result AA: ${toolResult}`,
         );
       } catch (e) {
         console.error(
