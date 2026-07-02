@@ -110,15 +110,15 @@ const GitStatus = () => {
   // TODO: handle overflow so it looks good
   return (
     <>
-      <div className="pb-1 border rounded-2xl border-neutral-800 bg-[#111111] m-2  flex flex-col gap-2 min-h-72">
-        <div className=" flex justify-between text-center text-sm">
-          <h1 className="font-bold px-2 border-r border-neutral-800 border-b  w-full py-1">
+      <div className="pb-1 border rounded-2xl border-neutral-800 bg-[#111111] m-2 overflow-hidden flex flex-col gap-2 min-h-72">
+        <div className=" flex justify-between text-center text-sm bg-neutral-900">
+          <h1 className="font-bold px-2 border-r border-neutral-800 border-b bg-neutral-800  w-full py-1">
             Files
           </h1>
           <h1 className="font-bold px-2 border-neutral-800 border-b w-full py-1">
             Stats
           </h1>
-          {/* <h1 className="font-bold px-2 w-full py-1">Changes</h1>*/}
+          {/*  <h1 className="font-bold px-2 w-full py-1">Changes</h1>*/}
         </div>
 
         <div className="px-2 overflow-auto min-h-50  max-h-50">

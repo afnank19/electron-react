@@ -4,7 +4,7 @@ import React from "react";
 import { useAppStore } from "../state/repo-store";
 
 // REMOVE AFTER NO LONGER NEEDED
-const AGENT_REQ_PROMPT = "Can you stage hello file for me?";
+const AGENT_REQ_PROMPT = "Stage and commit my changes.";
 
 export const ChatPanel = () => {
   const triggerRefresh = useAppStore((s) => s.triggerRefresh);
