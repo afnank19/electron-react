@@ -11,7 +11,7 @@ export async function getRepoStatus() {
 
   try {
     const statusResult = await gitStatus(cwd);
-    repoState += statusResult + "\n"
+    repoState += statusResult + "\n";
   } catch (e) {
     throw new Error(e.message);
   }
@@ -26,8 +26,8 @@ export async function getRepoStatus() {
   return {
     success: true,
     message: "Operation succeeded",
-    output: repoState
-  }
+    output: repoState,
+  };
 }
 
 // Primitive functions
@@ -57,6 +57,13 @@ export async function getLocalBranches(repoPath) {
 }
 
 export async function getDiff(staged) {}
+
+// Placing this function here because it is repo inspection but
+// i havent decided how the diff function is going to look like,
+// so temporarily it is here
+export async function gitDiffNumstat(repoPath) {
+  return runGit(repoPath, ["diff", "--numstat"]);
+}
 
 export function getCommitLog(repoPath, commitHash) {
   return runGit(repoPath, ["show", commitHash], { raw: true, color: true });

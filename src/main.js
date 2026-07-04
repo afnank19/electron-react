@@ -15,7 +15,11 @@ import { appState } from "./main/app-state.js";
 import { registerAppStateIPC } from "./ipc/app-state.ipc.js";
 import { initializeToolRegistry } from "./agent/tools/registry.js";
 import { initializeAgent } from "./agent/agent.js";
-import { getLocalBranches, gitLog } from "./services/git/repo-inspection.js";
+import {
+  getLocalBranches,
+  gitDiffNumstat,
+  gitLog,
+} from "./services/git/repo-inspection.js";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -158,6 +162,10 @@ export function registerGitIPC() {
   ipcMain.handle("git:diffStat", (_, repoPath) => {
     return git.gitDiffStat(repoPath);
   });
+
+  ipcMain.handle("git:diffNumstat", (_, repoPath) => {
+    return gitDiffNumstat(repoPath);
+  });
 }
 
 export function registerRepoIPC() {
@@ -193,5 +201,5 @@ export function registerLLMIPC() {
 
   ipcMain.handle("llm:agentRequest", (_, request) => {
     return handleAgentRequest(request);
-  })
+  });
 }
