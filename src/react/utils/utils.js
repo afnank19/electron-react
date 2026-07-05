@@ -47,3 +47,9 @@ export function parseNumstat(numstat) {
 
   return processedNumstat;
 }
+
+export function parseGitStatusOutput(status) {
+  const splitStatus = splitByNewLine(status);
+
+  console.log("Split status", splitStatus);
+}

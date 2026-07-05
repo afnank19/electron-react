@@ -8,6 +8,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { getDiffNumstat } from "../api/git-api";
 import { parseNumstat } from "../utils/utils";
+import { DotSquareIcon } from "lucide-react";
 
 const GitStatus = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
@@ -156,7 +157,10 @@ const GitStatus = () => {
               return (
                 <>
                   <div className="flex gap-2 items-center justify-between m-0 p-0">
-                    <p>{numstatItem.filePath}</p>
+                    <div className="flex gap-2 items-center">
+                      <DotSquareIcon size={20} className="text-yellow-300" />
+                      <p>{numstatItem.filePath}</p>
+                    </div>
                     <div className="flex gap-2">
                       <p className="text-green-500">+{numstatItem.additions}</p>
                       <p className="text-red-600">-{numstatItem.deletions}</p>
