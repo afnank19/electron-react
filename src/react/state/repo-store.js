@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 
 export const useRepoStore = create((set) => ({
   repoPath: null,
-  setRepoPath: (path) => set({ repoPath: path })
+  setRepoPath: (path) => set({ repoPath: path }),
 }));
 
 // here, tabs will look something like this:
@@ -13,6 +13,7 @@ export const useTabStore = create(
   persist(
     (set) => ({
       tabs: [],
+      recentTabs: [],
 
       addTab: (tab) =>
         set((state) => {
@@ -22,6 +23,10 @@ export const useTabStore = create(
 
           return {
             tabs: [...state.tabs, tab],
+            recentTabs: [
+              ...state.recentTabs.filter((t) => t.repoPath !== tab.repoPath),
+              tab,
+            ].slice(-10),
           };
         }),
 
@@ -29,11 +34,16 @@ export const useTabStore = create(
         set((state) => ({
           tabs: state.tabs.filter((tab) => tab.id !== id),
         })),
+
+      clearRecents: () =>
+        set((state) => ({
+          recentTabs: [],
+        })),
     }),
     {
       name: "tab-store", // localStorage key
-    }
-  )
+    },
+  ),
 );
 
 export const useAppStore = create((set) => ({
@@ -42,7 +52,7 @@ export const useAppStore = create((set) => ({
     set((state) => ({
       refreshCounter: state.refreshCounter + 1,
     })),
-}))
+}));
 
 // Don't know how this will look, but I'm gonna build it for
 // the file diff viewer use case first
@@ -53,8 +63,8 @@ export const VIEWER_MODE = {
   NONE: "none",
   COMMIT: "commit",
   FILE: "file",
-  SUMMARY: "summary"
-}
+  SUMMARY: "summary",
+};
 
 export const useViewerStore = create((set) => ({
   viewerMode: VIEWER_MODE.NONE,
@@ -64,27 +74,31 @@ export const useViewerStore = create((set) => ({
   commitHash: null,
   summary: null,
 
-  setFileDiff: (fileDiff, filePath) => set({ fileDiff: fileDiff, filePath: filePath }),
-  setCommitLog: (commitLog, commitHash) => set({ commitLog: commitLog, commitHash: commitHash }),
-  setSummary: (summary) => set({ summary: summary}),
+  setFileDiff: (fileDiff, filePath) =>
+    set({ fileDiff: fileDiff, filePath: filePath }),
+  setCommitLog: (commitLog, commitHash) =>
+    set({ commitLog: commitLog, commitHash: commitHash }),
+  setSummary: (summary) => set({ summary: summary }),
   setViewerMode: (viewerMode) => set({ viewerMode: viewerMode }),
-  resetViewer: () => set({
-    viewerMode: VIEWER_MODE.NONE,
-    fileDiff: null,
-    filePath: null,
-    commitLog: null,
-    commitHash: null,
-    summary: null,
-  })
-}))
+  resetViewer: () =>
+    set({
+      viewerMode: VIEWER_MODE.NONE,
+      fileDiff: null,
+      filePath: null,
+      commitLog: null,
+      commitHash: null,
+      summary: null,
+    }),
+}));
 
 export const useGitLogStore = create((set) => ({
   gitLogs: [],
   addLog: (log) =>
-      set((state) => ({
-        gitLogs: [...state.gitLogs, log],
-      })),
-  resetLogs: () => set((s) => ({
-    gitLogs: []
-  }))
-}))
+    set((state) => ({
+      gitLogs: [...state.gitLogs, log],
+    })),
+  resetLogs: () =>
+    set((s) => ({
+      gitLogs: [],
+    })),
+}));

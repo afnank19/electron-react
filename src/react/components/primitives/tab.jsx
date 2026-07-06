@@ -13,6 +13,7 @@ export const Tab = ({ repoName, tabId, handleCloseTab }) => {
     console.log("switched to", repoName);
     localStorage.setItem("repo-path", repoName);
     setRepoPath(repoName);
+    window.app.setRepoPath(repoName);
   };
 
   return (
