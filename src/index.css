@@ -1,28 +1,28 @@
 @import "tailwindcss";
 
 @font-face {
-    font-family: "Neuve Grotesque";
-    src: url("assets/fonts/NeuveGrotesque.ttf");
+  font-family: "Neuve Grotesque";
+  src: url("assets/fonts/NeuveGrotesque.ttf");
 }
 
 @font-face {
-    font-family: "DM Sans";
-    src: url("assets/fonts/DMSans-Regular.ttf");
+  font-family: "DM Sans";
+  src: url("assets/fonts/DMSans-Regular.ttf");
 }
 
 @font-face {
-    font-family: "Ioskeley Mono";
-    src: url("assets/fonts/IoskeleyMono-Regular.ttf");
+  font-family: "Ioskeley Mono";
+  src: url("assets/fonts/IoskeleyMono-Regular.ttf");
 }
 
 @theme {
-    --font-display: "Neuve Grotesque", sans-serif;
-    --font-mono: "Ioskeley Mono", monospace;
+  --font-display: "Neuve Grotesque", sans-serif;
+  --font-mono: "Ioskeley Mono", monospace;
 }
 
 body {
   background-color: #0e0e0e;
-  color: #e7e7e7;
+  color: #e1e1e1;
 }
 
 /* Container scrollbar width */

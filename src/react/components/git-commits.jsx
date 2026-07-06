@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { splitByNewLine } from "../utils/utils";
-import { VIEWER_MODE, useAppStore, useGitLogStore, useRepoStore, useViewerStore } from "../state/repo-store";
+import {
+  VIEWER_MODE,
+  useAppStore,
+  useGitLogStore,
+  useRepoStore,
+  useViewerStore,
+} from "../state/repo-store";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const GitCommits = () => {
@@ -45,7 +51,12 @@ export const GitCommits = () => {
 
   function handleOnCommit() {
     setCommitMsg("");
-    window.gitAPI.commitChange(repoPath, commitMsg).then(addLog).catch((err) => {addLog(err.message)});
+    window.gitAPI
+      .commitChange(repoPath, commitMsg)
+      .then(addLog)
+      .catch((err) => {
+        addLog(err.message);
+      });
     window.gitAPI.commits(repoPath).then(setCommits);
 
     triggerRefresh();
@@ -70,43 +81,48 @@ export const GitCommits = () => {
       return window.ai.commitMsg(headDiff);
     },
     onSuccess: (data) => {
-      console.log("succeeded in generation", data)
+      console.log("succeeded in generation", data);
       setCommitMsg(data);
       addLog("INFO: Generated commit message for current changes");
     },
     onError: (error) => {
-      console.error("failed generation", error)
-      addLog("FATAL: Failed to generate commit message through LLM: " + error.message);
-    }
+      console.error("failed generation", error);
+      addLog(
+        "FATAL: Failed to generate commit message through LLM: " +
+          error.message,
+      );
+    },
   });
 
   return (
-    <div className="text-white flex flex-col gap-2 m-2 border rounded-2xl border-neutral-800 py-1">
+    <div className="text-white flex flex-col gap-2 m-2 border rounded-2xl border-neutral-800 bg-[#111111] py-1">
       <h1 className="font-bold px-2">Commits</h1>
 
-      <div className="flex gap-2 border-b border-neutral-700 pb-4 px-2">
+      <div className="flex gap-2 border-b border-neutral-800 pb-4 px-2">
         <textarea
           placeholder="eg. feat: update README.md"
-          className="border border-neutral-700 rounded-lg px-2 text-sm flex-1 resize-none overflow-hidden"
+          className="border border-neutral-800 bg-neutral-900 rounded-lg px-2 text-sm flex-1 resize-none overflow-hidden min-w-20"
           value={commitMsg}
           onChange={(e) => {
             setCommitMsg(e.target.value);
           }}
           rows={1}
           onInput={(e) => {
-              const el = e.currentTarget;
-              el.style.height = "auto";
-              el.style.height = `${el.scrollHeight}px`;
+            const el = e.currentTarget;
+            el.style.height = "auto";
+            el.style.height = `${el.scrollHeight}px`;
           }}
         ></textarea>
         <button
-          className="font-bold text-xs border rounded-lg px-2  border-neutral-700 hover:bg-neutral-700"
-          onClick={() => { mutate(); }}
+          className="font-bold text-xs border rounded-lg px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+          onClick={() => {
+            mutate();
+          }}
         >
           {isPending ? "Generating" : "Generate with LLM"}
         </button>
         <button
-          className="font-bold text-xs border rounded-lg px-2  border-blue-600 hover:bg-blue-600"
+          className="font-bold text-xs border rounded-lg px-2  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-xl"
           onClick={handleOnCommit}
         >
           Commit with message

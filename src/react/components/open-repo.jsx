@@ -1,8 +1,10 @@
+// TODO: Remove the extra stuff from this component
+
 import React, { useEffect, useState } from "react";
 import { useRepoStore, useTabStore } from "../state/repo-store";
 import { Plus, PlusSquare } from "lucide-react";
 
-export const OpenRepo = ({ pathErr, setPathErr}) => {
+export const OpenRepo = ({ pathErr, setPathErr, children }) => {
   const setRepoPath = useRepoStore((state) => state.setRepoPath);
   const repoPath = useRepoStore((state) => state.repoPath);
 
@@ -17,10 +19,10 @@ export const OpenRepo = ({ pathErr, setPathErr}) => {
 
     if (path.error) {
       console.error("ERROR: not a git repo");
-      setPathErr("Selected directory was not a git repo");
+      // setPathErr("Selected directory was not a git repo");
       return;
     } else {
-      setPathErr("");
+      // setPathErr("");
     }
 
     console.log(path);
@@ -28,8 +30,8 @@ export const OpenRepo = ({ pathErr, setPathErr}) => {
     setRepoPath(path);
     addTab({
       id: crypto.randomUUID(),
-      repoPath: path
-    })
+      repoPath: path,
+    });
   };
 
   useEffect(() => {
@@ -41,10 +43,11 @@ export const OpenRepo = ({ pathErr, setPathErr}) => {
   return (
     <div className="text-white text-nowrap">
       <button
-        className="cursor-pointer font-bold text-xs rounded-lg p-1 my-1  hover:bg-neutral-600"
+        className="flex items-center justify-center cursor-pointer font-bold text-xs"
         onClick={handleClick}
       >
-        <Plus size={20} />
+        {/* <Plus size={20} />*/}
+        {children}
       </button>
     </div>
   );
