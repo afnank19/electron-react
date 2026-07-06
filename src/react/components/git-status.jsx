@@ -8,7 +8,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { getDiffNumstat } from "../api/git-api";
 import { parseNumstat } from "../utils/utils";
-import { DotSquareIcon } from "lucide-react";
+import { DotSquareIcon, Minus, Plus } from "lucide-react";
 
 const GitStatus = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
@@ -119,14 +119,14 @@ const GitStatus = () => {
 
   if (status === "") {
     return (
-      <div className="min-h-72 border rounded-2xl border-neutral-800 m-2">
-        <div className=" flex justify-between text-center text-sm bg-neutral-900">
-          <h1 className="font-bold px-2 border-r border-neutral-800 border-b bg-neutral-800  w-full py-1">
-            Files
+      <div className="min-h-72 border rounded-2xl border-neutral-800 m-2 overflow-hidden">
+        <div className=" flex justify-between text-sm bg-neutral- border-neutral-800 border-b">
+          <h1 className="font-bold px-2 border-r border-neutral-800   w-full py-1">
+            Changes
           </h1>
-          <h1 className="font-bold px-2 border-neutral-800 border-b w-full py-1">
+          {/* <h1 className="font-bold px-2 border-neutral-800 w-full py-1">
             Stats
-          </h1>
+          </h1>*/}
           {/*  <h1 className="font-bold px-2 w-full py-1">Changes</h1>*/}
         </div>
         <p className="px-2 pt-1 italic text-center">
@@ -140,13 +140,27 @@ const GitStatus = () => {
   return (
     <>
       <div className="pb-1 border rounded-2xl border-neutral-800 bg-[#111111] m-2 overflow-hidden flex flex-col gap-2 min-h-72">
-        <div className=" flex justify-between text-center text-sm bg-neutral-900">
-          <h1 className="font-bold px-2 border-r border-neutral-800 border-b bg-neutral-800  w-full py-1">
-            Files
+        <div className=" flex justify-between items-center text-sm  border-neutral-800 border-b">
+          <h1 className="font-bold px-2  w-full py-1">
+            Changes
           </h1>
-          <h1 className="font-bold px-2 border-neutral-800 border-b w-full py-1">
+          <div className="flex gap-1 text-nowrap mx-2">
+            <button
+              className="font-bold text-xs border rounded-md px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+              onClick={handleStageAll}
+            >
+              Stage All
+            </button>
+            <button
+              className="font-bold text-xs border rounded-md px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+              onClick={handleRestoreAll}
+            >
+              Restore All
+            </button>
+          </div>
+          {/* <h1 className="font-bold px-2 border-neutral-800 w-full py-1">
             Stats
-          </h1>
+          </h1>*/}
           {/*  <h1 className="font-bold px-2 w-full py-1">Changes</h1>*/}
         </div>
 
@@ -172,31 +186,31 @@ const GitStatus = () => {
           </div>
         ) : (
           <>
-            <div className="px-2 overflow-auto min-h-50  max-h-50">
+            <div className="px-2 overflow-auto min-h-60  max-h-60">
               {parsedStatus &&
                 parsedStatus.map((st, idx) => {
                   return (
-                    <div key={st} className="flex gap-2 items-center my-1">
-                      <div className="flex gap-1">
+                    <div key={st} className="flex gap-2 items-center my-1 w-full">
+                      <div className="flex gap-2">
                         <button
-                          className="font-bold text-xs border rounded-md px-2  border-[#00aa00] bg-[#008800] hover:bg-[#00aa00] hover:border-[#00cc00]"
+                          className="font-bold text-xs border rounded-md   border-[#00aa00] bg-[#008800] hover:bg-[#00aa00] hover:border-[#00cc00]"
                           onClick={() => {
                             handleStaging(st);
                           }}
                         >
-                          Stage
+                          <Plus size={18} strokeWidth={3} />
                         </button>
                         <button
-                          className="font-bold text-xs border rounded-md px-2  border-[#bb0000] bg-[#990000] hover:bg-[#bb0000] hover:border-[#dd0000]"
+                          className="font-bold text-xs border rounded-md   border-[#bb0000] bg-[#990000] hover:bg-[#bb0000] hover:border-[#dd0000]"
                           onClick={() => {
                             handleRestore(st);
                           }}
                         >
-                          Restore
+                          <Minus size={18} strokeWidth={3}/>
                         </button>
                       </div>
                       <button
-                        className="w-full group flex gap-4 items-center hover:bg-yellow-500 hover:text-black cursor-pointer"
+                        className="w-full overflow-hidden group flex gap-4 items-center hover:bg-yellow-500 hover:text-black cursor-pointer"
                         onClick={() => {
                           handleStatusItemClick(st);
                         }}
@@ -212,23 +226,13 @@ const GitStatus = () => {
                           Click to view diff
                         </p>
                       </button>
+                      <div className="flex gap-2 text-xs font-bold">
+                        <p className="text-green-500">+18</p>
+                        <p className="text-red-600">-18</p>
+                      </div>
                     </div>
                   );
                 })}
-            </div>
-            <div className="flex gap-1 border-t border-neutral-800 p-2">
-              <button
-                className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
-                onClick={handleStageAll}
-              >
-                Stage All
-              </button>
-              <button
-                className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
-                onClick={handleRestoreAll}
-              >
-                Restore All
-              </button>
             </div>
           </>
         )}
