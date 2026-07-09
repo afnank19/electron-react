@@ -120,7 +120,7 @@ const GitStatus = () => {
 
   if (status === "") {
     return (
-      <div className="border rounded-2xl border-neutral-800 m-2 overflow- h-full">
+      <div className="border border-neutral-800  overflow-hidden h-full">
         <div className=" flex justify-between text-sm bg-neutral- border-neutral-800 border-b">
           <h1 className="font-bold px-2 border-r border-neutral-800   w-full py-1">
             Changes
