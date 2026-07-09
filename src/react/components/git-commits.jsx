@@ -95,7 +95,7 @@ export const GitCommits = () => {
   });
 
   return (
-    <div className="text-white flex flex-col gap-2 m-2 border rounded-2xl border-neutral-800 bg-[#111111] py-1">
+    <div className="text-white flex flex-col gap-2 border  border-neutral-800 bg-[#111111] py-1 h-full">
       <h1 className="font-bold px-2">Commits</h1>
 
       <div className="flex gap-2 border-b border-neutral-800 pb-4 px-2">
@@ -129,7 +129,7 @@ export const GitCommits = () => {
         </button>
       </div>
 
-      <div className="overflow-auto min-h-52 max-h-52">
+      <div className="overflow-auto ">
         {parsedCommits &&
           parsedCommits.map((commit, idx) => {
             return (
