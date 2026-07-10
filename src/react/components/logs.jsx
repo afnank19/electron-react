@@ -19,7 +19,7 @@ export const Logs = () => {
   }, [repoPath]);
 
   return (
-    <div className="border rounded-2xl border-neutral-800 bg-[#111111] min-h-82 max-h-82 overflow-auto">
+    <div className="border border-neutral-800 bg-[#111111] overflow-auto h-full">
       <h1 className="font-bold border-b p-2 border-neutral-800 flex justify-between items-center">
         <span>Logs</span>
         <div className="flex gap-1.5">

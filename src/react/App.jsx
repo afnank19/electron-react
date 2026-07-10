@@ -1,7 +1,5 @@
-import { useState } from "react";
 import OpenRepoLayout from "./components/layouts/open-repo-layout";
 import GitStatus from "./components/git-status";
-import GitBranch from "./components/git-branch";
 import Tabs from "./components/tabs";
 import { GitCommits } from "./components/git-commits";
 import { useRepoStore } from "./state/repo-store";
@@ -10,10 +8,8 @@ import { Logs } from "./components/logs";
 import { GitRemote } from "./components/git-remote";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChatPanel } from "./components/chat-panel";
-import { OpenRepo } from "./components/open-repo";
-import { FolderGit } from "lucide-react";
 import { Onboarding } from "./components/onboarding";
-import { Group, Panel, Separator } from "react-resizable-panels";
+import { Group, Panel } from "react-resizable-panels";
 
 const queryClient = new QueryClient();
 
@@ -22,40 +18,59 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="font-display h-screen">
+      <div className="font-display h-screen flex flex-col">
         <Tabs />
+
         {repoPath !== null ? (
           <>
             <OpenRepoLayout />
-            <div className="flex">
-              {/* <div className="flex-1 max-w-1/3 h-full">*/}
-                {/* <GitStatus />*/}
-                {/* <GitCommits />*/}
-                {/* <GitBranch />*/}
-              {/* </div>*/}
 
-              <Group orientation="vertical" className="min-h-228 max-w-1/3">
-                <Panel>
-                  <GitStatus />
+            <div className="flex-1 min-h-0 mx-2">
+              <Group className="h-full">
+                <Panel defaultSize={33}>
+                  <Group orientation="vertical" className="h-full">
+                    <Panel defaultSize={50}>
+                      <div className="h-full min-h-0 overflow-hidden">
+                        <GitStatus />
+                      </div>
+                    </Panel>
+
+                    <Panel defaultSize={50}>
+                      <div className="h-full min-h-0 overflow-hidden">
+                        <GitCommits />
+                      </div>
+                    </Panel>
+                  </Group>
                 </Panel>
-                <Panel>
-                  <GitCommits />
+
+                <Panel defaultSize={34}>
+                  <Group orientation="vertical" className="h-full">
+                    <Panel defaultSize={25} maxSize={70}>
+                      <div className="h-full min-h-0 overflow-hidden">
+                        <GitRemote />
+                      </div>
+                    </Panel>
+
+                    <Panel defaultSize={50}>
+                      <div className="h-full min-h-0 border border-neutral-800 overflow-hidden">
+                        <Viewer />
+                      </div>
+                    </Panel>
+
+                    <Panel defaultSize={25}>
+                      <div className="h-full min-h-0 overflow-hidden">
+                        <Logs />
+                      </div>
+                    </Panel>
+                  </Group>
+                </Panel>
+
+                <Panel defaultSize={33}>
+                  <div className="h-full min-h-0 flex flex-col">
+                    <ChatPanel />
+                  </div>
                 </Panel>
               </Group>
-              <div className="flex-1 max-w-1/3 h-full flex flex-col mr-2">
-                <div className="flex flex-col gap-2">
-                  <GitRemote />
-                  <div className="flex flex-col gap-2">
-                    <div className=" border rounded-2xl border-neutral-800 min-h-115 max-h-115">
-                      <Viewer />
-                    </div>
-                    <Logs />
-                  </div>
-                </div>
-              </div>
-              <div className="flex-1 max-w-1/3 h-full flex flex-col mr-2">
-                <ChatPanel />
-              </div>
             </div>
           </>
         ) : (
