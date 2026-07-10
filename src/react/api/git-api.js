@@ -2,8 +2,8 @@ import { parseGitStatusPorcelain, parseNumstat } from "../utils/utils";
 
 export async function getDiffNumstat(repoPath) {
   const res = await window.gitAPI.diffNumstat(repoPath);
-  parseNumstat(res); // ??
-  return res;
+  const parsedNumstat = parseNumstat(res); // ??
+  return parsedNumstat;
 }
 
 export async function getStatus(repoPath) {

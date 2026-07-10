@@ -22,25 +22,25 @@ const GitStatus = () => {
   const setFileDiff = useViewerStore((s) => s.setFileDiff);
   const setViewerMode = useViewerStore((s) => s.setViewerMode);
 
-  const { stagingMutation, restoringMutation } = useChanges();
+  const { result ,stagingMutation, restoringMutation } = useChanges(repoPath);
 
-  useEffect(() => {
-    // reload data
-    console.log("refresh triggered");
-    window.gitAPI.status(repoPath).then(setStatus);
-  }, [refreshCounter]);
+  // useEffect(() => {
+  //   // reload data
+  //   console.log("refreshing statu");
+  //   window.gitAPI.status(repoPath).then(setStatus);
+  // }, [refreshCounter]);
 
-  useEffect(() => {
-    if (repoPath == null) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (repoPath == null) {
+  //     return;
+  //   }
 
-    window.gitAPI.status(repoPath).then(setStatus);
-    console.log(status);
-    const splitStatusL = status.split("\n");
-    console.log("split", splitStatusL);
-    console.log("split", splitStatusL[0]);
-  }, [repoPath]);
+  //   window.gitAPI.status(repoPath).then(setStatus);
+  //   console.log(status);
+  //   const splitStatusL = status.split("\n");
+  //   console.log("split", splitStatusL);
+  //   console.log("split", splitStatusL[0]);
+  // }, [repoPath]);
 
   function handleStaging(currentItem) {
     const filePath = currentItem.split(" ").pop();
@@ -86,7 +86,7 @@ const GitStatus = () => {
     function handleFocus() {
       console.log("window focused");
 
-      console.log("repo path in focus code", repoPath);
+      // console.log("repo path in focus code", repoPath);
 
       // refresh git status here
       // window.gitAPI.status(repoPath).then(setStatus);
@@ -100,22 +100,26 @@ const GitStatus = () => {
     };
   }, [repoPath]);
 
-  const {
-    data: numstatData,
-    isLoading: numstatLoad,
-    isError: numstatErr,
-  } = useQuery({
-    queryKey: ["numstat", repoPath],
-    queryFn: () => {
-      console.log("getting numstat diff");
-      return getDiffNumstat(repoPath);
-    },
-    select: (data) => {
-      return parseNumstat(data);
-    },
-  });
+  useEffect(() => {
+    console.log("[CHANGES]", result.files)
+  }, [result])
 
-  if (status === "") {
+  // const {
+  //   data: numstatData,
+  //   isLoading: numstatLoad,
+  //   isError: numstatErr,
+  // } = useQuery({
+  //   queryKey: ["numstat", repoPath],
+  //   queryFn: () => {
+  //     console.log("getting numstat diff");
+  //     return getDiffNumstat(repoPath);
+  //   },
+  //   select: (data) => {
+  //     return parseNumstat(data);
+  //   },
+  // });
+
+  if (result.files.length === 0) {
     return (
       <div className="border border-neutral-800  overflow-hidden h-full">
         <div className=" flex justify-between text-sm bg-neutral- border-neutral-800 border-b">
@@ -157,8 +161,8 @@ const GitStatus = () => {
         </div>
         <>
           <div className="px-2 overflow-auto">
-            {processedStatus &&
-              processedStatus.map((item, idx) => {
+            {result.files &&
+              result.files.map((item, idx) => {
                 return (
                   <div
                     key={item.path}
@@ -202,14 +206,14 @@ const GitStatus = () => {
                       </p>
                     </button>
                     <div className="flex gap-2 text-xs font-bold">
-                      <p className="text-green-500">+18</p>
-                      <p className="text-red-600">-18</p>
+                      <p className="text-green-500">+{item.additions}</p>
+                      <p className="text-red-600">-{item.deletions}</p>
                       <div className="flex gap-2">
                         {item.staged ? (
                           <button
                             className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border rounded-md   border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
                             onClick={() => {
-                              handleRestore(item.path);
+                              restoringMutation.mutate({repoPath: repoPath, filePath: item.path })
                             }}
                           >
                             <Minus
