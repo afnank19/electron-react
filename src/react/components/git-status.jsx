@@ -9,11 +9,12 @@ import { useQuery } from "@tanstack/react-query";
 import { getDiffNumstat } from "../api/git-api";
 import { parseGitStatusPorcelain, parseNumstat } from "../utils/utils";
 import { DotSquareIcon, Minus, Plus } from "lucide-react";
+import { useChanges } from "../hooks/use-changes";
 
 const GitStatus = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
   const [status, setStatus] = useState("");
-  const parsedStatus = status ? processStatus(status) : null;
+  // const parsedStatus = status ? processStatus(status) : null;
   const processedStatus = status ? parseGitStatusPorcelain(status) : null;
   const refreshCounter = useAppStore((s) => s.refreshCounter);
   const triggerRefresh = useAppStore((s) => s.triggerRefresh);
@@ -21,7 +22,7 @@ const GitStatus = () => {
   const setFileDiff = useViewerStore((s) => s.setFileDiff);
   const setViewerMode = useViewerStore((s) => s.setViewerMode);
 
-  const [activePane, setActivePane] = useState("files");
+  const { stagingMutation, restoringMutation } = useChanges();
 
   useEffect(() => {
     // reload data
@@ -40,10 +41,6 @@ const GitStatus = () => {
     console.log("split", splitStatusL);
     console.log("split", splitStatusL[0]);
   }, [repoPath]);
-
-  function processStatus(status) {
-    return status.split("\n").slice(0, -1);
-  }
 
   function handleStaging(currentItem) {
     const filePath = currentItem.split(" ").pop();
@@ -92,7 +89,7 @@ const GitStatus = () => {
       console.log("repo path in focus code", repoPath);
 
       // refresh git status here
-      window.gitAPI.status(repoPath).then(setStatus);
+      // window.gitAPI.status(repoPath).then(setStatus);
       triggerRefresh();
     }
 
@@ -142,114 +139,109 @@ const GitStatus = () => {
     <>
       <div className="pb-1 border border-neutral-800 bg-[#111111] overflow-hidden flex flex-col gap-2 h-full">
         <div className=" flex justify-between items-center text-sm  border-neutral-800 border-b">
-          <h1 className="font-bold px-2  w-full py-1">
-            Changes
-          </h1>
+          <h1 className="font-bold px-2  w-full py-1">Changes</h1>
           <div className="flex gap-1 text-nowrap mx-2">
             <button
               className="font-bold text-xs border rounded-md px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
-              onClick={handleStageAll}
+              onClick={() => { stagingMutation.mutate({repoPath: repoPath, filePath: "."}) }}
             >
               Stage All
             </button>
             <button
               className="font-bold text-xs border rounded-md px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
-              onClick={handleRestoreAll}
+              onClick={() => { restoringMutation.mutate({ repoPath: repoPath, filePath: "."}) }}
             >
               Restore All
             </button>
           </div>
-          {/* <h1 className="font-bold px-2 border-neutral-800 w-full py-1">
-            Stats
-          </h1>*/}
-          {/*  <h1 className="font-bold px-2 w-full py-1">Changes</h1>*/}
         </div>
-
-        {activePane === "stats" ? (
-          <div className="px-2">
-            {/* <p>{numstatData}</p>*/}
-            {numstatData.map((numstatItem) => {
-              return (
-                <>
-                  <div className="flex gap-2 items-center justify-between m-0 p-0">
-                    <div className="flex gap-2 items-center">
-                      <DotSquareIcon size={20} className="text-yellow-300" />
-                      <p>{numstatItem.filePath}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <p className="text-green-500">+{numstatItem.additions}</p>
-                      <p className="text-red-600">-{numstatItem.deletions}</p>
-                    </div>
-                  </div>
-                </>
-              );
-            })}
-          </div>
-        ) : (
-          <>
-            <div className="px-2 overflow-auto">
-              {processedStatus &&
-                processedStatus.map((item, idx) => {
-                  return (
-                    <div key={item.path} className="flex gap-2 items-center my-1 w-full">
-                      <div className="flex gap-2">
-                        <button
-                          className="font-bold text-xs border rounded-md   border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
-                          onClick={() => {
-                            handleStaging(item.path);
-                          }}
-                        >
-                          <Plus size={18} strokeWidth={3} className="text-neutral-400" />
-                        </button>
-                        <button
-                          className="font-bold text-xs border rounded-md   border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
-                          onClick={() => {
-                            handleRestore(item.path);
-                          }}
-                        >
-                          <Minus size={18} strokeWidth={3} className="text-neutral-400"/>
-                        </button>
-                      </div>
-                      <button
-                        className="w-full overflow-hidden group flex gap-4 items-center hover:bg-yellow-500 hover:text-black cursor-pointer"
-                        onClick={() => {
-                          handleStatusItemClick(item.path);
-                        }}
-                      >
-                        <div className="flex text-sm gap-2 items-center">
-                          <div className="flex gap-1 items-center">
-                            <p className="">{ item.indexSymbol  === " " ? "_" : item.indexSymbol }</p>
-                            <p className="">{ item.workingTreeSymbol  === " " ? "_" : item.workingTreeSymbol }</p>
-                          </div>
-                          <p
-                            key={idx}
-                            style={{ whiteSpace: "pre" }}
-                            className="text-sm "
-                          >
-                            {item.filename}
+        <>
+          <div className="px-2 overflow-auto">
+            {processedStatus &&
+              processedStatus.map((item, idx) => {
+                return (
+                  <div
+                    key={item.path}
+                    className="flex gap-2 items-center my-1 w-full"
+                  >
+                    <button
+                      className="w-full overflow-hidden group flex gap-4 items-center hover:bg-yellow-500 hover:text-black cursor-pointer"
+                      onClick={() => {
+                        handleStatusItemClick(item.path);
+                      }}
+                      title={ item.path } // Could use a more customizeable tooltip
+                    >
+                      <div className={`flex text-sm gap-2 items-center ${item.staged ? "text-lime-300 group-hover:text-black font-bold" : ""}`}>
+                        <div className="flex gap-1 items-center font-mono border-r pr-2 border-neutral-700">
+                          <p className="">
+                            {item.indexSymbol === " " ? "-" : item.indexSymbol}
                           </p>
-                          <p
-                            key={idx}
-                            style={{ whiteSpace: "pre" }}
-                            className="text-xs text-neutral-400 group-hover:text-neutral-700 "
-                          >
-                            {item.path}
+                          <p className="">
+                            {item.workingTreeSymbol === " "
+                              ? "-"
+                              : item.workingTreeSymbol}
                           </p>
                         </div>
-                        <p className="italic text-sm text-black hidden group-hover:block text-nowrap">
-                          Click to view diff
+                        <p
+                          key={item.path}
+                          style={{ whiteSpace: "pre" }}
+                          className="text-sm "
+                        >
+                          {item.filename}
                         </p>
-                      </button>
-                      <div className="flex gap-2 text-xs font-bold">
-                        <p className="text-green-500">+18</p>
-                        <p className="text-red-600">-18</p>
+                        <p
+                          key={idx}
+                          style={{ whiteSpace: "pre" }}
+                          className="text-xs text-neutral-400 group-hover:text-neutral-700 "
+                        >
+                          /{item.path}
+                        </p>
+                      </div>
+                      <p className="italic text-sm text-black hidden group-hover:block text-nowrap">
+                        Click to view diff
+                      </p>
+                    </button>
+                    <div className="flex gap-2 text-xs font-bold">
+                      <p className="text-green-500">+18</p>
+                      <p className="text-red-600">-18</p>
+                      <div className="flex gap-2">
+                        {item.staged ? (
+                          <button
+                            className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border rounded-md   border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+                            onClick={() => {
+                              handleRestore(item.path);
+                            }}
+                          >
+                            <Minus
+                              size={10}
+                              strokeWidth={3}
+                              className="text-neutral-400"
+                            />
+                            Restore
+                          </button>
+                        ) : (
+                          <button
+                            className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border rounded-md   border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+                            onClick={() => {
+                              // handleStaging(item.path);
+                              stagingMutation.mutate({repoPath: repoPath, filePath: item.path })
+                            }}
+                          >
+                            <Plus
+                              size={10}
+                              strokeWidth={3}
+                              className="text-neutral-400"
+                            />
+                            Stage
+                          </button>
+                        )}
                       </div>
                     </div>
-                  );
-                })}
-            </div>
-          </>
-        )}
+                  </div>
+                );
+              })}
+          </div>
+        </>
       </div>
     </>
   );
