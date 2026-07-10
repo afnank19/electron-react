@@ -8,10 +8,12 @@ import {
   stageFile,
   unstageFile,
 } from "../api/git-api";
+import { useQueryInvalidation } from "../queries/use-query-invalidation";
 
 export function useChanges(repoPath) {
   console.log("useChanges repoPath", repoPath);
   const queryClient = useQueryClient();
+  const { invalidateStatus } = useQueryInvalidation();
 
   const stagingMutation = useMutation({
     mutationFn: (args) => {
@@ -20,12 +22,13 @@ export function useChanges(repoPath) {
     onSuccess: () => {
       console.log("Staged file/s, refreshing status");
 
-      queryClient.invalidateQueries({
-        queryKey: ["status", repoPath],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["numstat", repoPath],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["status", repoPath],
+      // });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["numstat", repoPath],
+      // });
+      invalidateStatus(repoPath);
     },
     onError: (e) => {
       console.error("Couldnt stage file/s", e.message);
@@ -39,12 +42,13 @@ export function useChanges(repoPath) {
     onSuccess: () => {
       console.log("Restored file/s, refreshing status");
       // useAppStore.getState().triggerRefresh();
-      queryClient.invalidateQueries({
-        queryKey: ["status", repoPath],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["numstat", repoPath],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["status", repoPath],
+      // });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["numstat", repoPath],
+      // });
+      invalidateStatus(repoPath);
     },
     onError: () => {
       console.error("Couldnt stage file/s");

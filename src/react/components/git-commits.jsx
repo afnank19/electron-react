@@ -8,6 +8,7 @@ import {
   useViewerStore,
 } from "../state/repo-store";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryInvalidation } from "../queries/use-query-invalidation";
 
 export const GitCommits = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
@@ -23,6 +24,8 @@ export const GitCommits = () => {
   const setViewerMode = useViewerStore((s) => s.setViewerMode);
 
   const [commitMsg, setCommitMsg] = useState("");
+
+  const { invalidateStatus } = useQueryInvalidation();
 
   useEffect(() => {
     // reload data
@@ -60,6 +63,7 @@ export const GitCommits = () => {
     window.gitAPI.commits(repoPath).then(setCommits);
 
     triggerRefresh();
+    invalidateStatus(repoPath);
   }
 
   function handleOnCommitClick(commitItem) {
