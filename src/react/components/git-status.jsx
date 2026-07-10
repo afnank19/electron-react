@@ -10,6 +10,7 @@ import { getDiffNumstat } from "../api/git-api";
 import { parseGitStatusPorcelain, parseNumstat } from "../utils/utils";
 import { DotSquareIcon, Minus, Plus } from "lucide-react";
 import { useChanges } from "../hooks/use-changes";
+import { useQueryInvalidation } from "../queries/use-query-invalidation";
 
 const GitStatus = () => {
   const queryClient = useQueryClient();
@@ -25,6 +26,7 @@ const GitStatus = () => {
   const setViewerMode = useViewerStore((s) => s.setViewerMode);
 
   const { result, stagingMutation, restoringMutation } = useChanges(repoPath);
+  const { invalidateStatus } = useQueryInvalidation();
 
   function handleStatusItemClick(rawItem) {
     const rawItemSplit = rawItem.trim().split(" ");
@@ -44,12 +46,13 @@ const GitStatus = () => {
 
       // refresh git status here
       triggerRefresh();
-      queryClient.invalidateQueries({
-        queryKey: ["status", repoPath],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["numstat", repoPath],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["status", repoPath],
+      // });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["numstat", repoPath],
+      // });
+      invalidateStatus(repoPath);
     }
 
     window.addEventListener("focus", handleFocus);

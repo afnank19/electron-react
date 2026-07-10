@@ -133,7 +133,7 @@ export const GitCommits = () => {
         </button>
       </div>
 
-      <div className="overflow-auto ">
+      <div className="overflow-auto">
         {parsedCommits &&
           parsedCommits.map((commit, idx) => {
             return (

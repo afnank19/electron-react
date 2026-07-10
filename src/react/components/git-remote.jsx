@@ -65,7 +65,7 @@ export const GitRemote = () => {
   }
 
   return (
-    <div className="border rounded-2xl border-neutral-800 bg-[#111111] p-2 mt-2 min-h-18">
+    <div className="border border-neutral-800 bg-[#111111] p-2 h-full">
       {remotes === "" ? (
         <div>No remotes set</div>
       ) : (
@@ -103,7 +103,7 @@ export const GitRemote = () => {
                   })}
               </select>
             </div>
-            <div>
+            <div className="flex gap-2 flex-wrap items-center justify-center">
               <button
                 onClick={() => pushToRemote(activeRemote)}
                 disabled={isPending}

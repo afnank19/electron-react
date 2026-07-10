@@ -24,7 +24,7 @@ export const ChatPanel = () => {
   });
 
   return (
-    <div className="border border-neutral-800 bg-[#111111] max-h-[875px] min-h-[875px] rounded-2xl p-2 my-2 flex flex-col ">
+    <div className="border border-neutral-800 bg-[#111111] p-2 flex flex-col h-full">
       <h2 className="text-lg font-bold mb-4">Workflow Agent</h2>
       {/* TO BE REMOVED AFTER TESTING */}
       <p className="text-sm my-2">Current Prompt: {AGENT_REQ_PROMPT}</p>
