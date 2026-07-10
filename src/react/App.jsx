@@ -25,9 +25,9 @@ const App = () => {
           <>
             <OpenRepoLayout />
 
-            <div className="flex-1 min-h-0 mx-2">
+            <div className="flex-1 min-h-0 mb-2">
               <Group className="h-full">
-                <Panel defaultSize={33}>
+                <Panel defaultSize={25}>
                   <Group orientation="vertical" className="h-full">
                     <Panel defaultSize={50}>
                       <div className="h-full min-h-0 overflow-hidden">
@@ -43,7 +43,7 @@ const App = () => {
                   </Group>
                 </Panel>
 
-                <Panel defaultSize={34}>
+                <Panel defaultSize={50}>
                   <Group orientation="vertical" className="h-full">
                     <Panel defaultSize={25} maxSize={70}>
                       <div className="h-full min-h-0 overflow-hidden">
@@ -52,7 +52,7 @@ const App = () => {
                     </Panel>
 
                     <Panel defaultSize={50}>
-                      <div className="h-full min-h-0 border border-neutral-800 overflow-hidden">
+                      <div className="h-full min-h-0 border border-neutral-800">
                         <Viewer />
                       </div>
                     </Panel>
@@ -65,7 +65,7 @@ const App = () => {
                   </Group>
                 </Panel>
 
-                <Panel defaultSize={33}>
+                <Panel defaultSize={25}>
                   <div className="h-full min-h-0 flex flex-col">
                     <ChatPanel />
                   </div>

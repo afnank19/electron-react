@@ -73,7 +73,7 @@ export const Viewer = () => {
   // Current changes, goes through an agent that decides which files it has to explore.
 
   return (
-    <div className="bg-[#111111] h-full">
+    <div className="bg-[#111111] overflow-hidden h-full">
       {/* <p className="whitespace-pre font-mono text-sm">{fileDiff}</p>*/}
       <div className="font-bold border-b p-2 border-neutral-800 flex gap-2 justify-between">
         <h1 className="font-bold">Viewer</h1>
@@ -87,7 +87,7 @@ export const Viewer = () => {
           {!isPending ? "Summarize current changes" : "Clanking"}
         </button>
       </div>
-      <div className="overflow-auto relative">
+      <div className="overflow-auto relative h-full">
         <ViewerPanel />
         {/* {viewerMode === "commit" ? (
           commitLog != "" ? (
