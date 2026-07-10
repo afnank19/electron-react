@@ -1,5 +1,7 @@
-import { useMutation, useQueries } from "@tanstack/react-query";
-import { useAppStore, useRepoStore } from "../state/repo-store";
+// Not triggering a refresh on mutations here because staging doesn't really affect other parts
+// of the app
+
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import {
   getDiffNumstat,
   getStatus,
@@ -9,6 +11,7 @@ import {
 
 export function useChanges(repoPath) {
   console.log("useChanges repoPath", repoPath);
+  const queryClient = useQueryClient();
 
   const stagingMutation = useMutation({
     mutationFn: (args) => {
@@ -16,7 +19,13 @@ export function useChanges(repoPath) {
     },
     onSuccess: () => {
       console.log("Staged file/s, refreshing status");
-      useAppStore.getState().triggerRefresh(); // Could use tanstacks own query invalidation as well, need to have a think
+
+      queryClient.invalidateQueries({
+        queryKey: ["status", repoPath],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["numstat", repoPath],
+      });
     },
     onError: (e) => {
       console.error("Couldnt stage file/s", e.message);
@@ -29,7 +38,13 @@ export function useChanges(repoPath) {
     },
     onSuccess: () => {
       console.log("Restored file/s, refreshing status");
-      useAppStore.getState().triggerRefresh();
+      // useAppStore.getState().triggerRefresh();
+      queryClient.invalidateQueries({
+        queryKey: ["status", repoPath],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["numstat", repoPath],
+      });
     },
     onError: () => {
       console.error("Couldnt stage file/s");
@@ -43,12 +58,14 @@ export function useChanges(repoPath) {
         queryFn: () => {
           return getStatus(repoPath);
         },
+        refetchOnWindowFocus: true,
       },
       {
         queryKey: ["numstat", repoPath],
         queryFn: () => {
           return getDiffNumstat(repoPath);
         },
+        refetchOnWindowFocus: true,
       },
     ],
     combine: ([status, numstat]) => {

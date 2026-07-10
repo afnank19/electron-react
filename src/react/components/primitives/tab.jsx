@@ -17,9 +17,11 @@ export const Tab = ({ repoName, tabId, handleCloseTab }) => {
   };
 
   return (
-    <div className={`flex items-center gap-2 px-1 border border-neutral-800 justify-between rounded-lg overflow-hidden cursor-pointer hover:bg-neutral-800 ${
+    <div
+      className={`flex items-center gap-2 px-1 border border-neutral-800 justify-between rounded-lg overflow-hidden cursor-pointer hover:bg-neutral-800 ${
         repoPath === repoName ? "bg-neutral-800  border-neutral-500" : ""
-      }`}>
+      }`}
+    >
       <div className="flex items-center px-2 gap-2">
         {repoPath === repoName && (
           <span className="w-2 h-2 rounded-full bg-white" />
@@ -28,7 +30,7 @@ export const Tab = ({ repoName, tabId, handleCloseTab }) => {
           className="cursor-pointer font-bold truncate max-w-[16ch]"
           onClick={handleClick}
         >
-          /{parsedName}
+          {parsedName}
         </button>
       </div>
 

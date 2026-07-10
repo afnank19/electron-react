@@ -5,13 +5,15 @@ import {
   useRepoStore,
   useViewerStore,
 } from "../state/repo-store";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getDiffNumstat } from "../api/git-api";
 import { parseGitStatusPorcelain, parseNumstat } from "../utils/utils";
 import { DotSquareIcon, Minus, Plus } from "lucide-react";
 import { useChanges } from "../hooks/use-changes";
 
 const GitStatus = () => {
+  const queryClient = useQueryClient();
+
   const repoPath = useRepoStore((state) => state.repoPath);
   const [status, setStatus] = useState("");
   // const parsedStatus = status ? processStatus(status) : null;
@@ -22,53 +24,7 @@ const GitStatus = () => {
   const setFileDiff = useViewerStore((s) => s.setFileDiff);
   const setViewerMode = useViewerStore((s) => s.setViewerMode);
 
-  const { result ,stagingMutation, restoringMutation } = useChanges(repoPath);
-
-  // useEffect(() => {
-  //   // reload data
-  //   console.log("refreshing statu");
-  //   window.gitAPI.status(repoPath).then(setStatus);
-  // }, [refreshCounter]);
-
-  // useEffect(() => {
-  //   if (repoPath == null) {
-  //     return;
-  //   }
-
-  //   window.gitAPI.status(repoPath).then(setStatus);
-  //   console.log(status);
-  //   const splitStatusL = status.split("\n");
-  //   console.log("split", splitStatusL);
-  //   console.log("split", splitStatusL[0]);
-  // }, [repoPath]);
-
-  function handleStaging(currentItem) {
-    const filePath = currentItem.split(" ").pop();
-    console.log("staging ", filePath);
-
-    window.gitAPI.stageFile(repoPath, filePath);
-    window.gitAPI.status(repoPath).then(setStatus);
-  }
-
-  function handleRestore(currentItem) {
-    const filePath = currentItem.split(" ").pop();
-    console.log("staging ", filePath);
-
-    window.gitAPI.restoreFile(repoPath, filePath);
-    window.gitAPI.status(repoPath).then(setStatus);
-  }
-
-  function handleStageAll() {
-    window.gitAPI.stageFile(repoPath, ".");
-
-    // BUG: runs immmediately, should put this in the then chain above probably
-    window.gitAPI.status(repoPath).then(setStatus);
-  }
-
-  function handleRestoreAll() {
-    window.gitAPI.restoreFile(repoPath, ".");
-    window.gitAPI.status(repoPath).then(setStatus);
-  }
+  const { result, stagingMutation, restoringMutation } = useChanges(repoPath);
 
   function handleStatusItemClick(rawItem) {
     const rawItemSplit = rawItem.trim().split(" ");
@@ -86,11 +42,14 @@ const GitStatus = () => {
     function handleFocus() {
       console.log("window focused");
 
-      // console.log("repo path in focus code", repoPath);
-
       // refresh git status here
-      // window.gitAPI.status(repoPath).then(setStatus);
       triggerRefresh();
+      queryClient.invalidateQueries({
+        queryKey: ["status", repoPath],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["numstat", repoPath],
+      });
     }
 
     window.addEventListener("focus", handleFocus);
@@ -101,23 +60,8 @@ const GitStatus = () => {
   }, [repoPath]);
 
   useEffect(() => {
-    console.log("[CHANGES]", result.files)
-  }, [result])
-
-  // const {
-  //   data: numstatData,
-  //   isLoading: numstatLoad,
-  //   isError: numstatErr,
-  // } = useQuery({
-  //   queryKey: ["numstat", repoPath],
-  //   queryFn: () => {
-  //     console.log("getting numstat diff");
-  //     return getDiffNumstat(repoPath);
-  //   },
-  //   select: (data) => {
-  //     return parseNumstat(data);
-  //   },
-  // });
+    console.log("[CHANGES]", result.files);
+  }, [result]);
 
   if (result.files.length === 0) {
     return (
@@ -147,13 +91,17 @@ const GitStatus = () => {
           <div className="flex gap-1 text-nowrap mx-2">
             <button
               className="font-bold text-xs border rounded-md px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
-              onClick={() => { stagingMutation.mutate({repoPath: repoPath, filePath: "."}) }}
+              onClick={() => {
+                stagingMutation.mutate({ repoPath: repoPath, filePath: "." });
+              }}
             >
               Stage All
             </button>
             <button
               className="font-bold text-xs border rounded-md px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
-              onClick={() => { restoringMutation.mutate({ repoPath: repoPath, filePath: "."}) }}
+              onClick={() => {
+                restoringMutation.mutate({ repoPath: repoPath, filePath: "." });
+              }}
             >
               Restore All
             </button>
@@ -173,9 +121,11 @@ const GitStatus = () => {
                       onClick={() => {
                         handleStatusItemClick(item.path);
                       }}
-                      title={ item.path } // Could use a more customizeable tooltip
+                      title={item.path} // Could use a more customizeable tooltip
                     >
-                      <div className={`flex text-sm gap-2 items-center ${item.staged ? "text-lime-300 group-hover:text-black font-bold" : ""}`}>
+                      <div
+                        className={`flex text-sm gap-2 items-center ${item.staged ? "text-lime-300 group-hover:text-black font-bold" : ""}`}
+                      >
                         <div className="flex gap-1 items-center font-mono border-r pr-2 border-neutral-700">
                           <p className="">
                             {item.indexSymbol === " " ? "-" : item.indexSymbol}
@@ -213,7 +163,10 @@ const GitStatus = () => {
                           <button
                             className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border rounded-md   border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
                             onClick={() => {
-                              restoringMutation.mutate({repoPath: repoPath, filePath: item.path })
+                              restoringMutation.mutate({
+                                repoPath: repoPath,
+                                filePath: item.path,
+                              });
                             }}
                           >
                             <Minus
@@ -228,7 +181,10 @@ const GitStatus = () => {
                             className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border rounded-md   border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
                             onClick={() => {
                               // handleStaging(item.path);
-                              stagingMutation.mutate({repoPath: repoPath, filePath: item.path })
+                              stagingMutation.mutate({
+                                repoPath: repoPath,
+                                filePath: item.path,
+                              });
                             }}
                           >
                             <Plus
