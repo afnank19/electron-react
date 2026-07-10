@@ -5,72 +5,26 @@ import {
   useRepoStore,
   useViewerStore,
 } from "../state/repo-store";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getDiffNumstat } from "../api/git-api";
-import { parseNumstat } from "../utils/utils";
-import { DotSquareIcon } from "lucide-react";
+import { parseGitStatusPorcelain, parseNumstat } from "../utils/utils";
+import { DotSquareIcon, Minus, Plus } from "lucide-react";
+import { useChanges } from "../hooks/use-changes";
 
 const GitStatus = () => {
+  const queryClient = useQueryClient();
+
   const repoPath = useRepoStore((state) => state.repoPath);
   const [status, setStatus] = useState("");
-  const parsedStatus = status ? processStatus(status) : null;
+  // const parsedStatus = status ? processStatus(status) : null;
+  const processedStatus = status ? parseGitStatusPorcelain(status) : null;
   const refreshCounter = useAppStore((s) => s.refreshCounter);
   const triggerRefresh = useAppStore((s) => s.triggerRefresh);
 
   const setFileDiff = useViewerStore((s) => s.setFileDiff);
   const setViewerMode = useViewerStore((s) => s.setViewerMode);
 
-  const [activePane, setActivePane] = useState("files");
-
-  useEffect(() => {
-    // reload data
-    console.log("refresh triggered");
-    window.gitAPI.status(repoPath).then(setStatus);
-  }, [refreshCounter]);
-
-  useEffect(() => {
-    if (repoPath == null) {
-      return;
-    }
-
-    window.gitAPI.status(repoPath).then(setStatus);
-    console.log(status);
-    const splitStatusL = status.split("\n");
-    console.log("split", splitStatusL);
-    console.log("split", splitStatusL[0]);
-  }, [repoPath]);
-
-  function processStatus(status) {
-    return status.split("\n").slice(0, -1);
-  }
-
-  function handleStaging(currentItem) {
-    const filePath = currentItem.split(" ").pop();
-    console.log("staging ", filePath);
-
-    window.gitAPI.stageFile(repoPath, filePath);
-    window.gitAPI.status(repoPath).then(setStatus);
-  }
-
-  function handleRestore(currentItem) {
-    const filePath = currentItem.split(" ").pop();
-    console.log("staging ", filePath);
-
-    window.gitAPI.restoreFile(repoPath, filePath);
-    window.gitAPI.status(repoPath).then(setStatus);
-  }
-
-  function handleStageAll() {
-    window.gitAPI.stageFile(repoPath, ".");
-
-    // BUG: runs immmediately, should put this in the then chain above probably
-    window.gitAPI.status(repoPath).then(setStatus);
-  }
-
-  function handleRestoreAll() {
-    window.gitAPI.restoreFile(repoPath, ".");
-    window.gitAPI.status(repoPath).then(setStatus);
-  }
+  const { result, stagingMutation, restoringMutation } = useChanges(repoPath);
 
   function handleStatusItemClick(rawItem) {
     const rawItemSplit = rawItem.trim().split(" ");
@@ -88,11 +42,14 @@ const GitStatus = () => {
     function handleFocus() {
       console.log("window focused");
 
-      console.log("repo path in focus code", repoPath);
-
       // refresh git status here
-      window.gitAPI.status(repoPath).then(setStatus);
       triggerRefresh();
+      queryClient.invalidateQueries({
+        queryKey: ["status", repoPath],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["numstat", repoPath],
+      });
     }
 
     window.addEventListener("focus", handleFocus);
@@ -102,31 +59,20 @@ const GitStatus = () => {
     };
   }, [repoPath]);
 
-  const {
-    data: numstatData,
-    isLoading: numstatLoad,
-    isError: numstatErr,
-  } = useQuery({
-    queryKey: ["numstat", repoPath],
-    queryFn: () => {
-      console.log("getting numstat diff");
-      return getDiffNumstat(repoPath);
-    },
-    select: (data) => {
-      return parseNumstat(data);
-    },
-  });
+  useEffect(() => {
+    console.log("[CHANGES]", result.files);
+  }, [result]);
 
-  if (status === "") {
+  if (result.files.length === 0) {
     return (
-      <div className="min-h-72 border rounded-2xl border-neutral-800 m-2">
-        <div className=" flex justify-between text-center text-sm bg-neutral-900">
-          <h1 className="font-bold px-2 border-r border-neutral-800 border-b bg-neutral-800  w-full py-1">
-            Files
+      <div className="border border-neutral-800  overflow-hidden h-full">
+        <div className=" flex justify-between text-sm bg-neutral- border-neutral-800 border-b">
+          <h1 className="font-bold px-2 border-r border-neutral-800   w-full py-1">
+            Changes
           </h1>
-          <h1 className="font-bold px-2 border-neutral-800 border-b w-full py-1">
+          {/* <h1 className="font-bold px-2 border-neutral-800 w-full py-1">
             Stats
-          </h1>
+          </h1>*/}
           {/*  <h1 className="font-bold px-2 w-full py-1">Changes</h1>*/}
         </div>
         <p className="px-2 pt-1 italic text-center">
@@ -139,99 +85,123 @@ const GitStatus = () => {
   // TODO: handle overflow so it looks good
   return (
     <>
-      <div className="pb-1 border rounded-2xl border-neutral-800 bg-[#111111] m-2 overflow-hidden flex flex-col gap-2 min-h-72">
-        <div className=" flex justify-between text-center text-sm bg-neutral-900">
-          <h1 className="font-bold px-2 border-r border-neutral-800 border-b bg-neutral-800  w-full py-1">
-            Files
-          </h1>
-          <h1 className="font-bold px-2 border-neutral-800 border-b w-full py-1">
-            Stats
-          </h1>
-          {/*  <h1 className="font-bold px-2 w-full py-1">Changes</h1>*/}
-        </div>
-
-        {activePane === "stats" ? (
-          <div className="px-2">
-            {/* <p>{numstatData}</p>*/}
-            {numstatData.map((numstatItem) => {
-              return (
-                <>
-                  <div className="flex gap-2 items-center justify-between m-0 p-0">
-                    <div className="flex gap-2 items-center">
-                      <DotSquareIcon size={20} className="text-yellow-300" />
-                      <p>{numstatItem.filePath}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <p className="text-green-500">+{numstatItem.additions}</p>
-                      <p className="text-red-600">-{numstatItem.deletions}</p>
-                    </div>
-                  </div>
-                </>
-              );
-            })}
+      <div className="pb-1 border border-neutral-800 bg-[#111111] overflow-hidden flex flex-col gap-2 h-full">
+        <div className=" flex justify-between items-center text-sm  border-neutral-800 border-b">
+          <h1 className="font-bold px-2  w-full py-1">Changes</h1>
+          <div className="flex gap-1 text-nowrap mx-2">
+            <button
+              className="font-bold text-xs border rounded-md px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+              onClick={() => {
+                stagingMutation.mutate({ repoPath: repoPath, filePath: "." });
+              }}
+            >
+              Stage All
+            </button>
+            <button
+              className="font-bold text-xs border rounded-md px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+              onClick={() => {
+                restoringMutation.mutate({ repoPath: repoPath, filePath: "." });
+              }}
+            >
+              Restore All
+            </button>
           </div>
-        ) : (
-          <>
-            <div className="px-2 overflow-auto min-h-50  max-h-50">
-              {parsedStatus &&
-                parsedStatus.map((st, idx) => {
-                  return (
-                    <div key={st} className="flex gap-2 items-center my-1">
-                      <div className="flex gap-1">
-                        <button
-                          className="font-bold text-xs border rounded-md px-2  border-[#00aa00] bg-[#008800] hover:bg-[#00aa00] hover:border-[#00cc00]"
-                          onClick={() => {
-                            handleStaging(st);
-                          }}
-                        >
-                          Stage
-                        </button>
-                        <button
-                          className="font-bold text-xs border rounded-md px-2  border-[#bb0000] bg-[#990000] hover:bg-[#bb0000] hover:border-[#dd0000]"
-                          onClick={() => {
-                            handleRestore(st);
-                          }}
-                        >
-                          Restore
-                        </button>
-                      </div>
-                      <button
-                        className="w-full group flex gap-4 items-center hover:bg-yellow-500 hover:text-black cursor-pointer"
-                        onClick={() => {
-                          handleStatusItemClick(st);
-                        }}
+        </div>
+        <>
+          <div className="px-2 overflow-auto">
+            {result.files &&
+              result.files.map((item, idx) => {
+                return (
+                  <div
+                    key={item.path}
+                    className="flex gap-2 items-center my-1 w-full"
+                  >
+                    <button
+                      className="w-full overflow-hidden group flex gap-4 items-center hover:bg-yellow-500 hover:text-black cursor-pointer"
+                      onClick={() => {
+                        handleStatusItemClick(item.path);
+                      }}
+                      title={item.path} // Could use a more customizeable tooltip
+                    >
+                      <div
+                        className={`flex text-sm gap-2 items-center ${item.staged ? "text-lime-300 group-hover:text-black font-bold" : ""}`}
                       >
+                        <div className="flex gap-1 items-center font-mono border-r pr-2 border-neutral-700">
+                          <p className="">
+                            {item.indexSymbol === " " ? "-" : item.indexSymbol}
+                          </p>
+                          <p className="">
+                            {item.workingTreeSymbol === " "
+                              ? "-"
+                              : item.workingTreeSymbol}
+                          </p>
+                        </div>
+                        <p
+                          key={item.path}
+                          style={{ whiteSpace: "pre" }}
+                          className="text-sm "
+                        >
+                          {item.filename}
+                        </p>
                         <p
                           key={idx}
                           style={{ whiteSpace: "pre" }}
-                          className="font-mono text-sm "
+                          className="text-xs text-neutral-400 group-hover:text-neutral-700 "
                         >
-                          {idx === 0 ? "" + st : st}
+                          /{item.path}
                         </p>
-                        <p className="italic text-sm text-black hidden group-hover:block text-nowrap">
-                          Click to view diff
-                        </p>
-                      </button>
+                      </div>
+                      <p className="italic text-sm text-black hidden group-hover:block text-nowrap">
+                        Click to view diff
+                      </p>
+                    </button>
+                    <div className="flex gap-2 text-xs font-bold">
+                      <p className="text-green-500">+{item.additions}</p>
+                      <p className="text-red-600">-{item.deletions}</p>
+                      <div className="flex gap-2">
+                        {item.staged ? (
+                          <button
+                            className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border rounded-md   border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+                            onClick={() => {
+                              restoringMutation.mutate({
+                                repoPath: repoPath,
+                                filePath: item.path,
+                              });
+                            }}
+                          >
+                            <Minus
+                              size={10}
+                              strokeWidth={3}
+                              className="text-neutral-400"
+                            />
+                            Restore
+                          </button>
+                        ) : (
+                          <button
+                            className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border rounded-md   border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+                            onClick={() => {
+                              // handleStaging(item.path);
+                              stagingMutation.mutate({
+                                repoPath: repoPath,
+                                filePath: item.path,
+                              });
+                            }}
+                          >
+                            <Plus
+                              size={10}
+                              strokeWidth={3}
+                              className="text-neutral-400"
+                            />
+                            Stage
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  );
-                })}
-            </div>
-            <div className="flex gap-1 border-t border-neutral-800 p-2">
-              <button
-                className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
-                onClick={handleStageAll}
-              >
-                Stage All
-              </button>
-              <button
-                className="font-bold text-xs border rounded-lg px-2 py-1 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
-                onClick={handleRestoreAll}
-              >
-                Restore All
-              </button>
-            </div>
-          </>
-        )}
+                  </div>
+                );
+              })}
+          </div>
+        </>
       </div>
     </>
   );

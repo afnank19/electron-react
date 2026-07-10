@@ -13,6 +13,7 @@ import { ChatPanel } from "./components/chat-panel";
 import { OpenRepo } from "./components/open-repo";
 import { FolderGit } from "lucide-react";
 import { Onboarding } from "./components/onboarding";
+import { Group, Panel, Separator } from "react-resizable-panels";
 
 const queryClient = new QueryClient();
 
@@ -27,11 +28,20 @@ const App = () => {
           <>
             <OpenRepoLayout />
             <div className="flex">
-              <div className="flex-1 max-w-1/3">
-                <GitStatus />
-                <GitCommits />
-                <GitBranch />
-              </div>
+              {/* <div className="flex-1 max-w-1/3 h-full">*/}
+                {/* <GitStatus />*/}
+                {/* <GitCommits />*/}
+                {/* <GitBranch />*/}
+              {/* </div>*/}
+
+              <Group orientation="vertical" className="min-h-228 max-w-1/3">
+                <Panel>
+                  <GitStatus />
+                </Panel>
+                <Panel>
+                  <GitCommits />
+                </Panel>
+              </Group>
               <div className="flex-1 max-w-1/3 h-full flex flex-col mr-2">
                 <div className="flex flex-col gap-2">
                   <GitRemote />
