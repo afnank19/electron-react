@@ -2,11 +2,14 @@ import { useEffect } from "react";
 import { useRepoStore, useTabStore } from "../../state/repo-store";
 import { getFolderName } from "../../utils/utils";
 import { X } from "lucide-react";
+import { useQueryInvalidation } from "../../queries/use-query-invalidation";
 
 export const Tab = ({ repoName, tabId, handleCloseTab }) => {
   const parsedName = getFolderName(repoName);
   const repoPath = useRepoStore((state) => state.repoPath);
   const setRepoPath = useRepoStore((state) => state.setRepoPath);
+
+  const { invalidateAll } = useQueryInvalidation();
 
   // Sets the active repository to be this tab
   const handleClick = () => {
@@ -14,6 +17,7 @@ export const Tab = ({ repoName, tabId, handleCloseTab }) => {
     localStorage.setItem("repo-path", repoName);
     setRepoPath(repoName);
     window.app.setRepoPath(repoName);
+    invalidateAll(repoName);
   };
 
   return (

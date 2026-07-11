@@ -9,6 +9,7 @@ import {
 } from "../state/repo-store";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useQueryInvalidation } from "../queries/use-query-invalidation";
+import { useCommits } from "../hooks/use-commits";
 
 export const GitCommits = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
@@ -26,6 +27,7 @@ export const GitCommits = () => {
   const [commitMsg, setCommitMsg] = useState("");
 
   const { invalidateStatus } = useQueryInvalidation();
+  const { commitQuery } = useCommits(repoPath);
 
   useEffect(() => {
     // reload data
@@ -77,6 +79,7 @@ export const GitCommits = () => {
     });
   }
 
+  // Jinkies mate
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       const headDiff = await window.gitAPI.getHeadDiff(repoPath);
@@ -100,50 +103,64 @@ export const GitCommits = () => {
 
   return (
     <div className="text-white flex flex-col gap-2 border  border-neutral-800 bg-[#111111] py-1 h-full">
-      <h1 className="font-bold px-2">Commits</h1>
+      <h1 className="font-bold px-2">Commit History</h1>
 
-      <div className="flex gap-2 border-b border-neutral-800 pb-4 px-2">
-        <textarea
-          placeholder="eg. feat: update README.md"
-          className="border border-neutral-800 bg-neutral-900 rounded-lg px-2 text-sm flex-1 resize-none overflow-hidden min-w-20"
-          value={commitMsg}
-          onChange={(e) => {
-            setCommitMsg(e.target.value);
-          }}
-          rows={1}
-          onInput={(e) => {
-            const el = e.currentTarget;
-            el.style.height = "auto";
-            el.style.height = `${el.scrollHeight}px`;
-          }}
-        ></textarea>
+      <div className="flex flex-col gap-2 border-b border-neutral-800 pb-4 px-2">
+          <textarea
+            placeholder="eg. feat: update README.md"
+            className="border border-neutral-800 bg-neutral-900 rounded-lg px-2 text-sm flex-1 resize-none overflow-hidden min-w-20"
+            value={commitMsg}
+            onChange={(e) => {
+              setCommitMsg(e.target.value);
+            }}
+            rows={1}
+            onInput={(e) => {
+              const el = e.currentTarget;
+              el.style.height = "auto";
+              el.style.height = `${el.scrollHeight}px`;
+            }}
+          ></textarea>
+        <div className="flex gap-1 items-center justify-between">
+          <button
+            className="font-bold text-xs border rounded-lg px-2 py-0.5  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+            onClick={() => {
+              mutate();
+            }}
+          >
+            {isPending ? "Generating" : "Generate with LLM"}
+          </button>
         <button
-          className="font-bold text-xs border rounded-lg px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
-          onClick={() => {
-            mutate();
-          }}
-        >
-          {isPending ? "Generating" : "Generate with LLM"}
-        </button>
-        <button
-          className="font-bold text-xs border rounded-lg px-2  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-xl"
+          className="font-bold w-fit text-xs border rounded-lg px-2 py-0.5  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-xl"
           onClick={handleOnCommit}
         >
           Commit with message
         </button>
+        </div>
       </div>
 
-      <div className="overflow-auto">
-        {parsedCommits &&
-          parsedCommits.map((commit, idx) => {
+      <div className="overflow-auto h-full ">
+        {commitQuery.data &&
+          commitQuery.data.map((commit, idx) => {
             return (
-              <button
-                key={idx}
-                className="text-sm px-2 w-full text-left font-mono  text-nowrap hover:bg-yellow-500 hover:text-black cursor-pointer select-text border-b border-neutral-800"
-                onClick={() => handleOnCommitClick(commit)}
-              >
-                {commit}
-              </button>
+              <div className="text-sm hover:bg-neutral-700  cursor-pointer w-full  border-b border-neutral-800">
+                <div className="flex gap-1 mx-2">
+
+                  <button
+                    key={idx}
+                    className=" w-full text-left  text-nowrap  select-text"
+                    onClick={() => handleOnCommitClick(commit.hash)}
+                  >
+                    {commit.subject}
+                  </button>
+                </div>
+                <div className="flex gap-2 mx-2 text-xs text-neutral-400">
+                  <p>{commit.author}</p>
+                  <p>{commit.relativeDate}</p>
+                  <button className="">
+                    {commit.hash}
+                  </button>
+                </div>
+              </div>
             );
           })}
       </div>

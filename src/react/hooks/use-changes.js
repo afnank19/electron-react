@@ -11,7 +11,7 @@ import {
 import { useQueryInvalidation } from "../queries/use-query-invalidation";
 
 export function useChanges(repoPath) {
-  console.log("useChanges repoPath", repoPath);
+  // console.log("useChanges repoPath", repoPath);
   const queryClient = useQueryClient();
   const { invalidateStatus } = useQueryInvalidation();
 

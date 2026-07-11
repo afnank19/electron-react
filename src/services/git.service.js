@@ -70,6 +70,7 @@ export function getFileDiff(repoPath, filePath) {
 }
 
 export function getCommitLog(repoPath, commitHash) {
+  console.log("Getting show for hash", commitHash)
   return runGit(repoPath, ["show", commitHash], { raw: true, color: true});
 }
 

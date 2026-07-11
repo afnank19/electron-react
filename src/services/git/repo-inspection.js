@@ -41,7 +41,7 @@ export async function getCurrentBranch(repoPath) {
 
 // Gets the commits
 export function gitLog(repoPath, limit) {
-  let args = ["log", `--pretty=format:%h %cr %an %s`];
+  let args = ["log", `--pretty=format:%h%x1f%cr%x1f%an%x1f%s%x1e`];
 
   if (limit != null) {
     args = [...args, "-n", limit];

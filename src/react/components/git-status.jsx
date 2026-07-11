@@ -30,9 +30,9 @@ const GitStatus = () => {
 
   function handleStatusItemClick(rawItem) {
     const rawItemSplit = rawItem.trim().split(" ");
-    console.log("rISplit", rawItemSplit);
+    // console.log("rISplit", rawItemSplit);
     const filePath = rawItemSplit[rawItemSplit.length - 1];
-    console.log("fp", filePath);
+    // console.log("fp", filePath);
 
     setViewerMode(VIEWER_MODE.FILE);
     window.gitAPI.showFileDiff(repoPath, filePath).then((res) => {
@@ -61,10 +61,6 @@ const GitStatus = () => {
       window.removeEventListener("focus", handleFocus);
     };
   }, [repoPath]);
-
-  useEffect(() => {
-    console.log("[CHANGES]", result.files);
-  }, [result]);
 
   if (result.files.length === 0) {
     return (
