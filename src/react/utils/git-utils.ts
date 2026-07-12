@@ -1,3 +1,5 @@
+import parse from "parse-diff";
+
 export interface GitCommit {
   hash: string;
   relativeDate: string;
@@ -35,4 +37,32 @@ export function parseGitCommitOutput(output: string) {
         subject,
       };
     });
+}
+
+export function parseCommitDiff(diffStr: string) {
+  const files = parse(diffStr);
+  return files.map((f) => {
+    let oldContent = "";
+    let newContent = "";
+    for (const chunk of f.chunks) {
+      for (const change of chunk.changes) {
+        const line = change.content.slice(1);
+        if (change.type === "normal") {
+          oldContent += line + "\n";
+          newContent += line + "\n";
+        } else if (change.type === "del") {
+          oldContent += line + "\n";
+        } else if (change.type === "add") {
+          newContent += line + "\n";
+        }
+      }
+    }
+    const ext = (f.to || f.from || "").split(".").pop() || "";
+    return {
+      fileName: f.to || f.from || "",
+      oldContent,
+      newContent,
+      ext,
+    };
+  });
 }

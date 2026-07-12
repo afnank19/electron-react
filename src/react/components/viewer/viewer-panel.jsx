@@ -3,6 +3,7 @@ import { VIEWER_MODE, useViewerStore } from "../../state/repo-store";
 import { escapeHtml } from "../../utils/utils";
 import DOMPurify from "dompurify";
 import { ContentViewPane } from "./content-view-pane";
+import { CommitDiffViewer } from "./commit-diff-viewer";
 import Markdown from "react-markdown";
 
 
@@ -10,12 +11,7 @@ export const ViewerPanel = () => {
   const viewerMode = useViewerStore((s) => s.viewerMode);
 
   const fileDiff = useViewerStore((s) => s.fileDiff);
-  const filePath = useViewerStore((s) => s.filePath);
   const setFileDiff = useViewerStore((s) => s.setFileDiff);
-
-  const commitLog = useViewerStore((s) => s.commitLog);
-  const commitHash = useViewerStore((s) => s.commitHash);
-  const setCommitLog = useViewerStore((s) => s.setCommitLog);
 
   const summary = useViewerStore((s) => s.summary);
 
@@ -26,10 +22,6 @@ export const ViewerPanel = () => {
     ? DOMPurify.sanitize(fileDiffHtml)
     : null;
 
-  const commitLogHtml = commitLog
-    ? convert.toHtml(escapeHtml(commitLog))
-    : null;
-
   switch (viewerMode) {
     case VIEWER_MODE.NONE: {
       return (
@@ -38,7 +30,7 @@ export const ViewerPanel = () => {
     }
     case VIEWER_MODE.COMMIT: {
       return (
-        <ContentViewPane html={commitLogHtml} />
+        <CommitDiffViewer />
       )
     }
     case VIEWER_MODE.FILE: {
