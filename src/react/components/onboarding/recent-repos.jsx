@@ -50,6 +50,7 @@ export const RecentRepos = () => {
         {recentTabs.map((recentTab) => {
           return (
             <button
+              key={recentTab.repoPath}
               onClick={() => {
                 handleRecentTabClick(recentTab.repoPath);
               }}

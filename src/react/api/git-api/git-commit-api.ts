@@ -7,3 +7,7 @@ export async function getCommits(repoPath: string) {
   const parsedCommits = parseGitCommitOutput(res);
   return parsedCommits;
 }
+
+export async function commit(repoPath: string, commitMsg: string) {
+  return window.gitAPI.commitChange(repoPath, commitMsg);
+}

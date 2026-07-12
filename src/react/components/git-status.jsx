@@ -16,23 +16,21 @@ const GitStatus = () => {
   const queryClient = useQueryClient();
 
   const repoPath = useRepoStore((state) => state.repoPath);
-  const [status, setStatus] = useState("");
+  // const [status, setStatus] = useState("");
   // const parsedStatus = status ? processStatus(status) : null;
-  const processedStatus = status ? parseGitStatusPorcelain(status) : null;
-  const refreshCounter = useAppStore((s) => s.refreshCounter);
+  // const processedStatus = status ? parseGitStatusPorcelain(status) : null;
+  // const refreshCounter = useAppStore((s) => s.refreshCounter);
   const triggerRefresh = useAppStore((s) => s.triggerRefresh);
 
   const setFileDiff = useViewerStore((s) => s.setFileDiff);
   const setViewerMode = useViewerStore((s) => s.setViewerMode);
 
   const { result, stagingMutation, restoringMutation } = useChanges(repoPath);
-  const { invalidateStatus } = useQueryInvalidation();
+  const { invalidateStatus, invalidateAll } = useQueryInvalidation();
 
   function handleStatusItemClick(rawItem) {
     const rawItemSplit = rawItem.trim().split(" ");
-    // console.log("rISplit", rawItemSplit);
     const filePath = rawItemSplit[rawItemSplit.length - 1];
-    // console.log("fp", filePath);
 
     setViewerMode(VIEWER_MODE.FILE);
     window.gitAPI.showFileDiff(repoPath, filePath).then((res) => {
@@ -52,7 +50,8 @@ const GitStatus = () => {
       // queryClient.invalidateQueries({
       //   queryKey: ["numstat", repoPath],
       // });
-      invalidateStatus(repoPath);
+      // invalidateStatus(repoPath);
+      invalidateAll(repoPath);
     }
 
     window.addEventListener("focus", handleFocus);
@@ -69,10 +68,6 @@ const GitStatus = () => {
           <h1 className="font-bold px-2 border-r border-neutral-800   w-full py-1">
             Changes
           </h1>
-          {/* <h1 className="font-bold px-2 border-neutral-800 w-full py-1">
-            Stats
-          </h1>*/}
-          {/*  <h1 className="font-bold px-2 w-full py-1">Changes</h1>*/}
         </div>
         <p className="px-2 pt-1 italic text-center">
           Nothing to commit, working tree clean.
@@ -81,7 +76,6 @@ const GitStatus = () => {
     );
   }
 
-  // TODO: handle overflow so it looks good
   return (
     <>
       <div className="pb-1 border border-neutral-800 bg-[#111111] overflow-hidden flex flex-col gap-2 h-full">
