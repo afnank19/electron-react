@@ -22,6 +22,14 @@ export function useQueryInvalidation() {
   const invalidateAll = (repoPath) => {
     invalidateCommits(repoPath);
     invalidateStatus(repoPath);
+
+    // Probably move into its own func
+    queryClient.invalidateQueries({
+      queryKey: queryKeyStore.branch(repoPath),
+    });
+    queryClient.invalidateQueries({
+      queryKey: queryKeyStore.activeBranch(repoPath),
+    });
   }
 
   return {

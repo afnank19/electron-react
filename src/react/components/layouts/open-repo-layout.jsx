@@ -28,15 +28,19 @@ const OpenRepoLayout = () => {
   return (
     <div className="flex px-2 border-t border-neutral-800 justify-between">
       <div className="flex items-center">
-        <p className="flex gap-2 px-2 py-1 items-center border-r border-neutral-800">
-          <FolderGit size={20} strokeWidth={1.5} />
-          {getFolderName(repoPath)}
-        </p>
-        <div className="border-r border-neutral-800 py-1 px-2">
+        <div className="px-2 py-1 border-r border-neutral-800">
+          <p className="text-xs text-left text-neutral-400">Current Repository</p>
+          <p className="flex gap-2 items-center text-sm font-bold">
+            <FolderGit size={20} strokeWidth={1.5} />
+            {getFolderName(repoPath)}
+          </p>
+        </div>
+        <div className="border-r border-neutral-800 py-1 px-2 font-bold">
+          <p className="text-xs text-left text-neutral-400 font-medium">User Email</p>
           <MaskedText text={userEmail} />
         </div>
         {/* <ErrorMsg prefix={"INFO"} message={pathErr} type={"error"}/>*/}
-        <div className="border-r border-neutral-800 py-1 px-2">
+        <div className="border-r border-neutral-800 py-1 px-2 hover:bg-neutral-800 cursor-pointer select-none">
           <GitBranchDropdown
             trigger={<GitBranchDropdownTrigger />}
           />

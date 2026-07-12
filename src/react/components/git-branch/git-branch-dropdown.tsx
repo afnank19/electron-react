@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getLocalBranches } from "../../api/git-api/git-branch-api";
-import { useRepoStore } from "../../state/repo-store";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getLocalBranches, switchBranch, createAndSwitchToBranch } from "../../api/git-api/git-branch-api";
+import { useRepoStore, useGitLogStore } from "../../state/repo-store";
+import { useQueryInvalidation } from "../../queries/use-query-invalidation";
 
 type Item = {
   id: string;
@@ -29,13 +30,40 @@ export function GitBranchDropdown({
     enabled: isOpen,
   });
 
+  const { invalidateAll } = useQueryInvalidation();
+  const addLog = useGitLogStore((s) => s.addLog);
+
+  const switchMutation = useMutation({
+    mutationFn: (branch: string) => switchBranch(repoPath, branch),
+    onSuccess: () => {
+      addLog("INFO: Switched branch successfully");
+      invalidateAll(repoPath);
+      setIsOpen(false);
+    },
+    onError: (err: Error) => {
+      addLog("FATAL: Failed to switch branch: " + err.message);
+    },
+  });
+
+  const createMutation = useMutation({
+    mutationFn: (branch: string) => createAndSwitchToBranch(repoPath, branch),
+    onSuccess: () => {
+      addLog("INFO: Created and switched to branch successfully");
+      invalidateAll(repoPath);
+      setIsOpen(false);
+      setInputValue("");
+    },
+    onError: (err: Error) => {
+      addLog("FATAL: Failed to create branch: " + err.message);
+    },
+  });
+
   const handleItemClick = (branch: string) => {
-    // TODO: implement item click behavior
-    console.log("Clicking Branch", branch)
+    switchMutation.mutate(branch);
   };
 
   const handleCreate = (value: string) => {
-    // TODO: implement create behavior
+    createMutation.mutate(value);
   };
 
   useEffect(() => {
@@ -68,12 +96,12 @@ export function GitBranchDropdown({
       </div>
 
       {isOpen && (
-        <div className="absolute left-0 top-full z-50 bg-neutral-700 mt-1 flex min-w-60 flex-col gap-2 overflow-hidden">
+        <div className="absolute left-0 top-full pb-2 z-50 bg-neutral-900 drop-shadow-lg mt-1 flex min-w-60 flex-col gap-2 rounded-xl overflow-hidden">
           <input
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Search or create..."
-            className="w-full"
+            placeholder="Type to create a branch"
+            className="w-full px-2 py-1 border-b border-neutral-700 text-sm"
           />
 
           <div className="flex max-h-64 flex-col overflow-y-auto">
@@ -95,7 +123,7 @@ export function GitBranchDropdown({
                   key={branch}
                   type="button"
                   onClick={() => handleItemClick(branch)}
-                  className="text-left"
+                  className="text-left text-sm px-2 hover:bg-neutral-700 border-b border-neutral-800"
                 >
                   {branch}
                 </button>

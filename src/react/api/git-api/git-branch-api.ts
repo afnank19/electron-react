@@ -12,3 +12,13 @@ export async function getActiveBranch(repoPath: string): Promise<string> {
   console.log("active branch", res);
   return res;
 }
+
+export async function switchBranch(repoPath: string, branch: string): Promise<string> {
+  const res: string = await window.gitAPI.switchBranch(repoPath, branch);
+  return res;
+}
+
+export async function createAndSwitchToBranch(repoPath: string, branch: string): Promise<string> {
+  const res: string = await window.gitAPI.createBranch(repoPath, branch);
+  return res;
+}

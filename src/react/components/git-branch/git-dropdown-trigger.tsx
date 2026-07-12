@@ -17,9 +17,12 @@ export function GitBranchDropdownTrigger() {
   return (
     <div>
       {isActiveBranchLoading ? null : (
-        <div className="flex gap-2 items-center">
-          <p>{activeBranch + " | "}</p>
-          <ChevronDown size={12} />
+        <div>
+          <p className="text-xs text-left text-neutral-400">Current Branch</p>
+          <div className="flex gap-2 items-center text-sm">
+            <p className="font-bold">{activeBranch}</p>
+            <ChevronDown size={12} />
+          </div>
         </div>
       )}
     </div>

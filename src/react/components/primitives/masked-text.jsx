@@ -10,7 +10,7 @@ const MaskedText = ({ text }) => {
 
   return (
     <div className="flex gap-2 items-center">
-      <p className="">{revealed ? text : "*".repeat(text.length)}</p>
+      <p className="text-sm">{revealed ? text : "*".repeat(text.length)}</p>
       <button
         onClick={handleRevealClick}
         className="font-bold text-xs border rounded-md px-2 border-neutral-700 hover:bg-neutral-600"
