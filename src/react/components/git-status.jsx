@@ -139,7 +139,7 @@ const GitStatus = () => {
                         <p
                           key={idx}
                           style={{ whiteSpace: "pre" }}
-                          className="text-xs text-neutral-400 group-hover:text-neutral-700 "
+                          className="text-xs text-neutral-400 group-hover:text-neutral-700 truncate"
                         >
                           /{item.path}
                         </p>
