@@ -13,7 +13,20 @@ export function useQueryInvalidation() {
     });
   };
 
+  const invalidateCommits = (repoPath) => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeyStore.commit(repoPath)
+    })
+  }
+
+  const invalidateAll = (repoPath) => {
+    invalidateCommits(repoPath);
+    invalidateStatus(repoPath);
+  }
+
   return {
+    invalidateAll,
     invalidateStatus,
+    invalidateCommits
   };
 }
