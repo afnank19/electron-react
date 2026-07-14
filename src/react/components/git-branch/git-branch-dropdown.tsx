@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getLocalBranches, switchBranch, createAndSwitchToBranch } from "../../api/git-api/git-branch-api";
 import { useRepoStore, useGitLogStore } from "../../state/repo-store";
 import { useQueryInvalidation } from "../../queries/use-query-invalidation";
+import { Plus } from "lucide-react";
 
 type Item = {
   id: string;
@@ -96,12 +97,12 @@ export function GitBranchDropdown({
       </div>
 
       {isOpen && (
-        <div className="absolute left-0 top-full pb-2 z-50 bg-neutral-900 drop-shadow-lg mt-1 flex min-w-60 flex-col gap-2 rounded-xl overflow-hidden">
+        <div className="absolute left-0 top-full pb-2 z-50 bg-neutral-900 drop-shadow-lg mt-1 flex min-w-60 flex-col gap-2 rounded-xl overflow-hidden border border-neutral-700">
           <input
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Type to create a branch"
-            className="w-full px-2 py-1 border-b border-neutral-700 text-sm"
+            className="w-full px-2 py-2 rounded-lg text-sm border-b border-neutral-700 bg-neutral-950"
           />
 
           <div className="flex max-h-64 flex-col overflow-y-auto">
@@ -109,8 +110,9 @@ export function GitBranchDropdown({
               <button
                 type="button"
                 onClick={() => handleCreate(inputValue)}
-                className="text-left"
+                className="text-left text-green-200 text-sm px-2 py-1 hover:bg-neutral-700 flex items-center gap-2 border-b border-neutral-800"
               >
+                <Plus size={12}/>
                 Create "{inputValue}"
               </button>
             )}
@@ -123,7 +125,7 @@ export function GitBranchDropdown({
                   key={branch}
                   type="button"
                   onClick={() => handleItemClick(branch)}
-                  className="text-left text-sm px-2 hover:bg-neutral-700 border-b border-neutral-800"
+                  className="text-left text-sm px-2 hover:bg-neutral-700 border-b border-neutral-800 border-dashed"
                 >
                   {branch}
                 </button>

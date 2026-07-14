@@ -66,7 +66,8 @@ export function getHeadDiff(repoPath) {
 }
 
 export function getFileDiff(repoPath, filePath) {
-  return execGitRaw(repoPath, "diff HEAD -- " + filePath);
+  // return execGitRaw(repoPath, "diff HEAD -- " + filePath);
+  return runGit(repoPath, ["diff", "HEAD", "--", filePath], { raw: true, color: false });
 }
 
 export function getCommitLog(repoPath, commitHash) {

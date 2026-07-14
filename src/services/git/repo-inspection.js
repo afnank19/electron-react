@@ -66,5 +66,5 @@ export async function gitDiffNumstat(repoPath) {
 }
 
 export function getCommitLog(repoPath, commitHash) {
-  return runGit(repoPath, ["show", commitHash], { raw: true, color: true });
+  return runGit(repoPath, ["show", commitHash], { raw: true, color: false });
 }

@@ -16,6 +16,7 @@ import { registerAppStateIPC } from "./ipc/app-state.ipc.js";
 import { initializeToolRegistry } from "./agent/tools/registry.js";
 import { initializeAgent } from "./agent/agent.js";
 import {
+    getCommitLog,
   getLocalBranches,
   gitDiffNumstat,
   gitLog,
@@ -136,7 +137,7 @@ export function registerGitIPC() {
   });
 
   ipcMain.handle("git:getCommitLog", (_, repoPath, commitHash) => {
-    return git.getCommitLog(repoPath, commitHash);
+    return getCommitLog(repoPath, commitHash);
   });
 
   ipcMain.handle("git:checkout", (_, { repoPath, branch }) => {
