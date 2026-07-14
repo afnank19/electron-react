@@ -198,3 +198,19 @@ export async function handleAgentRequest(request) {
 
   return agent.run(request);
 }
+
+export async function generateCommitMessageV2() {
+  console.log("[AGENT REQUEST] Generate a commit msg my employee")
+
+  const request = `You have to generate a commit message for the current changes. In order to achieve this do the following:
+    Use the numstat diff tool to get an overview of the repository changes.
+    Decide if the numstat alone is enough to write a useful summary in Markdown.
+    If some files need closer inspection (significant logic changes, ambiguous purpose), call get_diffs for ONLY those files - be selective, this is expensive.
+    Once you have enough information, respond with ONLY the commit message.
+    Keep the commit message shorter than 80 characters.
+    `;
+
+  const agent = getAgent();
+
+  return agent.run(request);
+}

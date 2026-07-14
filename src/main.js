@@ -7,6 +7,7 @@ import { getRepoRoot } from "./services/git.service";
 import {
   diffSummaryAgent,
   generateCommitMessage,
+  generateCommitMessageV2,
   handleAgentRequest,
   summarizeCurrentChanges,
 } from "./services/llm.service.js";
@@ -192,7 +193,7 @@ export function registerRepoIPC() {
 
 export function registerLLMIPC() {
   ipcMain.handle("llm:commitMsg", (_, diff) => {
-    return generateCommitMessage(diff);
+    return generateCommitMessageV2();
   });
 
   ipcMain.handle("llm:diffSummary", (_, repoPath) => {
