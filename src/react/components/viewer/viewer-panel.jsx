@@ -3,12 +3,14 @@ import { VIEWER_MODE, useViewerStore } from "../../state/repo-store";
 import { escapeHtml } from "../../utils/utils";
 import DOMPurify from "dompurify";
 import { ContentViewPane } from "./content-view-pane";
-import { CommitDiffViewer } from "./commit-diff-viewer";
 import Markdown from "react-markdown";
+import { DiffViewer } from "./diff-viewer";
 
 
 export const ViewerPanel = () => {
   const viewerMode = useViewerStore((s) => s.viewerMode);
+
+  const commitLog = useViewerStore((s) => s.commitLog);
 
   const fileDiff = useViewerStore((s) => s.fileDiff);
   const setFileDiff = useViewerStore((s) => s.setFileDiff);
@@ -22,6 +24,10 @@ export const ViewerPanel = () => {
     ? DOMPurify.sanitize(fileDiffHtml)
     : null;
 
+  const commitLogHtml = commitLog
+      ? convert.toHtml(escapeHtml(commitLog))
+      : null;
+
   switch (viewerMode) {
     case VIEWER_MODE.NONE: {
       return (
@@ -30,12 +36,12 @@ export const ViewerPanel = () => {
     }
     case VIEWER_MODE.COMMIT: {
       return (
-        <CommitDiffViewer />
+        <DiffViewer diff={commitLog} />
       )
     }
     case VIEWER_MODE.FILE: {
       return (
-        <ContentViewPane html={cleanFileDiffHtml} />
+        <DiffViewer diff={fileDiff} />
       )
     }
     case VIEWER_MODE.SUMMARY: {

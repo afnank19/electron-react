@@ -52,7 +52,7 @@ const App = () => {
                     </Panel>
 
                     <Panel defaultSize={50}>
-                      <div className="h-full min-h-0 border border-neutral-800">
+                      <div className="h-full min-h-0 border border-neutral-800" >
                         <Viewer />
                       </div>
                     </Panel>
