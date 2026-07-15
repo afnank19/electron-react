@@ -4,4 +4,5 @@ export const queryKeyStore = {
   commit: (repoPath) => ["commits", repoPath],
   branch: (repoPath) => ["branches", repoPath],
   activeBranch: (repoPath) => ["activeBranch", repoPath],
+  remote: (repoPath) => ["remote", repoPath],
 };

@@ -1,72 +1,63 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAppStore, useGitLogStore, useRepoStore } from "../state/repo-store";
-import { splitByNewLine } from "../utils/utils";
+import { useRemotes } from "../hooks/use-remotes";
+import { queryKeyStore } from "../queries/queryKeys";
+import { useQueryInvalidation } from "../queries/use-query-invalidation";
 
 export const GitRemote = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
   const addLog = useGitLogStore((s) => s.addLog);
   const triggerRefresh = useAppStore((s) => s.triggerRefresh);
+  const queryClient = useQueryClient();
 
-  const [remotes, setRemotes] = useState("");
-  const parsedRemotes = remotes ? splitByNewLine(remotes) : null;
+  const { remotesQuery, pushMutation, pullMutation } = useRemotes(repoPath);
+  const { invalidateAll } = useQueryInvalidation();
 
+  const remotes = remotesQuery.data ?? [];
   const [activeRemote, setActiveRemote] = useState("");
-  const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
-    if (repoPath === null) {
-      return;
+    if (remotes.length > 0 && !activeRemote) {
+      setActiveRemote(remotes[0]);
     }
-
-    window.gitAPI
-      .getRemotes(repoPath)
-      .then(setRemotes)
-      .catch((err) => {
-        console.log("err: no remotes?");
-      });
-  }, [repoPath]);
-
-  // useEffect(() => {
-  //   console.log(remotes);
-  // }, [remotes]);
+  }, [remotes]);
 
   function pushToRemote(remote) {
-    console.log("pushing to", remote);
-    setIsPending(true);
     addLog("Pushing to " + remote + ". Please Wait...");
-    window.gitAPI
-      .push(repoPath, remote)
-      .then(addLog)
-      .catch((err) => {
+    pushMutation.mutate(remote, {
+      onSuccess: (res) => {
+        addLog(res);
+        invalidateAll(repoPath);
+        triggerRefresh();
+      },
+      onError: (err) => {
         addLog(err.message);
-      })
-      .finally(() => {
-        setIsPending(false);
-      });
-
-    triggerRefresh();
+      },
+    });
   }
 
   function pullFromRemote(remote) {
-    console.log("pulling from", remote);
     addLog("Pulling from " + remote + ". Please Wait...");
-    setIsPending(true);
-    window.gitAPI
-      .pull(repoPath, remote)
-      .then(addLog)
-      .catch((err) => {
+    pullMutation.mutate(remote, {
+      onSuccess: (res) => {
+        addLog(res);
+        invalidateAll(repoPath);
+        triggerRefresh();
+      },
+      onError: (err) => {
         addLog(err.message);
-      })
-      .finally(() => {
-        setIsPending(false);
-      });
-
-    triggerRefresh();
+      },
+    });
   }
+
+  const isPending = pushMutation.isPending || pullMutation.isPending;
 
   return (
     <div className="border border-neutral-800 bg-[#111111] p-2 h-full">
-      {remotes === "" ? (
+      {remotesQuery.isLoading ? (
+        <div>Loading remotes...</div>
+      ) : remotes.length === 0 ? (
         <div>No remotes set</div>
       ) : (
         <div className="flex flex-col gap-1">
@@ -92,15 +83,16 @@ export const GitRemote = () => {
           <div className="flex items-center justify-between gap-1">
             <div className="flex gap-2 items-center">
               <p className="text-sm font-bold">Active Remote:</p>
-              <select className="px-2 text-base">
-                {parsedRemotes &&
-                  parsedRemotes.map((remote, idx) => {
-                    return (
-                      <option key={idx} className="bg-black">
-                        {remote}
-                      </option>
-                    );
-                  })}
+              <select
+                className="px-2 text-base"
+                value={activeRemote}
+                onChange={(e) => setActiveRemote(e.target.value)}
+              >
+                {remotes.map((remote, idx) => (
+                  <option key={idx} className="bg-black">
+                    {remote}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="flex gap-2 flex-wrap items-center justify-center">

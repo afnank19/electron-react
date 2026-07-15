@@ -22,6 +22,7 @@ import {
   gitDiffNumstat,
   gitLog,
 } from "./services/git/repo-inspection.js";
+import { gitPull, gitPush } from "./services/git/remote.js";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -150,11 +151,12 @@ export function registerGitIPC() {
   });
 
   ipcMain.handle("git:push", (_, repoPath, remote) => {
-    return git.pushToRemote(repoPath, remote);
+    // return git.pushToRemote(repoPath, remote);
+    return gitPush(repoPath, remote);
   });
 
   ipcMain.handle("git:pull", (_, repoPath, remote) => {
-    return git.pullFromRemote(repoPath, remote);
+    return gitPull(repoPath, remote);
   });
 
   ipcMain.handle("git:headDiff", (_, repoPath) => {
