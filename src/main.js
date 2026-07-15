@@ -192,7 +192,7 @@ export function registerRepoIPC() {
 }
 
 export function registerLLMIPC() {
-  ipcMain.handle("llm:commitMsg", (_, diff) => {
+  ipcMain.handle("llm:commitMsg", (_) => {
     return generateCommitMessageV2();
   });
 
