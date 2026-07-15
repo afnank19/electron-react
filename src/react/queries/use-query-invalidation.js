@@ -30,6 +30,10 @@ export function useQueryInvalidation() {
     queryClient.invalidateQueries({
       queryKey: queryKeyStore.activeBranch(repoPath),
     });
+
+    queryClient.invalidateQueries({
+      queryKey: queryKeyStore.remote(repoPath),
+    })
   }
 
   return {

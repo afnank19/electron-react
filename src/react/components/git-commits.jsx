@@ -12,14 +12,7 @@ import { useQueryInvalidation } from "../queries/use-query-invalidation";
 import { useCommits } from "../hooks/use-commits";
 
 export const GitCommits = () => {
-  // const setRepoPath = useRepoStore((state) => state.setRepoPath);
   const triggerRefresh = useAppStore((s) => s.triggerRefresh);
-  // const refreshCounter = useAppStore((s) => s.refreshCounter);
-
-  // const [commits, setCommits] = useState("");
-  // const parsedCommits = commits ? splitByNewLine(commits) : null;
-
-
 
   const addLog = useGitLogStore((s) => s.addLog);
   const setCommitLog = useViewerStore((s) => s.setCommitLog);
@@ -29,17 +22,6 @@ export const GitCommits = () => {
   const { invalidateStatus, invalidateAll } = useQueryInvalidation();
   const { commitQuery, genCommitMsgMutation, commitMutation } = useCommits(repoPath);
 
-  // useEffect(() => {
-  //   // reload data
-  //   console.log("commit refresh triggered");
-  //   window.gitAPI
-  //     .commits(repoPath)
-  //     .then(setCommits)
-  //     .catch((err) => {
-  //       setCommits("");
-  //     });
-  // }, [refreshCounter]);
-
   useEffect(() => {
     if (repoPath == null) {
       return;
@@ -47,21 +29,6 @@ export const GitCommits = () => {
 
     setCommitMsg("");
   }, [repoPath]);
-
-  // function handleOnCommit() {
-  //   setCommitMsg("");
-  //   window.gitAPI
-  //     .commitChange(repoPath, commitMsg)
-  //     .then(addLog)
-  //     .catch((err) => {
-  //       addLog(err.message);
-  //     });
-  //   window.gitAPI.commits(repoPath).then(setCommits);
-
-  //   triggerRefresh();
-  //   // invalidateStatus(repoPath);
-  //   invalidateAll(repoPath);
-  // }
 
   function handleOnCommitClick(commitItem) {
     console.log("clicking the commit", commitItem);

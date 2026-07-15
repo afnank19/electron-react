@@ -49,5 +49,14 @@ export async function gitCreateBranch(repoPath, branchName) {
   return runGit(repoPath, ["switch", "-c", branchName]);
 }
 
+export async function gitBranchShowCurrent(repoPath) {
+  return runGit(repoPath, ["branch", "--show-current"], { raw: false, color: false });
+}
+
+// If this throws, then the branch has no upstream set up.
+export async function gitCheckBranchUpstream(repoPath) {
+  return runGit(repoPath, ["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"]);
+}
+
 // TODO
 export async function deleteBranch(repoPath) {}
