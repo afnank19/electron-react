@@ -1,3 +1,4 @@
+import { emitAgentEvent } from "../../events/eventBus";
 import { getLLMClient } from "../../services/llm.service";
 import { executeToolCall } from "../tools/execute-tools";
 import { getRegistry } from "../tools/registry";
@@ -12,6 +13,12 @@ export async function runLoop(messages, model) {
   const client = getLLMClient(); // this function may be moved to another place, its 1am rn, i cant be bothered
 
   console.log("active tools", tools);
+
+  emitAgentEvent({
+    type: "message",
+    message: "AGENT: Got it, working on it.",
+    tool: ""
+  })
 
   let count = 0;
   while (count < MAX_STEPS) {
@@ -50,6 +57,11 @@ export async function runLoop(messages, model) {
       console.log(
         `[Runner] Executing tool: ${toolCall.function?.name} (id: ${toolCall.id})`,
       );
+      emitAgentEvent({
+        type: "message",
+        message: "AGENT: running the following tool:",
+        tool: toolCall.function?.name + " with params: " + toolCall.function.arguments
+      })
       let toolResult;
       try {
         toolResult = await executeToolCall(toolCall);

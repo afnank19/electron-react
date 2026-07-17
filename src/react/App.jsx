@@ -10,11 +10,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChatPanel } from "./components/chat-panel";
 import { Onboarding } from "./components/onboarding";
 import { Group, Panel } from "react-resizable-panels";
+import { useAgentEvents } from "./hooks/use-agent-events";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
+  useAgentEvents();
 
   return (
     <QueryClientProvider client={queryClient}>

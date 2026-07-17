@@ -23,6 +23,8 @@ import {
   gitLog,
 } from "./services/git/repo-inspection.js";
 import { gitPull, gitPush } from "./services/git/remote.js";
+import { eventBus } from "./events/eventBus.js";
+import { initializeEventForwarder } from "./events/eventForwader.js";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -64,6 +66,7 @@ app.whenReady().then(() => {
   registerSettingsIPC();
   initializeToolRegistry();
   initializeAgent();
+  initializeEventForwarder();
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the

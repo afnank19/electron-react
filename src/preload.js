@@ -47,6 +47,18 @@ contextBridge.exposeInMainWorld("ai", {
   agentRequest: (request) => ipcRenderer.invoke("llm:agentRequest", request),
 });
 
+contextBridge.exposeInMainWorld("agentEvents", {
+  subscribe(callback) {
+    const listener = (_, event) => callback(event);
+
+    ipcRenderer.on("agent:event", listener);
+
+    return () => {
+      ipcRenderer.removeListener("agent:event", listener);
+    }
+  }
+})
+
 contextBridge.exposeInMainWorld("settings", {
   getSettings: () => ipcRenderer.invoke("cfg:getSettings"),
   setSettings: (settings) => ipcRenderer.invoke("cfg:setSettings", settings),

@@ -1,13 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { ArrowUp } from "lucide-react";
 import React from "react";
-import { useAppStore } from "../state/repo-store";
+import { useAppStore, useRepoStore } from "../state/repo-store";
+import { useQueryInvalidation } from "../queries/use-query-invalidation";
 
 // REMOVE AFTER NO LONGER NEEDED
 const AGENT_REQ_PROMPT = "Stage my changes.";
 
 export const ChatPanel = () => {
   const triggerRefresh = useAppStore((s) => s.triggerRefresh);
+  const repoPath = useRepoStore((s) => s.repoPath);
+  const { invalidateAll } = useQueryInvalidation();
 
   const { mutate, isPending } = useMutation({
     mutationFn: () => {
@@ -16,7 +19,8 @@ export const ChatPanel = () => {
     },
     onSuccess: (data) => {
       console.log("successfully ran, triggering refresh", data);
-      triggerRefresh();
+      // triggerRefresh();
+      invalidateAll(repoPath);
     },
     onError: (error) => {
       console.error(error.message);
