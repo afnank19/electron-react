@@ -18,13 +18,14 @@ import { initializeToolRegistry } from "./agent/tools/registry.js";
 import { initializeAgent } from "./agent/agent.js";
 import {
     getCommitLog,
-  getLocalBranches,
+  // getLocalBranches,
   gitDiffNumstat,
   gitLog,
 } from "./services/git/repo-inspection.js";
 import { gitPull, gitPush } from "./services/git/remote.js";
 import { eventBus } from "./events/eventBus.js";
 import { initializeEventForwarder } from "./events/eventForwader.js";
+import { gitLocalBranches } from "./services/git/branching.js";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -109,7 +110,7 @@ export function registerGitIPC() {
 
   // Returns all branches
   ipcMain.handle("git:branches", (_, repoPath) => {
-    return getLocalBranches(repoPath);
+    return gitLocalBranches(repoPath);
   });
 
   ipcMain.handle("git:switchBranch", (_, repoPath, branch) => {
