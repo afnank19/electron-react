@@ -56,14 +56,14 @@ export const Viewer = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: () => {
-      addLog("CLANKER: Analyzing changes, writing a summary for you.");
+      addLog("SYSTEM: Agent requested to write a summary for current changes.");
       return window.ai.diffSummary(repoPath);
     },
     onSuccess: (data) => {
       console.log("successfully ran, summary generated", data);
       setSummary(data);
       setViewerMode(VIEWER_MODE.SUMMARY);
-      addLog("CLANKER: Summary written successfully");
+      addLog("SYSTEM: Summary written successfully");
     },
     onError: (error) => {
       addLog("ERROR: Couldn't write summary. Check: " + error.message);

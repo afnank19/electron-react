@@ -46,36 +46,35 @@ export function getAgent() {
 }
 
 function buildContext(request, ctx) {
-  console.log("[BUILD CTX]", request)
-  // const chatItems = useChatStore.getState().items;
-  console.log("[CHAT ITEMS]", ctx)
-
   const conversationContext = [];
 
   // I do not like this one bit
   // massively needs improvement
-  ctx.forEach((item) => {
-    let role = "user"
-    if (item.type === "message") {
-      role = "assistant"
-      conversationContext.push({
-        role: role,
-        content: item.message
-      })
-    } else if (item.type === "tool_call") {
-      role = "assistant"
-      conversationContext.push({
-        role: role,
-        content: "Used tool " + item.tool + " with parameter/s " + item.params
-      })
-    } else if (item.type === "user") {
-      role = "user"
-      conversationContext.push({
-        role: role,
-        content: item.message
-      })
-    }
-  })
+
+  if (ctx !== null) {
+    ctx.forEach((item) => {
+      let role = "user"
+      if (item.type === "message") {
+        role = "assistant"
+        conversationContext.push({
+          role: role,
+          content: item.message
+        })
+      } else if (item.type === "tool_call") {
+        role = "assistant"
+        conversationContext.push({
+          role: role,
+          content: "Used tool " + item.tool + " with parameter/s " + item.params
+        })
+      } else if (item.type === "user") {
+        role = "user"
+        conversationContext.push({
+          role: role,
+          content: item.message
+        })
+      }
+    })
+  }
 
   conversationContext.push({
     role: "user",

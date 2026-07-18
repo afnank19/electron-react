@@ -1,5 +1,6 @@
 import Markdown from "react-markdown";
 import type { ChatItem } from "../../state/chat-store";
+import { ToolChatItem } from "./item-types/tool-chat-item";
 
 type ChatItemRendererProps = {
   item: ChatItem
@@ -23,10 +24,11 @@ export function ChatItemRenderer({ item }: ChatItemRendererProps) {
     }
     case "tool_call": {
       return (
-        <div className="font-mono text-sm px-2 m-1 border-l border-green-500">
-          Tool Invoked: {item.tool}
-          <p>Parameters: {item.params} </p>
-        </div>
+        // <div className="font-mono text-sm px-2 m-1 border-l border-green-500">
+        //   Tool Invoked: {item.tool}
+        //   <p>Parameters: {item.params} </p>
+        // </div>
+        <ToolChatItem item={item} />
       )
     }
     case "log": {
