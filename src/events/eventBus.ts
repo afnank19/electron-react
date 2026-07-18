@@ -1,4 +1,5 @@
 import EventEmitter from "events";
+import type { ChatItemType } from "../react/state/chat-store";
 
 export const eventBus = new EventEmitter;
 
@@ -7,9 +8,7 @@ export function emitAgentEvent(event: AgentEvent) {
 }
 
 export type AgentEvent = {
-  type: AgentEventType,
+  type: ChatItemType,
   message: string,
   tool: string
 }
-
-export type AgentEventType = "tool" | "message"
