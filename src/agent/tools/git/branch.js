@@ -5,7 +5,6 @@ import {
   getLocalBranches,
   switchBranch,
 } from "../../../services/git/branching";
-import { getCurrentBranch } from "../../../services/git/repo-inspection";
 
 export const switchBranchTool = {
   name: "switch_branch",

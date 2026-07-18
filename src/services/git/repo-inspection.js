@@ -1,5 +1,4 @@
 import { appState } from "../../main/app-state";
-import { gitBranchShowCurrent } from "./branching";
 import { runGit } from "./git-runner";
 
 // Intended as a function for the LLM to use as a tool
@@ -18,7 +17,7 @@ export async function getRepoStatus() {
   }
 
   try {
-    const currentBranch = await gitBranchShowCurrent(cwd);
+    const currentBranch = await getAc(cwd);
     repoState += "Current branch is " + currentBranch;
   } catch (e) {
     throw new Error(e.message);
@@ -36,9 +35,9 @@ export async function gitStatus(repoPath) {
   return runGit(repoPath, ["status", "--porcelain", "-uall"], { raw: true });
 }
 
-// export async function getCurrentBranch(repoPath) {
-//   return runGit(repoPath, ["branch", "--show-current"], { raw: true });
-// }
+export async function getCurrentBranch(repoPath) {
+  return runGit(repoPath, ["branch", "--show-current"], { raw: true });
+}
 
 // Gets the commits
 export function gitLog(repoPath, limit) {
