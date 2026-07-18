@@ -51,7 +51,7 @@ const Tabs = () => {
     <>
       <div className="px-2 py-1 items-center flex gap-1 select-none">
         <div className="border-2 border-lime-200 px-1 py-0 mr-1">
-          <p className="font-bold font-mono text-lime-200">GS</p>
+          <p className="font-bold font-mono text-lime-200 font-serif">Circe</p>
         </div>
         {/* <button onClick={handleTab1} className="hover:bg-gray-600 border">app-test-repo</button>
         <button onClick={handleTab2} className="hover:bg-gray-600 border">my-app</button>*/}

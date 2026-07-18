@@ -81,7 +81,7 @@ export const Viewer = () => {
           onClick={() => {
             mutate();
           }}
-          className="font-bold text-xs border rounded-lg px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 flex gap-1 items-center"
+          className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 flex gap-1 items-center"
         >
           <Bot size={16} />
           {!isPending ? "Summarize current changes" : "Clanking"}

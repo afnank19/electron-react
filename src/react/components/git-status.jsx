@@ -83,7 +83,7 @@ const GitStatus = () => {
           <h1 className="font-bold px-2  w-full py-1">Changes</h1>
           <div className="flex gap-1 text-nowrap mx-2">
             <button
-              className="font-bold text-xs border rounded-md px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+              className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
               onClick={() => {
                 stagingMutation.mutate({ repoPath: repoPath, filePath: "." });
               }}
@@ -91,7 +91,7 @@ const GitStatus = () => {
               Stage All
             </button>
             <button
-              className="font-bold text-xs border rounded-md px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+              className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
               onClick={() => {
                 restoringMutation.mutate({ repoPath: repoPath, filePath: "." });
               }}

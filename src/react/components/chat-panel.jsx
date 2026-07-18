@@ -61,7 +61,7 @@ export const ChatPanel = () => {
 
   return (
     <div className="border border-neutral-800  flex flex-col h-full">
-      <h2 className="px-2 py-1 font-bold mb-4 border-b border-neutral-800">
+      <h2 className="text-sm px-2 py-1 font-bold mb-4 border-b border-neutral-800">
         Workflow Agent
       </h2>
 
