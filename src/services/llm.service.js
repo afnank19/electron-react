@@ -193,10 +193,10 @@ export async function summarizeCurrentChanges() {
   return agent.run(requestPrompt);
 }
 
-export async function handleAgentRequest(request) {
+export async function handleAgentRequest(request, ctx) {
   const agent = getAgent();
 
-  return agent.run(request);
+  return agent.run(request, ctx);
 }
 
 export async function generateCommitMessageV2() {

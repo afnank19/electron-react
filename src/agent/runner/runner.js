@@ -6,13 +6,13 @@ import { getRegistry } from "../tools/registry";
 const MAX_STEPS = 25;
 
 export async function runLoop(messages, model) {
-  console.log("messages", messages, "model", model);
+  // console.log("messages", messages, "model", model);
 
   const registry = getRegistry();
   const tools = registry.definitions();
   const client = getLLMClient(); // this function may be moved to another place, its 1am rn, i cant be bothered
 
-  console.log("active tools", tools);
+  // console.log("active tools", tools);
 
   emitAgentEvent({
     type: "message",

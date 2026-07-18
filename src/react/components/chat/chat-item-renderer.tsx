@@ -1,3 +1,4 @@
+import Markdown from "react-markdown";
 import type { ChatItem } from "../../state/chat-store";
 
 type ChatItemRendererProps = {
@@ -13,14 +14,16 @@ export function ChatItemRenderer({ item }: ChatItemRendererProps) {
     }
     case "message": {
       return (
-        <div className="font-mono text-sm px-2 m-1 border-l border-blue-500">
-          Clank: {item.message}
+        <div className="text-sm px-2 m-1 border-l border-blue-500">
+          <Markdown>
+            {item.message}
+          </Markdown>
         </div>
       )
     }
     case "tool_call": {
       return (
-        <div className="font-mono text-sm px-2 m-1 border-l border-yellow-500">
+        <div className="font-mono text-sm px-2 m-1 border-l border-green-500">
           Tool Invoked: {item.tool}
           <p>Parameters: {item.params} </p>
         </div>
