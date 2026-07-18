@@ -48,7 +48,7 @@ export const GitCommits = () => {
       <div className="flex flex-col gap-2 border-b border-neutral-800 pb-4 px-2">
         <textarea
           placeholder="eg. feat: update README.md"
-          className="border border-neutral-800 bg-neutral-900 rounded-lg px-2 text-sm flex-1 resize-none overflow-hidden min-w-20"
+          className="border border-neutral-800 bg-neutral-900 px-2 text-sm flex-1 resize-none overflow-hidden min-w-20"
           value={commitMsg}
           onChange={(e) => {
             setCommitMsg(e.target.value);
@@ -62,7 +62,7 @@ export const GitCommits = () => {
         ></textarea>
         <div className="flex gap-1 items-center justify-between">
           <button
-            className="font-bold text-xs border rounded-lg px-2 py-0.5  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+            className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 py-0.5  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
             onClick={() => {
               genCommitMsgMutation.mutate(null, {
                 onSuccess: (data) => {
@@ -84,7 +84,7 @@ export const GitCommits = () => {
               : "Generate with LLM"}
           </button>
           <button
-            className="font-bold w-fit text-xs border rounded-lg px-2 py-0.5  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-xl"
+            className="font-bold w-fit text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 py-0.5  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500"
             onClick={() => {
               commitMutation.mutate(commitMsg, {
                 onSuccess: (log) => {

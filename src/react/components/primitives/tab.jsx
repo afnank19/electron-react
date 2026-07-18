@@ -22,7 +22,7 @@ export const Tab = ({ repoName, tabId, handleCloseTab }) => {
 
   return (
     <div
-      className={`flex items-center gap-2 px-1 border border-neutral-800 justify-between rounded-lg overflow-hidden cursor-pointer hover:bg-neutral-800 ${
+      className={`flex items-center gap-2 px-1 border border-neutral-800 justify-between overflow-hidden cursor-pointer hover:bg-neutral-800 ${
         repoPath === repoName ? "bg-neutral-800  border-neutral-500" : ""
       }`}
     >

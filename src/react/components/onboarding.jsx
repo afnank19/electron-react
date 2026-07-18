@@ -7,7 +7,7 @@ export const Onboarding = () => {
     <div className="flex items-center justify-center">
       <div className="w-full max-w-2xl flex flex-col gap-4 mx-2 my-8">
         <div>
-          <p className="font-bold text-xl">Welcome to GitSage!</p>
+          <p className="font-bold text-xl">Welcome to Circe.</p>
           <p className="text-neutral-300">
             A git client complete with agentic features that help you focus on
             the important bits in this fast paced world.

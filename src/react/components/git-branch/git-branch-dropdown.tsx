@@ -97,7 +97,7 @@ export function GitBranchDropdown({
       </div>
 
       {isOpen && (
-        <div className="absolute left-0 top-full pb-2 z-50 bg-neutral-900 drop-shadow-lg mt-1 flex min-w-60 flex-col gap-2 rounded-xl overflow-hidden border border-neutral-700">
+        <div className="absolute left-0 top-full pb-2 z-50 bg-neutral-900  shadow-[4px_4px_0px_rgba(0,0,0,1)] mt-1 flex min-w-60 flex-col gap-2 overflow-hidden border border-neutral-700">
           <form onSubmit={(e) => {
             e.preventDefault();
             handleCreate(inputValue);
@@ -106,7 +106,7 @@ export function GitBranchDropdown({
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Type to create a branch"
-              className="w-full px-2 py-2 rounded-lg text-sm border-b border-neutral-700 bg-neutral-950"
+              className="w-full px-2 py-2 rounded-sm text-sm border-b border-neutral-700 bg-neutral-950"
             />
           </form>
 

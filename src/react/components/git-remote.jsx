@@ -65,7 +65,7 @@ export const GitRemote = () => {
             <p className="text-sm font-bold">Quick Actions</p>
             <div>
               <button
-                className="font-bold text-xs border rounded-md px-2  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-xl mx-1"
+                className="font-bold text-xs border  shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 mx-1"
                 onClick={() => pushToRemote("origin")}
                 disabled={isPending}
               >
@@ -73,7 +73,7 @@ export const GitRemote = () => {
               </button>
               <button
                 onClick={() => pullFromRemote("origin")}
-                className="font-bold text-xs border rounded-md px-2  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-xl"
+                className="font-bold text-xs border px-2  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500  shadow-[3px_3px_0px_rgba(0,0,0,0.9)]"
                 disabled={isPending}
               >
                 Pull from Origin
@@ -95,18 +95,18 @@ export const GitRemote = () => {
                 ))}
               </select>
             </div>
-            <div className="flex gap-2 flex-wrap items-center justify-center">
+            <div className="flex flex-wrap items-center justify-center">
               <button
                 onClick={() => pushToRemote(activeRemote)}
                 disabled={isPending}
-                className="font-bold text-xs border rounded-md px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 mx-1"
+                className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 mx-1"
               >
                 Push to Remote
               </button>
               <button
                 disabled={isPending}
                 onClick={() => pullFromRemote(activeRemote)}
-                className="font-bold text-xs border rounded-md px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+                className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
               >
                 Pull from Remote
               </button>
