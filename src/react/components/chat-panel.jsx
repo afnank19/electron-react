@@ -8,8 +8,8 @@ import { ChatItemRenderer } from "./chat/chat-item-renderer";
 
 // TODO:
 // * Display different message types whenever emitted [done]
-// * User messages actually show up in chat
-// * User messages trigger runs
+// * User messages actually show up in chat [done]
+// * User messages trigger runs [done]
 // * Disabling input when a workflow is running.
 
 // REMOVE AFTER NO LONGER NEEDED
@@ -84,6 +84,7 @@ export const ChatPanel = () => {
             onChange={(e) => {
               setUserMsg(e.target.value);
             }}
+            disabled={isPending}
           />
         </form>
         <button
