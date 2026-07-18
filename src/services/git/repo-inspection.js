@@ -17,7 +17,7 @@ export async function getRepoStatus() {
   }
 
   try {
-    const currentBranch = await getCurrentBranch(cwd);
+    const currentBranch = await getAc(cwd);
     repoState += "Current branch is " + currentBranch;
   } catch (e) {
     throw new Error(e.message);

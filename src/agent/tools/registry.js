@@ -1,4 +1,4 @@
-import { createBranchTool, switchBranchTool } from "./git/branch";
+import { createBranchTool, getCurrentBranchTool, listLocalBranchesTool, switchBranchTool } from "./git/branch";
 import { commitTool } from "./git/commit";
 import { gitDiffTool } from "./git/git-diff";
 import { gitDiffNumStatTool } from "./git/git-diff-numstat";
@@ -36,6 +36,8 @@ export function initializeToolRegistry() {
   registry.register(commitTool);
   registry.register(switchBranchTool);
   registry.register(createBranchTool);
+  registry.register(getCurrentBranchTool);
+  registry.register(listLocalBranchesTool);
 }
 
 export function getRegistry() {

@@ -38,6 +38,40 @@ export async function createAndSwitchBranch(repoPath, branchName) {
   }
 }
 
+export async function getActiveBranch(repoPath) {
+  try {
+    const output = await gitBranchShowCurrent(repoPath);
+    return {
+      success: true,
+      message: "Here is the current branch",
+      gitOutput: output
+    }
+  } catch (e) {
+    return {
+      success: false,
+      message: "Could not get current branch",
+      error: e.message
+    }
+  }
+}
+
+export async function getLocalBranches(repoPath) {
+  try {
+    const output = await gitLocalBranches(repoPath);
+    return {
+      success: true,
+      message: "Here is a list of local branches",
+      gitOutput: output
+    }
+  } catch (e) {
+    return {
+      success: false,
+      message: "Could not get local branches",
+      error: e.message
+    }
+  }
+}
+
 // Primitives
 
 export async function gitSwitchBranch(repoPath, branchName) {
@@ -51,6 +85,12 @@ export async function gitCreateBranch(repoPath, branchName) {
 
 export async function gitBranchShowCurrent(repoPath) {
   return runGit(repoPath, ["branch", "--show-current"], { raw: false, color: false });
+}
+
+export async function gitLocalBranches(repoPath) {
+  return runGit(repoPath, ["branch", "--format=%(refname:short)"], {
+    raw: false,
+  });
 }
 
 // If this throws, then the branch has no upstream set up.
