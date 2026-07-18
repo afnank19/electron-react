@@ -45,6 +45,12 @@ const App = () => {
                   </Group>
                 </Panel>
 
+                <Panel defaultSize={25}>
+                  <div className="h-full min-h-0 flex flex-col">
+                    <ChatPanel />
+                  </div>
+                </Panel>
+
                 <Panel defaultSize={50}>
                   <Group orientation="vertical" className="h-full">
                     <Panel defaultSize={25} maxSize={70}>
@@ -67,11 +73,7 @@ const App = () => {
                   </Group>
                 </Panel>
 
-                <Panel defaultSize={25}>
-                  <div className="h-full min-h-0 flex flex-col">
-                    <ChatPanel />
-                  </div>
-                </Panel>
+
               </Group>
             </div>
           </>

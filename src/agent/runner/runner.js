@@ -17,7 +17,8 @@ export async function runLoop(messages, model) {
   emitAgentEvent({
     type: "message",
     message: "AGENT: Got it, working on it.",
-    tool: ""
+    tool: "",
+    params: ""
   })
 
   let count = 0;
@@ -58,9 +59,10 @@ export async function runLoop(messages, model) {
         `[Runner] Executing tool: ${toolCall.function?.name} (id: ${toolCall.id})`,
       );
       emitAgentEvent({
-        type: "message",
-        message: "AGENT: running the following tool:",
-        tool: toolCall.function?.name + " with params: " + toolCall.function.arguments
+        type: "tool_call",
+        message: "",
+        tool: toolCall.function?.name,
+        params: toolCall.function.arguments
       })
       let toolResult;
       try {

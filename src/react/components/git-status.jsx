@@ -154,7 +154,7 @@ const GitStatus = () => {
                       <div className="flex gap-2">
                         {item.staged ? (
                           <button
-                            className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border rounded-md   border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+                            className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)]  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
                             onClick={() => {
                               restoringMutation.mutate({
                                 repoPath: repoPath,
@@ -171,7 +171,7 @@ const GitStatus = () => {
                           </button>
                         ) : (
                           <button
-                            className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border rounded-md   border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+                            className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border  shadow-[3px_3px_0px_rgba(0,0,0,0.9)]  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
                             onClick={() => {
                               // handleStaging(item.path);
                               stagingMutation.mutate({
