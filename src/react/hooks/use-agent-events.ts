@@ -1,17 +1,20 @@
 import { useEffect } from "react";
 import { useGitLogStore } from "../state/repo-store";
 import type { AgentEvent } from "../../events/eventBus";
+import { useChatStore, type ChatItem } from "../state/chat-store";
 
 export function useAgentEvents() {
   const addLog = useGitLogStore((s) => s.addLog);
+  const addItem = useChatStore((s) => s.addItem);
 
   useEffect(() => {
-    const unsubscribe = window.agentEvents.subscribe((event: AgentEvent) => {
-          addLog(buildLog(event));
-        });
+    const unsubscribe = window.agentEvents.subscribe((event: ChatItem) => {
+      // addLog(buildLog(event));
+      addItem(event);
+    });
 
     return unsubscribe;
-  }, [addLog])
+  }, [addLog]);
 }
 
 // temporary function to test the events

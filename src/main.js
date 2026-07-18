@@ -206,7 +206,7 @@ export function registerLLMIPC() {
     return summarizeCurrentChanges();
   });
 
-  ipcMain.handle("llm:agentRequest", (_, request) => {
-    return handleAgentRequest(request);
+  ipcMain.handle("llm:agentRequest", (_, request, ctx) => {
+    return handleAgentRequest(request, ctx);
   });
 }

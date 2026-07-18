@@ -190,13 +190,13 @@ export async function summarizeCurrentChanges() {
 
   const agent = getAgent();
 
-  return agent.run(requestPrompt);
+  return agent.run(requestPrompt, null);
 }
 
-export async function handleAgentRequest(request) {
+export async function handleAgentRequest(request, ctx) {
   const agent = getAgent();
 
-  return agent.run(request);
+  return agent.run(request, ctx);
 }
 
 export async function generateCommitMessageV2() {
@@ -212,5 +212,5 @@ export async function generateCommitMessageV2() {
 
   const agent = getAgent();
 
-  return agent.run(request);
+  return agent.run(request, null);
 }
