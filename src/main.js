@@ -22,7 +22,7 @@ import {
   gitDiffNumstat,
   gitLog,
 } from "./services/git/repo-inspection.js";
-import { gitPull, gitPush } from "./services/git/remote.js";
+import { gitPull, gitPush, gitRemoteAdd } from "./services/git/remote.js";
 import { eventBus } from "./events/eventBus.js";
 import { initializeEventForwarder } from "./events/eventForwader.js";
 
@@ -152,6 +152,10 @@ export function registerGitIPC() {
   ipcMain.handle("git:getRemotes", (_, repoPath) => {
     return git.getRemotes(repoPath);
   });
+
+  ipcMain.handle("git:addRemote", (_, repoPath, remote, url) => {
+    return gitRemoteAdd(repoPath, remote, url);
+  })
 
   ipcMain.handle("git:push", (_, repoPath, remote) => {
     // return git.pushToRemote(repoPath, remote);
