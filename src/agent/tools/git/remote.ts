@@ -25,12 +25,12 @@ export const pushToRemoteTool = {
   },
 };
 
-export const pullToRemoteTool = {
-  name: "pull_to_remote",
+export const pullFromRemoteTool = {
+  name: "pull_from_remote",
   definition: {
     type: "function",
     function: {
-      name: "pull_to_remote",
+      name: "pull_from_remote",
       description: "Pull from a specified remote.",
       parameters: {
         type: "object",
