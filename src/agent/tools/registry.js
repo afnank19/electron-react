@@ -3,7 +3,7 @@ import { commitTool } from "./git/commit";
 import { gitDiffTool } from "./git/git-diff";
 import { gitDiffNumStatTool } from "./git/git-diff-numstat";
 import { gitStatusTool } from "./git/git-status";
-import { getRemotesTool, pullToRemoteTool, pushToRemoteTool } from "./git/remote";
+import { getRemotesTool, pullFromRemoteTool, pushToRemoteTool } from "./git/remote";
 import { stageAllTool, stageFilesTool, unstageFilesTool } from "./git/staging";
 
 class ToolRegistry {
@@ -44,7 +44,7 @@ export function initializeToolRegistry() {
   registry.register(listLocalBranchesTool);
 
   registry.register(pushToRemoteTool);
-  registry.register(pullToRemoteTool);
+  registry.register(pullFromRemoteTool);
   registry.register(getRemotesTool);
 }
 
