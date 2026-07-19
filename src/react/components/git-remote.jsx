@@ -11,11 +11,15 @@ export const GitRemote = () => {
   const triggerRefresh = useAppStore((s) => s.triggerRefresh);
   const queryClient = useQueryClient();
 
-  const { remotesQuery, pushMutation, pullMutation } = useRemotes(repoPath);
-  const { invalidateAll } = useQueryInvalidation();
+  const { remotesQuery, pushMutation, pullMutation, addRemoteMutation } =
+    useRemotes(repoPath);
+  const { invalidateAll, invalideRemotes } = useQueryInvalidation();
 
   const remotes = remotesQuery.data ?? [];
   const [activeRemote, setActiveRemote] = useState("");
+
+  const [remoteName, setRemoteName] = useState("");
+  const [remoteUrl, setRemoteUrl] = useState("");
 
   useEffect(() => {
     if (remotes.length > 0 && !activeRemote) {
@@ -51,21 +55,43 @@ export const GitRemote = () => {
     });
   }
 
+  function addRemote() {
+    if (remoteName === "" || remoteUrl === "") {
+      addLog("SYSTEM: Could not add remote, Empty fields (name or url).");
+      return;
+    }
+
+    addRemoteMutation.mutate(
+      { remote: remoteName, url: remoteUrl },
+      {
+        onSuccess: (output) => {
+          addLog("SYSTEM: Added Remote " + remoteName);
+          invalideRemotes(repoPath);
+          setRemoteName("");
+          setRemoteUrl("");
+        },
+        onError: (err) => {
+          addLog(err.message);
+        },
+      },
+    );
+  }
+
   const isPending = pushMutation.isPending || pullMutation.isPending;
 
   return (
-    <div className="border border-neutral-800 bg-[#111111] p-2 h-full">
+    <div className="border border-neutral-800 p-2 h-full">
       {remotesQuery.isLoading ? (
         <div>Loading remotes...</div>
       ) : remotes.length === 0 ? (
         <div>No remotes set</div>
       ) : (
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-col gap-1  whitespace-nowrap">
+          <div className="flex items-center flex-1 gap-2 flex-nowrap justify-between">
             <p className="text-sm font-bold">Quick Actions</p>
-            <div>
+            <div className="flex items-center flex-nowrap whitespace-nowrap">
               <button
-                className="font-bold text-xs border  shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 mx-1"
+                className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 mx-1"
                 onClick={() => pushToRemote("origin")}
                 disabled={isPending}
               >
@@ -73,16 +99,16 @@ export const GitRemote = () => {
               </button>
               <button
                 onClick={() => pullFromRemote("origin")}
-                className="font-bold text-xs border px-2  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500  shadow-[3px_3px_0px_rgba(0,0,0,0.9)]"
+                className="font-bold text-xs border px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600  shadow-[3px_3px_0px_rgba(0,0,0,0.9)]"
                 disabled={isPending}
               >
                 Pull from Origin
               </button>
             </div>
           </div>
-          <div className="flex items-center justify-between gap-1">
-            <div className="flex gap-2 items-center">
-              <p className="text-sm font-bold">Active Remote:</p>
+          <div className="flex flex-1 items-center gap-1 justify-between">
+            <div className="flex gap-1 items-center">
+              <p className="text-sm font-bold">Remote:</p>
               <select
                 className="px-2 text-base"
                 value={activeRemote}
@@ -95,7 +121,7 @@ export const GitRemote = () => {
                 ))}
               </select>
             </div>
-            <div className="flex flex-wrap items-center justify-center">
+            <div className="flex items-center justify-center whitespace-nowrap">
               <button
                 onClick={() => pushToRemote(activeRemote)}
                 disabled={isPending}
@@ -114,6 +140,37 @@ export const GitRemote = () => {
           </div>
         </div>
       )}
+      <div className="flex gap-2 text-sm items-center mt-1">
+        <label>Name</label>
+        <input
+          type="text"
+          placeholder="origin"
+          className="px-1 text-sm border border-neutral-700 bg-neutral-900"
+          value={remoteName}
+          onChange={(e) => {
+            setRemoteName(e.target.value);
+          }}
+        />
+
+        <label>URL</label>
+        <input
+          type="text"
+          placeholder="https://github.com/user/repo.git"
+          className="flex-1 px-1 text-sm border border-neutral-700 bg-neutral-900"
+          value={remoteUrl}
+          onChange={(e) => {
+            setRemoteUrl(e.target.value);
+          }}
+        />
+
+        <button
+          disabled={isPending}
+          onClick={() => addRemote()}
+          className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+        >
+          Add Remote
+        </button>
+      </div>
     </div>
   );
 };

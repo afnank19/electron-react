@@ -38,6 +38,10 @@ export async function gitPull(cwd: string, remote = "origin") {
   }
 }
 
+export async function gitRemoteAdd(cwd: string, remote: string, url: string) {
+  return runGit(cwd, ["remote", "add", remote, url], { raw: true, color: false});
+}
+
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
