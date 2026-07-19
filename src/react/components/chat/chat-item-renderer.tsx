@@ -10,12 +10,12 @@ export function ChatItemRenderer({ item }: ChatItemRendererProps) {
   switch (item.type) {
     case "user": {
       return (
-        <div className="italic p-2">{ item.message }</div>
+        <div className="italic px-2 my-1 mx-2 border border-neutral-700 self-end bg-neutral-800 max-w-3/4">{ item.message }</div>
       )
     }
     case "message": {
       return (
-        <div className="text-sm px-2 m-1 border-l border-blue-500">
+        <div className="text-sm px-2 m-1">
           <Markdown>
             {item.message}
           </Markdown>

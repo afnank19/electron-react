@@ -42,7 +42,7 @@ export const GitCommits = () => {
   }
 
   return (
-    <div className="text-white flex flex-col gap-2 border  border-neutral-800 bg-[#111111] py-1 h-full">
+    <div className="text-white flex flex-col gap-2 border  border-neutral-800 py-1 h-full">
       <h1 className="font-bold px-2">Commit History</h1>
 
       <div className="flex flex-col gap-2 border-b border-neutral-800 pb-4 px-2">

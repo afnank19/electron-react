@@ -78,7 +78,7 @@ const GitStatus = () => {
 
   return (
     <>
-      <div className="pb-1 border border-neutral-800 bg-[#111111] overflow-hidden flex flex-col gap-2 h-full">
+      <div className="pb-1 border border-neutral-800 overflow-hidden flex flex-col gap-2 h-full">
         <div className=" flex justify-between items-center text-sm  border-neutral-800 border-b">
           <h1 className="font-bold px-2  w-full py-1">Changes</h1>
           <div className="flex gap-1 text-nowrap mx-2">
