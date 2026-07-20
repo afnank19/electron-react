@@ -10,7 +10,9 @@ export function ChatItemRenderer({ item }: ChatItemRendererProps) {
   switch (item.type) {
     case "user": {
       return (
-        <div className="italic px-2 my-1 mx-2 border border-neutral-700 self-end bg-neutral-800 max-w-3/4">{ item.message }</div>
+        <div className="text-sm px-2 my-1 mx-2 border border-neutral-700 self-end bg-linear-to-b from-neutral-800 to-neutral-700 max-w-3/4 shadow-xs shadow-neutral-950 rounded-full">
+          {item.message}
+        </div>
       )
     }
     case "message": {
