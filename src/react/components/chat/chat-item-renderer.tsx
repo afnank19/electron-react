@@ -17,7 +17,7 @@ export function ChatItemRenderer({ item }: ChatItemRendererProps) {
     }
     case "message": {
       return (
-        <div className="text-sm px-2 m-1">
+        <div className="text-sm px-2 m-1 break-all">
           <Markdown>
             {item.message}
           </Markdown>

@@ -22,8 +22,6 @@ export const gitDiffTool = {
     const cwd = appState.getRepoPath();
     console.log("running diff for files", files);
 
-    const parsedFilePaths = files.join(" ");
-
-    return await getFileDiffNoANSIIColor(cwd, parsedFilePaths);
+    return await getFileDiffNoANSIIColor(cwd, files);
   }
 }
