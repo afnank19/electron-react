@@ -88,7 +88,7 @@ export function gitDiffNumStat(repoPath) {
 }
 
 export function getFileDiffNoANSIIColor(repoPath, filePaths) {
-  return execGitWithOutput(repoPath, "diff HEAD -- " + filePaths);
+  return runGit(repoPath, ["diff", "HEAD", "--", ...filePaths], { raw: true, color: false });
 }
 
 export function pushToRemote(repoPath, remote) {
