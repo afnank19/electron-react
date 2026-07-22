@@ -53,7 +53,7 @@ const App = () => {
 
                 <Panel defaultSize={50}>
                   <Group orientation="vertical" className="h-full">
-                    <Panel defaultSize={25} maxSize={90}>
+                    <Panel defaultSize={25} maxSize={70}>
                       <div className="h-full min-h-0 overflow-hidden">
                         <GitRemote />
                       </div>
