@@ -25,22 +25,26 @@ body {
   color: #e1e1e1;
 }
 
+input[type="radio"] {
+  accent-color: #f54900; /* Indigo */
+}
+
 /* Container scrollbar width */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 /* Background of the scrollbar track */
 ::-webkit-scrollbar-track {
   background: #181818;
-  border-radius: 5px;
+  border-radius: 0px;
 }
 
 /* The actual draggable handle */
 ::-webkit-scrollbar-thumb {
   background: #888;
-  border-radius: 5px;
+  border-radius: 0px;
 }
 
 /* Handle on hover */
