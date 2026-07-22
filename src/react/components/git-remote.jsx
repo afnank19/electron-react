@@ -59,7 +59,11 @@ export const GitRemote = () => {
     addLog("Fetching from " + remote + ". Please Wait...");
     fetchMutation.mutate(remote, {
       onSuccess: (res) => {
-        addLog(res);
+        if (res === "") {
+          addLog("SYSTEM: Fetch successful, up to date");
+        } else {
+          addLog(res);
+        }
         invalidateAll(repoPath);
         triggerRefresh();
       },
