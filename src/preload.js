@@ -33,6 +33,7 @@ contextBridge.exposeInMainWorld("gitAPI", {
   addRemote: (repoPath, remote, url) => ipcRenderer.invoke("git:addRemote", repoPath, remote, url),
   push: (repoPath, remote) => ipcRenderer.invoke("git:push", repoPath, remote),
   pull: (repoPath, remote) => ipcRenderer.invoke("git:pull", repoPath, remote),
+  fetch: (repoPath, remote) => ipcRenderer.invoke("git:fetch", repoPath, remote),
   getHeadDiff: (repoPath) => ipcRenderer.invoke("git:headDiff", repoPath),
   diffStat: (repoPath) => ipcRenderer.invoke("git:diffStat", repoPath),
   diffNumstat: (repoPath) => ipcRenderer.invoke("git:diffNumstat", repoPath),

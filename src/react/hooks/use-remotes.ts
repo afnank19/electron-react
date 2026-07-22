@@ -4,6 +4,7 @@ import {
   getRemotes,
   pushToRemote,
   pullFromRemote,
+  fetchFromRemote,
   addRemote,
 } from "../api/git-api/git-remotes-api";
 
@@ -22,6 +23,10 @@ export function useRemotes(repoPath: string) {
     mutationFn: (remote: string) => pullFromRemote(repoPath, remote),
   });
 
+  const fetchMutation = useMutation({
+    mutationFn: (remote: string) => fetchFromRemote(repoPath, remote),
+  });
+
   const addRemoteMutation = useMutation({
     mutationFn: ({ remote, url }: { remote: string, url: string }) => addRemote(repoPath, remote, url),
   })
@@ -30,6 +35,7 @@ export function useRemotes(repoPath: string) {
     remotesQuery,
     pushMutation,
     pullMutation,
+    fetchMutation,
     addRemoteMutation
   };
 }

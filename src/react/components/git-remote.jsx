@@ -11,7 +11,7 @@ export const GitRemote = () => {
   const triggerRefresh = useAppStore((s) => s.triggerRefresh);
   const queryClient = useQueryClient();
 
-  const { remotesQuery, pushMutation, pullMutation, addRemoteMutation } =
+  const { remotesQuery, pushMutation, pullMutation, fetchMutation, addRemoteMutation } =
     useRemotes(repoPath);
   const { invalidateAll, invalideRemotes } = useQueryInvalidation();
 
@@ -55,6 +55,20 @@ export const GitRemote = () => {
     });
   }
 
+  function fetchFromRemote(remote) {
+    addLog("Fetching from " + remote + ". Please Wait...");
+    fetchMutation.mutate(remote, {
+      onSuccess: (res) => {
+        addLog(res);
+        invalidateAll(repoPath);
+        triggerRefresh();
+      },
+      onError: (err) => {
+        addLog(err.message);
+      },
+    });
+  }
+
   function addRemote() {
     if (remoteName === "" || remoteUrl === "") {
       addLog("SYSTEM: Could not add remote, Empty fields (name or url).");
@@ -77,7 +91,7 @@ export const GitRemote = () => {
     );
   }
 
-  const isPending = pushMutation.isPending || pullMutation.isPending;
+  const isPending = pushMutation.isPending || pullMutation.isPending || fetchMutation.isPending;
 
   return (
     <div className="border border-neutral-800 p-2 h-full">
@@ -90,6 +104,13 @@ export const GitRemote = () => {
           <div className="flex items-center flex-1 gap-2 flex-nowrap justify-between">
             <p className="text-sm font-bold">Quick Actions</p>
             <div className="flex items-center flex-nowrap whitespace-nowrap">
+              <button
+                className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 mx-1"
+                onClick={() => fetchFromRemote("origin")}
+                disabled={isPending}
+              >
+                Fetch from Origin
+              </button>
               <button
                 className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 mx-1"
                 onClick={() => pushToRemote("origin")}
@@ -122,6 +143,13 @@ export const GitRemote = () => {
               </select>
             </div>
             <div className="flex items-center justify-center whitespace-nowrap">
+              <button
+                onClick={() => fetchFromRemote(activeRemote)}
+                disabled={isPending}
+                className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 mx-1"
+              >
+                Fetch from Remote
+              </button>
               <button
                 onClick={() => pushToRemote(activeRemote)}
                 disabled={isPending}
