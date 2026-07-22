@@ -98,8 +98,30 @@ export async function gitPull(cwd: string, remote = "origin") {
   }
 }
 
+export async function fetchFromRemote(cwd: string, remote: string) {
+  try {
+    const output = await gitFetch(cwd, remote);
+
+    return {
+      success: true,
+      message: "The fetch tool ran successfully.",
+      gitOutput: output
+    }
+  } catch (e) {
+    return {
+      success: false,
+      message: "The fetch tool failed",
+      error: getErrorMessage(e)
+    }
+  }
+}
+
 export async function gitRemoteAdd(cwd: string, remote: string, url: string) {
   return runGit(cwd, ["remote", "add", remote, url], { raw: true, color: false});
+}
+
+export async function gitFetch(cwd: string, remote: string) {
+  return runGit(cwd, ["fetch", remote], { raw: true, color: false });
 }
 
 function getErrorMessage(error: unknown): string {
