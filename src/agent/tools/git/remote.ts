@@ -1,5 +1,5 @@
 import { appState } from "../../../main/app-state";
-import { getRemotes, pullFromRemote, pushToRemote } from "../../../services/git/remote";
+import { getRemotes, pullFromRemote, pushToRemote, fetchFromRemote } from "../../../services/git/remote";
 
 export const pushToRemoteTool = {
   name: "push_to_remote",
@@ -46,6 +46,30 @@ export const pullFromRemoteTool = {
     const cwd = appState.getRepoPath();
 
     return await pullFromRemote(cwd, remote);
+  },
+};
+
+export const fetchFromRemoteTool = {
+  name: "fetch_from_remote",
+  definition: {
+    type: "function",
+    function: {
+      name: "fetch_from_remote",
+      description: "Fetch from a specified remote.",
+      parameters: {
+        type: "object",
+        properties: {
+          remote: { type: "string" },
+        },
+        required: ["remote"],
+      },
+    },
+  },
+
+  async execute({ remote } : { remote: string}) {
+    const cwd = appState.getRepoPath();
+
+    return await fetchFromRemote(cwd, remote);
   },
 };
 
