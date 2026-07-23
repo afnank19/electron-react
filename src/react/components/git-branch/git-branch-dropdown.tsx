@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getLocalBranches, switchBranch, createAndSwitchToBranch, getRemoteBranches } from "../../api/git-api/git-branch-api";
+import {
+  getLocalBranches,
+  switchBranch,
+  createAndSwitchToBranch,
+  getRemoteBranches,
+} from "../../api/git-api/git-branch-api";
 import { useRepoStore, useGitLogStore } from "../../state/repo-store";
 import { useQueryInvalidation } from "../../queries/use-query-invalidation";
 import { Plus, Cloud } from "lucide-react";
@@ -14,9 +19,7 @@ type ItemDropdownProps = {
   trigger: React.ReactNode;
 };
 
-export function GitBranchDropdown({
-  trigger,
-}: ItemDropdownProps) {
+export function GitBranchDropdown({ trigger }: ItemDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const repoPath = useRepoStore((state) => state.repoPath);
@@ -78,10 +81,7 @@ export function GitBranchDropdown({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -94,28 +94,29 @@ export function GitBranchDropdown({
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative inline-flex z-50"
-    >
-      <div onClick={() => {
-        console.log("Clicking el button", items)
-        setIsOpen((prev) => !prev)
-      }}>
+    <div ref={containerRef} className="relative z-50 inline-flex">
+      <div
+        onClick={() => {
+          console.log("Clicking el button", items);
+          setIsOpen((prev) => !prev);
+        }}
+      >
         {trigger}
       </div>
 
       {isOpen && (
-        <div className="absolute left-0 top-full pb-2 z-50 bg-neutral-900  shadow-[4px_4px_0px_rgba(0,0,0,1)] mt-1 flex min-w-72 flex-col gap-2 overflow-hidden border border-neutral-700">
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            handleCreate(inputValue);
-          }}>
+        <div className="absolute top-full left-0 z-50 mt-1 flex min-w-72 flex-col gap-2 overflow-hidden border border-neutral-700 bg-neutral-900 pb-2 shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleCreate(inputValue);
+            }}
+          >
             <input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Type to create a branch"
-              className="w-full px-2 py-2 rounded-sm text-sm border-b border-neutral-700 bg-neutral-950"
+              className="w-full rounded-sm border-b border-neutral-700 bg-neutral-950 px-2 py-2 text-sm"
             />
           </form>
 
@@ -124,9 +125,9 @@ export function GitBranchDropdown({
               <button
                 type="button"
                 onClick={() => handleCreate(inputValue)}
-                className="text-left text-green-200 text-sm px-2 py-1 hover:bg-neutral-700 flex items-center gap-2 border-b border-neutral-800"
+                className="flex items-center gap-2 border-b border-neutral-800 px-2 py-1 text-left text-sm text-green-200 hover:bg-neutral-700"
               >
-                <Plus size={12}/>
+                <Plus size={12} />
                 Create "{inputValue}"
               </button>
             )}
@@ -139,14 +140,14 @@ export function GitBranchDropdown({
                   key={branch}
                   type="button"
                   onClick={() => handleItemClick(branch)}
-                className="text-left text-sm px-2 hover:bg-neutral-700 border-b border-neutral-800 border-dashed whitespace-nowrap"
-              >
-                {branch}
-              </button>
-            ))}
+                  className="border-b border-dashed border-neutral-800 px-2 text-left text-sm whitespace-nowrap hover:bg-neutral-700"
+                >
+                  {branch}
+                </button>
+              ))}
 
             {filteredRemote.length > 0 && (
-              <div className="text-xs text-neutral-500 px-2 py-1 border-b border-neutral-800 whitespace-nowrap">
+              <div className="border-b border-neutral-800 px-2 py-1 text-xs whitespace-nowrap text-neutral-500">
                 ─── Remote ───
               </div>
             )}
@@ -156,7 +157,7 @@ export function GitBranchDropdown({
                 key={branch}
                 type="button"
                 onClick={() => handleItemClick(branch)}
-                className="text-left text-sm px-2 hover:bg-neutral-700 border-b border-neutral-800 border-dashed flex items-center gap-2 whitespace-nowrap"
+                className="flex items-center gap-2 border-b border-dashed border-neutral-800 px-2 text-left text-sm whitespace-nowrap hover:bg-neutral-700"
               >
                 <Cloud size={12} className="text-neutral-500" />
                 {branch}

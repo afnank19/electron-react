@@ -2,10 +2,10 @@ export const ContentViewPane = ({ html }) => {
   return (
     <div className="relative">
       <p
-        className="whitespace-pre font-mono text-sm p-2"
+        className="p-2 font-mono text-sm whitespace-pre"
         dangerouslySetInnerHTML={{ __html: html }}
       ></p>
-      <button className="font-bold text-xs border rounded-md px-2  border-teal-700 hover:bg-teal-700 absolute top-2 right-2">
+      <button className="absolute top-2 right-2 rounded-md border border-teal-700 px-2 text-xs font-bold hover:bg-teal-700">
         Summarize
       </button>
     </div>

@@ -49,27 +49,23 @@ const Tabs = () => {
 
   return (
     <>
-      <div className="px-2 py-1 items-center flex gap-1 select-none">
-        <div className="border-2 border-lime-200 px-1 py-0 mr-1">
-          <p className="font-bold font-mono text-lime-200 font-serif">Circe</p>
+      <div className="flex items-center gap-1 px-2 py-1 select-none">
+        <div className="mr-1 border-2 border-lime-200 px-1 py-0">
+          <p className="font-mono font-serif font-bold text-lime-200">Circe</p>
         </div>
         {/* <button onClick={handleTab1} className="hover:bg-gray-600 border">app-test-repo</button>
         <button onClick={handleTab2} className="hover:bg-gray-600 border">my-app</button>*/}
-        <div className="overflow-x-auto flex gap-1">
+        <div className="flex gap-1 overflow-x-auto">
           {tabs.map((tab, idx) => {
             return (
               <div key={idx}>
-                <Tab
-                  repoName={tab.repoPath}
-                  tabId={tab.id}
-                  handleCloseTab={handleCloseTab}
-                />
+                <Tab repoName={tab.repoPath} tabId={tab.id} handleCloseTab={handleCloseTab} />
               </div>
             );
           })}
         </div>
         <OpenRepo pathErr={pathErr} setPathErr={setPathErr}>
-          <div className="p-1  rounded-lg  hover:bg-neutral-600">
+          <div className="rounded-lg p-1 hover:bg-neutral-600">
             <Plus size={18} />
           </div>
         </OpenRepo>

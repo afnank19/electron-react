@@ -19,14 +19,14 @@ const AppContent = () => {
   useAgentEvents();
 
   return (
-    <div className="font-display h-screen flex flex-col">
+    <div className="font-display flex h-screen flex-col">
       <Tabs />
 
       {repoPath !== null ? (
         <>
           <OpenRepoLayout />
 
-          <div className="flex-1 min-h-0 mb-2">
+          <div className="mb-2 min-h-0 flex-1">
             <Group className="h-full">
               <Panel defaultSize={25}>
                 <Group orientation="vertical" className="h-full">
@@ -45,7 +45,7 @@ const AppContent = () => {
               </Panel>
 
               <Panel defaultSize={25}>
-                <div className="h-full min-h-0 flex flex-col">
+                <div className="flex h-full min-h-0 flex-col">
                   <ChatPanel />
                 </div>
               </Panel>
@@ -59,7 +59,7 @@ const AppContent = () => {
                   </Panel>
 
                   <Panel defaultSize={50}>
-                    <div className="h-full min-h-0 border border-neutral-800" >
+                    <div className="h-full min-h-0 border border-neutral-800">
                       <Viewer />
                     </div>
                   </Panel>
@@ -71,8 +71,6 @@ const AppContent = () => {
                   </Panel>
                 </Group>
               </Panel>
-
-
             </Group>
           </div>
         </>

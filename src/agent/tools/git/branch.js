@@ -54,7 +54,6 @@ export const createBranchTool = {
   },
 };
 
-
 export const listLocalBranchesTool = {
   name: "list_local_branches",
   definition: {
@@ -69,8 +68,8 @@ export const listLocalBranchesTool = {
     const cwd = appState.getRepoPath();
 
     return await getLocalBranches(cwd);
-  }
-}
+  },
+};
 
 export const getCurrentBranchTool = {
   name: "get_current_branch",
@@ -85,6 +84,6 @@ export const getCurrentBranchTool = {
   async execute(args) {
     const cwd = appState.getRepoPath();
 
-  return await getActiveBranch(cwd);
-  }
-}
+    return await getActiveBranch(cwd);
+  },
+};

@@ -10,14 +10,14 @@ export async function pushToRemote(cwd: string, remote: string) {
     return {
       success: true,
       message: "The push tool ran successfully",
-      gitOutput: output
-    }
+      gitOutput: output,
+    };
   } catch (e) {
     return {
       success: false,
       message: "The push tool failed",
-      error: getErrorMessage(e)
-    }
+      error: getErrorMessage(e),
+    };
   }
 }
 
@@ -28,14 +28,14 @@ export async function pullFromRemote(cwd: string, remote: string) {
     return {
       success: true,
       message: "The pull tool ran successfully.",
-      gitOutput: output
-    }
+      gitOutput: output,
+    };
   } catch (e) {
     return {
       success: false,
       message: "The pull tool failed",
-      error: getErrorMessage(e)
-    }
+      error: getErrorMessage(e),
+    };
   }
 }
 
@@ -46,18 +46,16 @@ export async function getRemotes(cwd: string) {
     return {
       success: true,
       message: "Here is a list of the remotes",
-      gitOutput: output
-    }
+      gitOutput: output,
+    };
   } catch (e) {
     return {
       success: false,
       message: "Unable to get remotes.",
-      error: getErrorMessage(e)
-    }
+      error: getErrorMessage(e),
+    };
   }
 }
-
-
 
 // Primitives
 
@@ -105,19 +103,19 @@ export async function fetchFromRemote(cwd: string, remote: string) {
     return {
       success: true,
       message: "The fetch tool ran successfully.",
-      gitOutput: output
-    }
+      gitOutput: output,
+    };
   } catch (e) {
     return {
       success: false,
       message: "The fetch tool failed",
-      error: getErrorMessage(e)
-    }
+      error: getErrorMessage(e),
+    };
   }
 }
 
 export async function gitRemoteAdd(cwd: string, remote: string, url: string) {
-  return runGit(cwd, ["remote", "add", remote, url], { raw: true, color: false});
+  return runGit(cwd, ["remote", "add", remote, url], { raw: true, color: false });
 }
 
 export async function gitFetch(cwd: string, remote: string) {

@@ -12,19 +12,14 @@ const READ_ONLY_TOOLS = new Set([
   "list_local_branches",
 ]);
 
-const STATUS_TOOLS = new Set([
-  "stage_files",
-  "stage_all_files",
-  "unstage_files",
-]);
+const STATUS_TOOLS = new Set(["stage_files", "stage_all_files", "unstage_files"]);
 
 const COMMIT_TOOLS = new Set(["commit"]);
 
 export function useAgentEvents() {
   const repoPath = useRepoStore((s) => s.repoPath);
   const addItem = useChatStore((s) => s.addItem);
-  const { invalidateAll, invalidateStatus, invalidateCommits } =
-    useQueryInvalidation();
+  const { invalidateAll, invalidateStatus, invalidateCommits } = useQueryInvalidation();
 
   useEffect(() => {
     if (!repoPath) return;

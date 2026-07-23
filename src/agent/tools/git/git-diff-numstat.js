@@ -15,5 +15,5 @@ export const gitDiffNumStatTool = {
     const cwd = appState.getRepoPath();
 
     return await gitDiffNumStat(cwd);
-  }
-}
+  },
+};

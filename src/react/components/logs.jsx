@@ -19,13 +19,13 @@ export const Logs = () => {
   }, [repoPath]);
 
   return (
-    <div className="border border-neutral-800 overflow-auto h-full">
-      <h1 className="font-bold border-b p-2 border-neutral-800 flex justify-between items-center">
+    <div className="h-full overflow-auto border border-neutral-800">
+      <h1 className="flex items-center justify-between border-b border-neutral-800 p-2 font-bold">
         <span>Logs</span>
         <div className="flex gap-1.5">
-          <span className="w-3 h-3 rounded-full bg-red-500" />
-          <span className="w-3 h-3 rounded-full bg-yellow-500" />
-          <span className="w-3 h-3 rounded-full bg-green-500" />
+          <span className="h-3 w-3 rounded-full bg-red-500" />
+          <span className="h-3 w-3 rounded-full bg-yellow-500" />
+          <span className="h-3 w-3 rounded-full bg-green-500" />
         </div>
       </h1>
       <div className="">
@@ -33,7 +33,7 @@ export const Logs = () => {
           return (
             <div
               style={{ whiteSpace: "pre-wrap" }}
-              className="font-mono text-sm px-2 m-1 border-l border-orange-500"
+              className="m-1 border-l border-orange-500 px-2 font-mono text-sm"
             >
               {log}
             </div>

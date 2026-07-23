@@ -15,15 +15,15 @@ export function useQueryInvalidation() {
 
   const invalidateCommits = (repoPath) => {
     queryClient.invalidateQueries({
-      queryKey: queryKeyStore.commit(repoPath)
-    })
-  }
+      queryKey: queryKeyStore.commit(repoPath),
+    });
+  };
 
   const invalideRemotes = (repoPath) => {
     queryClient.invalidateQueries({
       queryKey: queryKeyStore.remote(repoPath),
-    })
-  }
+    });
+  };
 
   const invalidateAll = (repoPath) => {
     invalidateCommits(repoPath);
@@ -38,12 +38,12 @@ export function useQueryInvalidation() {
     });
 
     invalideRemotes(repoPath);
-  }
+  };
 
   return {
     invalidateAll,
     invalidateStatus,
     invalidateCommits,
-    invalideRemotes
+    invalideRemotes,
   };
 }

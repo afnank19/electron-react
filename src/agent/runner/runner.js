@@ -13,9 +13,7 @@ export async function runLoop(messages, model) {
   let count = 0;
   while (count < MAX_STEPS) {
     count++;
-    console.log(
-      `[Runner] Step ${count + 1}/${MAX_STEPS} — ${messages.length} messages in context`,
-    );
+    console.log(`[Runner] Step ${count + 1}/${MAX_STEPS} — ${messages.length} messages in context`);
     let res;
     try {
       res = await client.chat.completions.create({
@@ -44,15 +42,13 @@ export async function runLoop(messages, model) {
 
     let rounds = 0; // temp debugging
     for (const toolCall of message.tool_calls) {
-      console.log(
-        `[Runner] Executing tool: ${toolCall.function?.name} (id: ${toolCall.id})`,
-      );
+      console.log(`[Runner] Executing tool: ${toolCall.function?.name} (id: ${toolCall.id})`);
       emitAgentEvent({
         type: "tool_call",
         message: "",
         tool: toolCall.function?.name,
-        params: toolCall.function.arguments
-      })
+        params: toolCall.function.arguments,
+      });
       let toolResult;
       try {
         toolResult = await executeToolCall(toolCall);
@@ -61,14 +57,9 @@ export async function runLoop(messages, model) {
           message: "",
           tool: toolCall.function?.name,
         });
-        console.log(
-          `[Runner] Tool ${toolCall.function?.name} result AA: ${toolResult}`,
-        );
+        console.log(`[Runner] Tool ${toolCall.function?.name} result AA: ${toolResult}`);
       } catch (e) {
-        console.error(
-          `[Runner] Tool ${toolCall.function?.name} failed:`,
-          e.message,
-        );
+        console.error(`[Runner] Tool ${toolCall.function?.name} failed:`, e.message);
         throw new Error(e.message); // return the error back to the model
       }
 

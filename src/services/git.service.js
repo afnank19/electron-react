@@ -8,14 +8,10 @@ import { promisify } from "node:util";
 
 export function getRepoRoot(path) {
   return new Promise((resolve, reject) => {
-    exec(
-      "git rev-parse --show-toplevel",
-      { cwd: path },
-      (err, stdout, stderr) => {
-        if (err) return reject("Not a git repository");
-        resolve(stdout.trim());
-      },
-    );
+    exec("git rev-parse --show-toplevel", { cwd: path }, (err, stdout, stderr) => {
+      if (err) return reject("Not a git repository");
+      resolve(stdout.trim());
+    });
   });
 }
 
@@ -71,8 +67,8 @@ export function getFileDiff(repoPath, filePath) {
 }
 
 export function getCommitLog(repoPath, commitHash) {
-  console.log("Getting show for hash", commitHash)
-  return runGit(repoPath, ["show", commitHash], { raw: true, color: true});
+  console.log("Getting show for hash", commitHash);
+  return runGit(repoPath, ["show", commitHash], { raw: true, color: true });
 }
 
 export function getRemotes(repoPath) {
@@ -80,7 +76,7 @@ export function getRemotes(repoPath) {
 }
 
 export function gitDiffStat(repoPath) {
-  return execGitWithOutput(repoPath, "diff --stat")
+  return execGitWithOutput(repoPath, "diff --stat");
 }
 
 export function gitDiffNumStat(repoPath) {

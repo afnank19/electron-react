@@ -23,5 +23,5 @@ export const gitDiffTool = {
     console.log("running diff for files", files);
 
     return await getFileDiffNoANSIIColor(cwd, files);
-  }
-}
+  },
+};

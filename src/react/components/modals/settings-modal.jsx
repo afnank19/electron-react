@@ -1,6 +1,6 @@
 // Since this is the initial stages, im not gonna over engineer this
 
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 
 export const SettingsModal = ({ onClose }) => {
   const [secretKey, setSecretKey] = useState("");
@@ -9,7 +9,7 @@ export const SettingsModal = ({ onClose }) => {
 
   useEffect(() => {
     window.settings.getSettings().then((settings) => {
-      console.log("settings loaded", settings)
+      console.log("settings loaded", settings);
       if (true) {
         setSecretKey(settings.apiKey ?? "");
         setBaseUrl(settings.baseURL ?? "");
@@ -27,22 +27,24 @@ export const SettingsModal = ({ onClose }) => {
   }
 
   return (
-    <div className="text-white bg-neutral-900 border border-neutral-800 w-[40vw] h-auto p-4 flex flex-col gap-4">
-      <h1 className="font-bold text-lg">Settings</h1>
+    <div className="flex h-auto w-[40vw] flex-col gap-4 border border-neutral-800 bg-neutral-900 p-4 text-white">
+      <h1 className="text-lg font-bold">Settings</h1>
 
-      <p className="text-sm text-neutral-400">Please use OpenAI library compatible API keys and Base Urls </p>
+      <p className="text-sm text-neutral-400">
+        Please use OpenAI library compatible API keys and Base Urls{" "}
+      </p>
       <div className="flex flex-col gap-2">
         <label className="text-sm">API Key</label>
         <div className="flex gap-2">
           <input
             type={showKey ? "text" : "password"}
             placeholder="eq. Aasdasd"
-            className="border border-neutral-800 bg-neutral-900 px-2 py-0.5 text-sm flex-1"
+            className="flex-1 border border-neutral-800 bg-neutral-900 px-2 py-0.5 text-sm"
             value={secretKey}
             onChange={(e) => setSecretKey(e.target.value)}
           />
           <button
-            className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 py-0.5 border-red-700 bg-red-800 hover:bg-red-700 hover:border-red-600"
+            className="border border-red-700 bg-red-800 px-2 py-0.5 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-red-600 hover:bg-red-700"
             onClick={() => setShowKey((prev) => !prev)}
           >
             {showKey ? "Hide" : "Reveal"}
@@ -60,20 +62,20 @@ export const SettingsModal = ({ onClose }) => {
         />
       </div>
 
-      <div className="flex gap-2 justify-end mt-2">
+      <div className="mt-2 flex justify-end gap-2">
         <button
-          className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-1 py-0.5  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+          className="border border-neutral-700 bg-neutral-800 px-1 py-0.5 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-600 hover:bg-neutral-700"
           onClick={handleCancel}
         >
           Cancel
         </button>
         <button
-          className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-1 py-0.5  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500"
+          className="border border-orange-600 bg-orange-700 px-1 py-0.5 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-orange-500 hover:bg-orange-600"
           onClick={handleSave}
         >
           Save
         </button>
       </div>
     </div>
-  )
-}
+  );
+};

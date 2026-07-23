@@ -2,12 +2,7 @@
 // of the app
 
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
-import {
-  getDiffNumstat,
-  getStatus,
-  stageFile,
-  unstageFile,
-} from "../api/git-api";
+import { getDiffNumstat, getStatus, stageFile, unstageFile } from "../api/git-api";
 import { useQueryInvalidation } from "../queries/use-query-invalidation";
 
 export function useChanges(repoPath) {
@@ -76,9 +71,7 @@ export function useChanges(repoPath) {
       const statusFiles = status.data ?? [];
       const numstatFiles = numstat.data ?? [];
 
-      const numstatMap = new Map(
-        numstatFiles.map((file) => [file.filePath, file]),
-      );
+      const numstatMap = new Map(numstatFiles.map((file) => [file.filePath, file]));
 
       const files = statusFiles.map((statusFile) => {
         const stats = numstatMap.get(statusFile.path);

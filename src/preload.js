@@ -10,26 +10,19 @@ contextBridge.exposeInMainWorld("app", {
 contextBridge.exposeInMainWorld("gitAPI", {
   status: (repoPath) => ipcRenderer.invoke("git:status", repoPath),
   userEmail: (repoPath) => ipcRenderer.invoke("git:userEmail", repoPath),
-  stageFile: (repoPath, filePath) =>
-    ipcRenderer.invoke("git:stageFile", repoPath, filePath),
-  restoreFile: (repoPath, filePath) =>
-    ipcRenderer.invoke("git:restoreFile", repoPath, filePath),
+  stageFile: (repoPath, filePath) => ipcRenderer.invoke("git:stageFile", repoPath, filePath),
+  restoreFile: (repoPath, filePath) => ipcRenderer.invoke("git:restoreFile", repoPath, filePath),
   branches: (repoPath) => ipcRenderer.invoke("git:branches", repoPath),
   remoteBranches: (repoPath) => ipcRenderer.invoke("git:remoteBranches", repoPath),
-  switchBranch: (repoPath, branch) =>
-    ipcRenderer.invoke("git:switchBranch", repoPath, branch),
-  createBranch: (repoPath, branch) =>
-    ipcRenderer.invoke("git:createBranch", repoPath, branch),
+  switchBranch: (repoPath, branch) => ipcRenderer.invoke("git:switchBranch", repoPath, branch),
+  createBranch: (repoPath, branch) => ipcRenderer.invoke("git:createBranch", repoPath, branch),
   branch: (repoPath) => ipcRenderer.invoke("git:branch", repoPath),
   commits: (repoPath) => ipcRenderer.invoke("git:commits", repoPath),
-  commitChange: (repoPath, message) =>
-    ipcRenderer.invoke("git:commitChange", repoPath, message),
-  showFileDiff: (repoPath, filePath) =>
-    ipcRenderer.invoke("git:showFileDiff", repoPath, filePath),
+  commitChange: (repoPath, message) => ipcRenderer.invoke("git:commitChange", repoPath, message),
+  showFileDiff: (repoPath, filePath) => ipcRenderer.invoke("git:showFileDiff", repoPath, filePath),
   getCommitLog: (repoPath, commitHash) =>
     ipcRenderer.invoke("git:getCommitLog", repoPath, commitHash),
-  checkout: (repoPath, branch) =>
-    ipcRenderer.invoke("git:checkout", { repoPath, branch }),
+  checkout: (repoPath, branch) => ipcRenderer.invoke("git:checkout", { repoPath, branch }),
   getRemotes: (repoPath) => ipcRenderer.invoke("git:getRemotes", repoPath),
   addRemote: (repoPath, remote, url) => ipcRenderer.invoke("git:addRemote", repoPath, remote, url),
   push: (repoPath, remote) => ipcRenderer.invoke("git:push", repoPath, remote),
@@ -58,9 +51,9 @@ contextBridge.exposeInMainWorld("agentEvents", {
 
     return () => {
       ipcRenderer.removeListener("agent:event", listener);
-    }
-  }
-})
+    };
+  },
+});
 
 contextBridge.exposeInMainWorld("settings", {
   getSettings: () => ipcRenderer.invoke("cfg:getSettings"),

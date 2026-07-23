@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  VIEWER_MODE,
-  useAppStore,
-  useRepoStore,
-  useViewerStore,
-} from "../state/repo-store";
+import { VIEWER_MODE, useAppStore, useRepoStore, useViewerStore } from "../state/repo-store";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getDiffNumstat } from "../api/git-api";
 import { parseGitStatusPorcelain, parseNumstat } from "../utils/utils";
@@ -63,27 +58,23 @@ const GitStatus = () => {
 
   if (result.files.length === 0) {
     return (
-      <div className="border border-neutral-800  overflow-hidden h-full">
-        <div className=" flex justify-between text-sm bg-neutral- border-neutral-800 border-b">
-          <h1 className="font-bold px-2 border-r border-neutral-800   w-full py-1">
-            Changes
-          </h1>
+      <div className="h-full overflow-hidden border border-neutral-800">
+        <div className="bg-neutral- flex justify-between border-b border-neutral-800 text-sm">
+          <h1 className="w-full border-r border-neutral-800 px-2 py-1 font-bold">Changes</h1>
         </div>
-        <p className="px-2 pt-1 italic text-center">
-          Nothing to commit, working tree clean.
-        </p>
+        <p className="px-2 pt-1 text-center italic">Nothing to commit, working tree clean.</p>
       </div>
     );
   }
 
   return (
     <>
-      <div className="pb-1 border border-neutral-800 overflow-hidden flex flex-col gap-2 h-full">
-        <div className=" flex justify-between items-center text-sm  border-neutral-800 border-b">
-          <h1 className="font-bold px-2  w-full py-1">Changes</h1>
-          <div className="flex gap-1 text-nowrap mx-2">
+      <div className="flex h-full flex-col gap-2 overflow-hidden border border-neutral-800 pb-1">
+        <div className="flex items-center justify-between border-b border-neutral-800 text-sm">
+          <h1 className="w-full px-2 py-1 font-bold">Changes</h1>
+          <div className="mx-2 flex gap-1 text-nowrap">
             <button
-              className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+              className="border border-neutral-700 bg-neutral-800 px-2 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-600 hover:bg-neutral-700"
               onClick={() => {
                 stagingMutation.mutate({ repoPath: repoPath, filePath: "." });
               }}
@@ -91,7 +82,7 @@ const GitStatus = () => {
               Stage All
             </button>
             <button
-              className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+              className="border border-neutral-700 bg-neutral-800 px-2 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-600 hover:bg-neutral-700"
               onClick={() => {
                 restoringMutation.mutate({ repoPath: repoPath, filePath: "." });
               }}
@@ -101,50 +92,39 @@ const GitStatus = () => {
           </div>
         </div>
         <>
-          <div className="px-2 overflow-auto">
+          <div className="overflow-auto px-2">
             {result.files &&
               result.files.map((item, idx) => {
                 return (
-                  <div
-                    key={item.path}
-                    className="flex gap-2 items-center my-1 w-full"
-                  >
+                  <div key={item.path} className="my-1 flex w-full items-center gap-2">
                     <button
-                      className="w-full overflow-hidden group flex gap-4 items-center hover:bg-yellow-500 hover:text-black cursor-pointer"
+                      className="group flex w-full cursor-pointer items-center gap-4 overflow-hidden hover:bg-yellow-500 hover:text-black"
                       onClick={() => {
                         handleStatusItemClick(item.path);
                       }}
                       title={item.path} // Could use a more customizeable tooltip
                     >
                       <div
-                        className={`flex text-sm gap-2 items-center ${item.staged ? "text-lime-300 group-hover:text-black font-bold" : ""}`}
+                        className={`flex items-center gap-2 text-sm ${item.staged ? "font-bold text-lime-300 group-hover:text-black" : ""}`}
                       >
-                        <div className="flex gap-1 items-center font-mono border-r pr-2 border-neutral-700">
+                        <div className="flex items-center gap-1 border-r border-neutral-700 pr-2 font-mono">
+                          <p className="">{item.indexSymbol === " " ? "-" : item.indexSymbol}</p>
                           <p className="">
-                            {item.indexSymbol === " " ? "-" : item.indexSymbol}
-                          </p>
-                          <p className="">
-                            {item.workingTreeSymbol === " "
-                              ? "-"
-                              : item.workingTreeSymbol}
+                            {item.workingTreeSymbol === " " ? "-" : item.workingTreeSymbol}
                           </p>
                         </div>
-                        <p
-                          key={item.path}
-                          style={{ whiteSpace: "pre" }}
-                          className="text-sm "
-                        >
+                        <p key={item.path} style={{ whiteSpace: "pre" }} className="text-sm">
                           {item.filename}
                         </p>
                         <p
                           key={idx}
                           style={{ whiteSpace: "pre" }}
-                          className="text-xs text-neutral-400 group-hover:text-neutral-700 truncate"
+                          className="truncate text-xs text-neutral-400 group-hover:text-neutral-700"
                         >
                           /{item.path}
                         </p>
                       </div>
-                      <p className="italic text-sm text-black hidden group-hover:block text-nowrap">
+                      <p className="hidden text-sm text-nowrap text-black italic group-hover:block">
                         Click to view diff
                       </p>
                     </button>
@@ -154,7 +134,7 @@ const GitStatus = () => {
                       <div className="flex gap-2">
                         {item.staged ? (
                           <button
-                            className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)]  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+                            className="flex items-center gap-1 border border-neutral-700 bg-neutral-800 pr-1 pl-0.5 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-600 hover:bg-neutral-700"
                             onClick={() => {
                               restoringMutation.mutate({
                                 repoPath: repoPath,
@@ -162,16 +142,12 @@ const GitStatus = () => {
                               });
                             }}
                           >
-                            <Minus
-                              size={10}
-                              strokeWidth={3}
-                              className="text-neutral-400"
-                            />
+                            <Minus size={10} strokeWidth={3} className="text-neutral-400" />
                             Restore
                           </button>
                         ) : (
                           <button
-                            className="font-bold flex items-center gap-1 pl-0.5 pr-1 text-xs border  shadow-[3px_3px_0px_rgba(0,0,0,0.9)]  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+                            className="flex items-center gap-1 border border-neutral-700 bg-neutral-800 pr-1 pl-0.5 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-600 hover:bg-neutral-700"
                             onClick={() => {
                               // handleStaging(item.path);
                               stagingMutation.mutate({
@@ -180,11 +156,7 @@ const GitStatus = () => {
                               });
                             }}
                           >
-                            <Plus
-                              size={10}
-                              strokeWidth={3}
-                              className="text-neutral-400"
-                            />
+                            <Plus size={10} strokeWidth={3} className="text-neutral-400" />
                             Stage
                           </button>
                         )}

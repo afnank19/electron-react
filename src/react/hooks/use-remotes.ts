@@ -28,14 +28,15 @@ export function useRemotes(repoPath: string) {
   });
 
   const addRemoteMutation = useMutation({
-    mutationFn: ({ remote, url }: { remote: string, url: string }) => addRemote(repoPath, remote, url),
-  })
+    mutationFn: ({ remote, url }: { remote: string; url: string }) =>
+      addRemote(repoPath, remote, url),
+  });
 
   return {
     remotesQuery,
     pushMutation,
     pullMutation,
     fetchMutation,
-    addRemoteMutation
+    addRemoteMutation,
   };
 }

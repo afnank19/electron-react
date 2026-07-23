@@ -6,7 +6,6 @@ import { ContentViewPane } from "./content-view-pane";
 import Markdown from "react-markdown";
 import { DiffViewer } from "./diff-viewer";
 
-
 export const ViewerPanel = () => {
   const viewerMode = useViewerStore((s) => s.viewerMode);
 
@@ -20,41 +19,35 @@ export const ViewerPanel = () => {
   const convert = new Convert();
 
   const fileDiffHtml = fileDiff ? convert.toHtml(escapeHtml(fileDiff)) : null;
-  const cleanFileDiffHtml = fileDiffHtml
-    ? DOMPurify.sanitize(fileDiffHtml)
-    : null;
+  const cleanFileDiffHtml = fileDiffHtml ? DOMPurify.sanitize(fileDiffHtml) : null;
 
-  const commitLogHtml = commitLog
-      ? convert.toHtml(escapeHtml(commitLog))
-      : null;
+  const commitLogHtml = commitLog ? convert.toHtml(escapeHtml(commitLog)) : null;
 
   switch (viewerMode) {
     case VIEWER_MODE.NONE: {
       return (
-        <div className="text-center italic p-4">Click on a changed file or commit to view</div>
-      )
+        <div className="p-4 text-center italic">Click on a changed file or commit to view</div>
+      );
     }
     case VIEWER_MODE.COMMIT: {
-      return (
-        <DiffViewer diff={commitLog} />
-      )
+      return <DiffViewer diff={commitLog} />;
     }
     case VIEWER_MODE.FILE: {
-      return (
-        <DiffViewer diff={fileDiff} />
-      )
+      return <DiffViewer diff={fileDiff} />;
     }
     case VIEWER_MODE.SUMMARY: {
       return (
-        <div className="text-sm p-2">
+        <div className="p-2 text-sm">
           <Markdown>{summary}</Markdown>
         </div>
-      )
+      );
     }
     default: {
       return (
-        <div className="text-center italic">Nothing to show. Click on a changed file or commit to view</div>
-      )
+        <div className="text-center italic">
+          Nothing to show. Click on a changed file or commit to view
+        </div>
+      );
     }
   }
-}
+};

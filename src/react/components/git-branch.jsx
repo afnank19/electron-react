@@ -55,22 +55,22 @@ const GitBranch = () => {
   // updating one, can lead to the others refreshing themselves with new data
   // kind of like an event driven system?
   return (
-    <div className="flex flex-col gap-2 py-1 border rounded-2xl border-neutral-800 bg-[#111111] m-2">
+    <div className="m-2 flex flex-col gap-2 rounded-2xl border border-neutral-800 bg-[#111111] py-1">
       {/* <p>{test }</p>*/}
-      <div className="border-b border-neutral-800 pb-2 px-2 flex flex-col gap-2">
+      <div className="flex flex-col gap-2 border-b border-neutral-800 px-2 pb-2">
         <div className="font-bold">Branch Management</div>
-        <div className="font-bold text-sm">Currently on: {activeBranch}</div>
+        <div className="text-sm font-bold">Currently on: {activeBranch}</div>
 
         <div className="flex gap-4">
           <input
             placeholder="Branch name"
-            className="border border-neutral-800 bg-neutral-900 rounded-lg px-2 text-sm flex-1"
+            className="flex-1 rounded-lg border border-neutral-800 bg-neutral-900 px-2 text-sm"
             value={newBranchName}
             onChange={(e) => setNewBranchName(e.target.value)}
           ></input>
           <button
             onClick={handleNewBranchCreationClick}
-            className="font-bold text-xs flex items-center gap-1 border rounded-lg px-2  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-xl"
+            className="flex items-center gap-1 rounded-lg border border-orange-600 bg-orange-700 px-2 text-xs font-bold shadow-xl hover:border-orange-500 hover:bg-orange-600"
           >
             <GitBranchIcon size={16} />
             Create and Switch to Branch
@@ -84,12 +84,12 @@ const GitBranch = () => {
             return (
               <div
                 key={idx}
-                className="flex gap-4 items-center group justify-between relative hover:bg-neutral-800 px-2 my-0.5"
+                className="group relative my-0.5 flex items-center justify-between gap-4 px-2 hover:bg-neutral-800"
               >
-                <p className=" text-sm">- {branch}</p>
+                <p className="text-sm">- {branch}</p>
                 <button
                   // className="font-bold text-xs border rounded-md px-2 border-neutral-700 hover:bg-neutral-600 hidden group-hover:block"
-                  className="font-bold text-xs border rounded-md px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+                  className="rounded-md border border-neutral-700 bg-neutral-800 px-2 text-xs font-bold hover:border-neutral-600 hover:bg-neutral-700"
                   onClick={() => {
                     handleBranchSwitch(branch);
                   }}

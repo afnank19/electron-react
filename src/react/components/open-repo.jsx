@@ -41,9 +41,9 @@ export const OpenRepo = ({ pathErr, setPathErr, children }) => {
   }, []);
 
   return (
-    <div className="text-white text-nowrap">
+    <div className="text-nowrap text-white">
       <button
-        className="flex items-center justify-center cursor-pointer font-bold text-xs"
+        className="flex cursor-pointer items-center justify-center text-xs font-bold"
         onClick={handleClick}
       >
         {/* <Plus size={20} />*/}

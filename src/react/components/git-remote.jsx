@@ -11,13 +11,8 @@ export const GitRemote = () => {
   const triggerRefresh = useAppStore((s) => s.triggerRefresh);
   const queryClient = useQueryClient();
 
-  const {
-    remotesQuery,
-    pushMutation,
-    pullMutation,
-    fetchMutation,
-    addRemoteMutation,
-  } = useRemotes(repoPath);
+  const { remotesQuery, pushMutation, pullMutation, fetchMutation, addRemoteMutation } =
+    useRemotes(repoPath);
   const { invalidateAll, invalideRemotes } = useQueryInvalidation();
 
   const remotes = remotesQuery.data ?? [];
@@ -115,22 +110,21 @@ export const GitRemote = () => {
     );
   }
 
-  const isPending =
-    pushMutation.isPending || pullMutation.isPending || fetchMutation.isPending;
+  const isPending = pushMutation.isPending || pullMutation.isPending || fetchMutation.isPending;
   const actionPrefix = selectedAction === "push" ? "To" : "From";
 
   return (
-    <div className="border border-neutral-800 p-2 h-full">
+    <div className="h-full border border-neutral-800 p-2">
       {remotesQuery.isLoading ? (
         <div>Loading remotes...</div>
       ) : remotes.length === 0 ? (
         <div>No remotes set</div>
       ) : (
-        <div className="flex  gap-2 whitespace-nowrap">
-          <div className="flex items-center gap-2 flex-nowrap">
+        <div className="flex gap-2 whitespace-nowrap">
+          <div className="flex flex-nowrap items-center gap-2">
             <p className="text-sm font-bold">Remote:</p>
             <select
-              className="px-2 text-sm border border-neutral-700"
+              className="border border-neutral-700 px-2 text-sm"
               value={activeRemote}
               onChange={(e) => setActiveRemote(e.target.value)}
             >
@@ -142,7 +136,7 @@ export const GitRemote = () => {
             </select>
           </div>
           <div className="flex items-center gap-2">
-            <label className="flex items-center gap-1 text-xs cursor-pointer">
+            <label className="flex cursor-pointer items-center gap-1 text-xs">
               <input
                 type="radio"
                 name="remote-action"
@@ -152,7 +146,7 @@ export const GitRemote = () => {
               />
               Push
             </label>
-            <label className="flex items-center gap-1 text-xs cursor-pointer">
+            <label className="flex cursor-pointer items-center gap-1 text-xs">
               <input
                 type="radio"
                 name="remote-action"
@@ -162,7 +156,7 @@ export const GitRemote = () => {
               />
               Pull
             </label>
-            <label className="flex items-center gap-1 text-xs cursor-pointer">
+            <label className="flex cursor-pointer items-center gap-1 text-xs">
               <input
                 type="radio"
                 name="remote-action"
@@ -173,30 +167,30 @@ export const GitRemote = () => {
               Fetch
             </label>
           </div>
-          <div className="flex flex-1 justify-end items-center gap-2">
+          <div className="flex flex-1 items-center justify-end gap-2">
             <button
               onClick={() => executeAction("origin")}
               disabled={isPending}
-              className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+              className="border border-neutral-700 bg-neutral-800 px-2 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-600 hover:bg-neutral-700"
             >
               {actionPrefix} Origin
             </button>
             <button
               onClick={() => executeAction(activeRemote)}
               disabled={isPending}
-              className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+              className="border border-neutral-700 bg-neutral-800 px-2 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-600 hover:bg-neutral-700"
             >
               {actionPrefix} Remote
             </button>
           </div>
         </div>
       )}
-      <div className="flex gap-2 text-sm items-center mt-1">
+      <div className="mt-1 flex items-center gap-2 text-sm">
         <label className="font-bold">Name</label>
         <input
           type="text"
           placeholder="origin"
-          className="px-1 text-sm border border-neutral-700 bg-neutral-900"
+          className="border border-neutral-700 bg-neutral-900 px-1 text-sm"
           value={remoteName}
           onChange={(e) => {
             setRemoteName(e.target.value);
@@ -207,7 +201,7 @@ export const GitRemote = () => {
         <input
           type="text"
           placeholder="https://github.com/user/repo.git"
-          className="flex-1 px-1 text-sm border border-neutral-700 bg-neutral-900"
+          className="flex-1 border border-neutral-700 bg-neutral-900 px-1 text-sm"
           value={remoteUrl}
           onChange={(e) => {
             setRemoteUrl(e.target.value);
@@ -217,7 +211,7 @@ export const GitRemote = () => {
         <button
           disabled={isPending}
           onClick={() => addRemote()}
-          className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+          className="border border-neutral-700 bg-neutral-800 px-2 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-600 hover:bg-neutral-700"
         >
           Add Remote
         </button>
