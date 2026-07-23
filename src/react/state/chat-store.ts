@@ -7,7 +7,7 @@ export type ChatItem = {
   params?: any;
 };
 
-export type ChatItemType = "tool_call" | "message" | "log" | "user";
+export type ChatItemType = "tool_call" | "message" | "log" | "user" | "tool_complete";
 
 type ChatStore = {
   items: ChatItem[];

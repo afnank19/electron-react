@@ -14,73 +14,79 @@ import { useAgentEvents } from "./hooks/use-agent-events";
 
 const queryClient = new QueryClient();
 
-const App = () => {
+const AppContent = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
   useAgentEvents();
 
   return (
+    <div className="font-display h-screen flex flex-col">
+      <Tabs />
+
+      {repoPath !== null ? (
+        <>
+          <OpenRepoLayout />
+
+          <div className="flex-1 min-h-0 mb-2">
+            <Group className="h-full">
+              <Panel defaultSize={25}>
+                <Group orientation="vertical" className="h-full">
+                  <Panel defaultSize={50}>
+                    <div className="h-full min-h-0 overflow-hidden">
+                      <GitStatus />
+                    </div>
+                  </Panel>
+
+                  <Panel defaultSize={50}>
+                    <div className="h-full min-h-0 overflow-hidden">
+                      <GitCommits />
+                    </div>
+                  </Panel>
+                </Group>
+              </Panel>
+
+              <Panel defaultSize={25}>
+                <div className="h-full min-h-0 flex flex-col">
+                  <ChatPanel />
+                </div>
+              </Panel>
+
+              <Panel defaultSize={50}>
+                <Group orientation="vertical" className="h-full">
+                  <Panel defaultSize={25} maxSize={70}>
+                    <div className="h-full min-h-0 overflow-hidden">
+                      <GitRemote />
+                    </div>
+                  </Panel>
+
+                  <Panel defaultSize={50}>
+                    <div className="h-full min-h-0 border border-neutral-800" >
+                      <Viewer />
+                    </div>
+                  </Panel>
+
+                  <Panel defaultSize={25}>
+                    <div className="h-full min-h-0 overflow-hidden">
+                      <Logs />
+                    </div>
+                  </Panel>
+                </Group>
+              </Panel>
+
+
+            </Group>
+          </div>
+        </>
+      ) : (
+        <Onboarding />
+      )}
+    </div>
+  );
+};
+
+const App = () => {
+  return (
     <QueryClientProvider client={queryClient}>
-      <div className="font-display h-screen flex flex-col">
-        <Tabs />
-
-        {repoPath !== null ? (
-          <>
-            <OpenRepoLayout />
-
-            <div className="flex-1 min-h-0 mb-2">
-              <Group className="h-full">
-                <Panel defaultSize={25}>
-                  <Group orientation="vertical" className="h-full">
-                    <Panel defaultSize={50}>
-                      <div className="h-full min-h-0 overflow-hidden">
-                        <GitStatus />
-                      </div>
-                    </Panel>
-
-                    <Panel defaultSize={50}>
-                      <div className="h-full min-h-0 overflow-hidden">
-                        <GitCommits />
-                      </div>
-                    </Panel>
-                  </Group>
-                </Panel>
-
-                <Panel defaultSize={25}>
-                  <div className="h-full min-h-0 flex flex-col">
-                    <ChatPanel />
-                  </div>
-                </Panel>
-
-                <Panel defaultSize={50}>
-                  <Group orientation="vertical" className="h-full">
-                    <Panel defaultSize={25} maxSize={70}>
-                      <div className="h-full min-h-0 overflow-hidden">
-                        <GitRemote />
-                      </div>
-                    </Panel>
-
-                    <Panel defaultSize={50}>
-                      <div className="h-full min-h-0 border border-neutral-800" >
-                        <Viewer />
-                      </div>
-                    </Panel>
-
-                    <Panel defaultSize={25}>
-                      <div className="h-full min-h-0 overflow-hidden">
-                        <Logs />
-                      </div>
-                    </Panel>
-                  </Group>
-                </Panel>
-
-
-              </Group>
-            </div>
-          </>
-        ) : (
-          <Onboarding />
-        )}
-      </div>
+      <AppContent />
     </QueryClientProvider>
   );
 };

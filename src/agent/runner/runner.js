@@ -56,6 +56,11 @@ export async function runLoop(messages, model) {
       let toolResult;
       try {
         toolResult = await executeToolCall(toolCall);
+        emitAgentEvent({
+          type: "tool_complete",
+          message: "",
+          tool: toolCall.function?.name,
+        });
         console.log(
           `[Runner] Tool ${toolCall.function?.name} result AA: ${toolResult}`,
         );
