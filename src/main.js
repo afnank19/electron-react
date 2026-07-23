@@ -21,6 +21,7 @@ import {
   getLocalBranches,
   gitDiffNumstat,
   gitLog,
+  gitRemoteBranches,
 } from "./services/git/repo-inspection.js";
 import { gitPull, gitPush, gitRemoteAdd, gitFetch } from "./services/git/remote.js";
 import { eventBus } from "./events/eventBus.js";
@@ -122,6 +123,10 @@ export function registerGitIPC() {
 
   ipcMain.handle("git:branch", (_, repoPath) => {
     return git.gitGetActiveBranch(repoPath);
+  });
+
+  ipcMain.handle("git:remoteBranches", (_, repoPath) => {
+    return gitRemoteBranches(repoPath);
   });
 
   // Debugging with the app state path here

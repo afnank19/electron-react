@@ -18,6 +18,14 @@ export async function switchBranch(repoPath: string, branch: string): Promise<st
   return res;
 }
 
+export async function getRemoteBranches(repoPath: string) {
+  const res = await window.gitAPI.remoteBranches(repoPath);
+  const parsed = splitByNewLine(res);
+  return parsed
+    .filter((b) => !b.includes("HEAD") && b.includes("/"))
+    .map((b) => b.replace(/^[^\/]+\//, ""));
+}
+
 export async function createAndSwitchToBranch(repoPath: string, branch: string): Promise<string> {
   const res: string = await window.gitAPI.createBranch(repoPath, branch);
   return res;
