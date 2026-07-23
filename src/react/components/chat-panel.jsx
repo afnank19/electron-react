@@ -60,26 +60,29 @@ export const ChatPanel = () => {
   }, [repoPath]);
 
   return (
-    <div className="border border-neutral-800  flex flex-col h-full">
-      <h2 className="text-sm px-2 py-1 font-bold mb-4 border-b border-neutral-800">
+    <div className="flex h-full flex-col border border-neutral-800">
+      <h2 className="mb-4 border-b border-neutral-800 px-2 py-1 text-sm font-bold">
         Workflow Agent
       </h2>
 
-      <div className="flex-1 flex flex-col gap-2 overflow-y-auto mb-4  pb-4">
+      <div className="mb-4 flex flex-1 flex-col gap-2 overflow-y-auto pb-4">
         {items &&
           items.map((msg, idx) => {
             return <ChatItemRenderer item={msg} />;
           })}
       </div>
-      <div className="flex gap-2 border-t-2 p-2 border-neutral-800">
-        <form className="flex flex-1" onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}>
+      <div className="flex gap-2 border-t-2 border-neutral-800 p-2">
+        <form
+          className="flex flex-1"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+        >
           <input
             type="text"
             placeholder="Specify a custom workflow"
-            className="flex-1 py-1 px-2  text-sm border border-neutral-700 bg-neutral-900"
+            className="flex-1 border border-neutral-700 bg-neutral-900 px-2 py-1 text-sm"
             value={userMsg}
             onChange={(e) => {
               setUserMsg(e.target.value);
@@ -89,7 +92,7 @@ export const ChatPanel = () => {
         </form>
         <button
           onClick={handleSubmit}
-          className="font-bold text-xs  px-1.5 border  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500 shadow-[3px_3px_0px_rgba(0,0,0,0.9)]"
+          className="border border-orange-600 bg-orange-700 px-1.5 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-orange-500 hover:bg-orange-600"
         >
           <ArrowUp size={16} />
         </button>

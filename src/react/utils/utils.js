@@ -73,7 +73,7 @@ function parseGitStatusPorcelainV2(output) {
   return output
     .split("\n")
     .filter(Boolean)
-    .map(raw => {
+    .map((raw) => {
       const indexSymbol = raw[0];
       const workingTreeSymbol = raw[1];
       const status = raw.slice(0, 2);
@@ -90,45 +90,28 @@ function parseGitStatusPorcelainV2(output) {
       const filename = currentPath.split("/").pop();
 
       const lastDot = filename.lastIndexOf(".");
-      const basename =
-        lastDot > 0 ? filename.slice(0, lastDot) : filename;
-      const extension =
-        lastDot > 0 ? filename.slice(lastDot + 1) : "";
+      const basename = lastDot > 0 ? filename.slice(0, lastDot) : filename;
+      const extension = lastDot > 0 ? filename.slice(lastDot + 1) : "";
 
-      const directory =
-        currentPath.includes("/")
-          ? currentPath.substring(0, currentPath.lastIndexOf("/"))
-          : "";
+      const directory = currentPath.includes("/")
+        ? currentPath.substring(0, currentPath.lastIndexOf("/"))
+        : "";
 
-      const staged =
-        indexSymbol !== " " &&
-        indexSymbol !== "?";
+      const staged = indexSymbol !== " " && indexSymbol !== "?";
 
-      const unstaged =
-        workingTreeSymbol !== " " &&
-        workingTreeSymbol !== "?";
+      const unstaged = workingTreeSymbol !== " " && workingTreeSymbol !== "?";
 
       const partiallyStaged = staged && unstaged;
 
-      const modified =
-        indexSymbol === "M" ||
-        workingTreeSymbol === "M";
+      const modified = indexSymbol === "M" || workingTreeSymbol === "M";
 
-      const added =
-        indexSymbol === "A" ||
-        workingTreeSymbol === "A";
+      const added = indexSymbol === "A" || workingTreeSymbol === "A";
 
-      const deleted =
-        indexSymbol === "D" ||
-        workingTreeSymbol === "D";
+      const deleted = indexSymbol === "D" || workingTreeSymbol === "D";
 
-      const renamed =
-        indexSymbol === "R" ||
-        workingTreeSymbol === "R";
+      const renamed = indexSymbol === "R" || workingTreeSymbol === "R";
 
-      const copied =
-        indexSymbol === "C" ||
-        workingTreeSymbol === "C";
+      const copied = indexSymbol === "C" || workingTreeSymbol === "C";
 
       const conflicted =
         indexSymbol === "U" ||

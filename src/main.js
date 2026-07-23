@@ -17,7 +17,7 @@ import { registerAppStateIPC } from "./ipc/app-state.ipc.js";
 import { initializeToolRegistry } from "./agent/tools/registry.js";
 import { initializeAgent } from "./agent/agent.js";
 import {
-    getCommitLog,
+  getCommitLog,
   getLocalBranches,
   gitDiffNumstat,
   gitLog,
@@ -47,9 +47,7 @@ const createWindow = () => {
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
-    mainWindow.loadFile(
-      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
-    );
+    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
   // Open the DevTools.
@@ -160,7 +158,7 @@ export function registerGitIPC() {
 
   ipcMain.handle("git:addRemote", (_, repoPath, remote, url) => {
     return gitRemoteAdd(repoPath, remote, url);
-  })
+  });
 
   ipcMain.handle("git:push", (_, repoPath, remote) => {
     // return git.pushToRemote(repoPath, remote);

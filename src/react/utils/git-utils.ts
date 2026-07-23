@@ -18,8 +18,7 @@ export function parseGitCommitOutput(output: string) {
     .split(RECORD_SEPARATOR)
     .filter((record) => record.trim() !== "")
     .map((record): GitCommit => {
-      const [hash, relativeDate, author, subject] =
-        record.split(FIELD_SEPARATOR);
+      const [hash, relativeDate, author, subject] = record.split(FIELD_SEPARATOR);
 
       if (
         hash === undefined ||
@@ -92,10 +91,7 @@ export function parseCommitDiff(diffStr: string) {
     console.log(f.chunks[0]?.changes[0]);
 
     const hunks = f.chunks.map((chunk) =>
-      [
-        chunk.content,
-        ...chunk.changes.map((change) => change.content),
-      ].join("\n")
+      [chunk.content, ...chunk.changes.map((change) => change.content)].join("\n"),
     );
 
     return {
@@ -121,7 +117,6 @@ export function splitGitPatches(text: string): string[] {
     return text.slice(start, end);
   });
 }
-
 
 // export function parseCommitDiff(diffStr: string) {
 //   return parse(diffStr).map((f) => {

@@ -44,14 +44,14 @@ export async function getActiveBranch(repoPath) {
     return {
       success: true,
       message: "Here is the current branch",
-      gitOutput: output
-    }
+      gitOutput: output,
+    };
   } catch (e) {
     return {
       success: false,
       message: "Could not get current branch",
-      error: e.message
-    }
+      error: e.message,
+    };
   }
 }
 
@@ -61,14 +61,14 @@ export async function getLocalBranches(repoPath) {
     return {
       success: true,
       message: "Here is a list of local branches",
-      gitOutput: output
-    }
+      gitOutput: output,
+    };
   } catch (e) {
     return {
       success: false,
       message: "Could not get local branches",
-      error: e.message
-    }
+      error: e.message,
+    };
   }
 }
 

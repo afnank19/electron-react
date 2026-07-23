@@ -11,7 +11,7 @@ class Agent {
   async run(request, ctx) {
     console.log("[AGENT REQ]", request);
     const reqAndCtx = buildContext(request, ctx);
-    console.log("son: ",reqAndCtx)
+    console.log("son: ", reqAndCtx);
 
     const messages = [
       { role: "system", content: SYSTEM_PROMPT },
@@ -20,7 +20,7 @@ class Agent {
       // { role: "user", content: request }
     ];
 
-    console.log("Messages and Context", messages)
+    console.log("Messages and Context", messages);
 
     try {
       const result = runLoop(messages, this.model);
@@ -53,33 +53,33 @@ function buildContext(request, ctx) {
 
   if (ctx !== null) {
     ctx.forEach((item) => {
-      let role = "user"
+      let role = "user";
       if (item.type === "message") {
-        role = "assistant"
+        role = "assistant";
         conversationContext.push({
           role: role,
-          content: item.message
-        })
+          content: item.message,
+        });
       } else if (item.type === "tool_call") {
-        role = "assistant"
+        role = "assistant";
         conversationContext.push({
           role: role,
-          content: "Used tool " + item.tool + " with parameter/s " + item.params
-        })
+          content: "Used tool " + item.tool + " with parameter/s " + item.params,
+        });
       } else if (item.type === "user") {
-        role = "user"
+        role = "user";
         conversationContext.push({
           role: role,
-          content: item.message
-        })
+          content: item.message,
+        });
       }
-    })
+    });
   }
 
   conversationContext.push({
     role: "user",
-    content: request
-  })
+    content: request,
+  });
 
   return conversationContext;
 }

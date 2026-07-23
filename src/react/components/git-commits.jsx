@@ -42,13 +42,13 @@ export const GitCommits = () => {
   }
 
   return (
-    <div className="text-white flex flex-col gap-2 border  border-neutral-800 py-1 h-full">
-      <h1 className="font-bold px-2">Commit History</h1>
+    <div className="flex h-full flex-col gap-2 border border-neutral-800 py-1 text-white">
+      <h1 className="px-2 font-bold">Commit History</h1>
 
-      <div className="flex flex-col gap-2 border-b border-neutral-800 pb-4 px-2">
+      <div className="flex flex-col gap-2 border-b border-neutral-800 px-2 pb-4">
         <textarea
           placeholder="eg. feat: update README.md"
-          className="border border-neutral-800 bg-neutral-900 px-2 text-sm flex-1 resize-none overflow-hidden min-w-20"
+          className="min-w-20 flex-1 resize-none overflow-hidden border border-neutral-800 bg-neutral-900 px-2 text-sm"
           value={commitMsg}
           onChange={(e) => {
             setCommitMsg(e.target.value);
@@ -60,9 +60,9 @@ export const GitCommits = () => {
             el.style.height = `${el.scrollHeight}px`;
           }}
         ></textarea>
-        <div className="flex gap-1 items-center justify-between">
+        <div className="flex items-center justify-between gap-1">
           <button
-            className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 py-0.5  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
+            className="border border-neutral-700 bg-neutral-800 px-2 py-0.5 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-600 hover:bg-neutral-700"
             onClick={() => {
               genCommitMsgMutation.mutate(null, {
                 onSuccess: (data) => {
@@ -71,24 +71,19 @@ export const GitCommits = () => {
                 },
                 onError: (error) => {
                   console.error("failed generation", error);
-                  addLog(
-                    "FATAL: Failed to generate commit message through LLM: " +
-                      error.message,
-                  );
+                  addLog("FATAL: Failed to generate commit message through LLM: " + error.message);
                 },
               });
             }}
           >
-            {genCommitMsgMutation.isPending
-              ? "Generating"
-              : "Generate with LLM"}
+            {genCommitMsgMutation.isPending ? "Generating" : "Generate with LLM"}
           </button>
           <button
-            className="font-bold w-fit text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 py-0.5  bg-orange-700 border-orange-600 hover:bg-orange-600 hover:border-orange-500"
+            className="w-fit border border-orange-600 bg-orange-700 px-2 py-0.5 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-orange-500 hover:bg-orange-600"
             onClick={() => {
               commitMutation.mutate(commitMsg, {
                 onSuccess: (log) => {
-                  console.log("Successfully commited, should be refreshing rn")
+                  console.log("Successfully commited, should be refreshing rn");
                   setCommitMsg("");
                   addLog(log);
                   triggerRefresh();
@@ -105,21 +100,24 @@ export const GitCommits = () => {
         </div>
       </div>
 
-      <div className="overflow-auto h-full ">
+      <div className="h-full overflow-auto">
         {commitQuery.data &&
           commitQuery.data.map((commit, idx) => {
             return (
-              <div key={commit.hash} className="text-sm hover:bg-neutral-700  cursor-pointer w-full  border-b border-neutral-800">
-                <div className="flex gap-1 mx-2">
+              <div
+                key={commit.hash}
+                className="w-full cursor-pointer border-b border-neutral-800 text-sm hover:bg-neutral-700"
+              >
+                <div className="mx-2 flex gap-1">
                   <button
                     key={idx}
-                    className=" w-full text-left  text-nowrap  select-text"
+                    className="w-full text-left text-nowrap select-text"
                     onClick={() => handleOnCommitClick(commit.hash)}
                   >
                     {commit.subject}
                   </button>
                 </div>
-                <div className="flex gap-2 mx-2 text-xs text-neutral-400">
+                <div className="mx-2 flex gap-2 text-xs text-neutral-400">
                   <p>{commit.author}</p>
                   <p>{commit.relativeDate}</p>
                   <button className="">{commit.hash}</button>

@@ -9,13 +9,13 @@ export function useCommits(repoPath: string) {
     queryFn: () => {
       return getCommits(repoPath);
     },
-    refetchOnWindowFocus: true
-  })
+    refetchOnWindowFocus: true,
+  });
 
   const commitMutation = useMutation({
-      mutationFn: async (commitMsg: string) => {
-        return commit(repoPath, commitMsg);
-      },
+    mutationFn: async (commitMsg: string) => {
+      return commit(repoPath, commitMsg);
+    },
   });
 
   // This needs to be redone to use the new agent
@@ -33,6 +33,6 @@ export function useCommits(repoPath: string) {
   return {
     commitQuery,
     genCommitMsgMutation,
-    commitMutation
-  }
+    commitMutation,
+  };
 }

@@ -24,8 +24,8 @@ export const RecentRepos = () => {
 
   if (recentTabs.length === 0) {
     return (
-      <div className="flex items-center justify-between gap-1 my-4 rounded-2xl border border-neutral-800 bg-neutral-900 p-2">
-        <div className="flex items-center gap-2 mx-1">
+      <div className="my-4 flex items-center justify-between gap-1 rounded-2xl border border-neutral-800 bg-neutral-900 p-2">
+        <div className="mx-1 flex items-center gap-2">
           <FolderOpen size={20} />
           <p>Your recent repositories will be shown here.</p>
         </div>
@@ -34,14 +34,14 @@ export const RecentRepos = () => {
   }
 
   return (
-    <div className="my-4 ">
-      <div className="flex items-center justify-between m-2">
+    <div className="my-4">
+      <div className="m-2 flex items-center justify-between">
         <p className="text-lg font-bold">Recent</p>
         <button
           onClick={() => {
             clearRecents();
           }}
-          className="font-bold border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 text-xs px-2 py-0.5 rounded-lg"
+          className="rounded-lg border border-neutral-700 bg-neutral-800 px-2 py-0.5 text-xs font-bold hover:border-neutral-600 hover:bg-neutral-700"
         >
           Clear Recents
         </button>
@@ -54,7 +54,7 @@ export const RecentRepos = () => {
               onClick={() => {
                 handleRecentTabClick(recentTab.repoPath);
               }}
-              className="hover:bg-orange-700 hover:border-orange-600  border border-neutral-700 bg-neutral-800  w-full text-left px-2 rounded-lg my-1.5 flex gap-2 items-center"
+              className="my-1.5 flex w-full items-center gap-2 rounded-lg border border-neutral-700 bg-neutral-800 px-2 text-left hover:border-orange-600 hover:bg-orange-700"
             >
               <div className="h-1 w-1 rounded bg-zinc-400" />
               {recentTab.repoPath}

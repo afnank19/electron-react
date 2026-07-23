@@ -1,10 +1,5 @@
 import { useEffect } from "react";
-import {
-  VIEWER_MODE,
-  useGitLogStore,
-  useRepoStore,
-  useViewerStore,
-} from "../state/repo-store";
+import { VIEWER_MODE, useGitLogStore, useRepoStore, useViewerStore } from "../state/repo-store";
 import Convert from "ansi-to-html";
 import DOMPurify from "dompurify";
 import { escapeHtml } from "../utils/utils";
@@ -34,13 +29,9 @@ export const Viewer = () => {
   const convert = new Convert();
 
   const fileDiffHtml = fileDiff ? convert.toHtml(escapeHtml(fileDiff)) : null;
-  const cleanFileDiffHtml = fileDiffHtml
-    ? DOMPurify.sanitize(fileDiffHtml)
-    : null;
+  const cleanFileDiffHtml = fileDiffHtml ? DOMPurify.sanitize(fileDiffHtml) : null;
 
-  const commitLogHtml = commitLog
-    ? convert.toHtml(escapeHtml(commitLog))
-    : null;
+  const commitLogHtml = commitLog ? convert.toHtml(escapeHtml(commitLog)) : null;
 
   console.count("viewer refreshed");
 
@@ -73,21 +64,21 @@ export const Viewer = () => {
   // Current changes, goes through an agent that decides which files it has to explore.
 
   return (
-    <div className="overflow-hidden h-full">
+    <div className="h-full overflow-hidden">
       {/* <p className="whitespace-pre font-mono text-sm">{fileDiff}</p>*/}
-      <div className="font-bold border-b p-2 border-neutral-800 flex gap-2 justify-between">
+      <div className="flex justify-between gap-2 border-b border-neutral-800 p-2 font-bold">
         <h1 className="font-bold">Viewer</h1>
         <button
           onClick={() => {
             mutate();
           }}
-          className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2  border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 flex gap-1 items-center"
+          className="flex items-center gap-1 border border-neutral-700 bg-neutral-800 px-2 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-600 hover:bg-neutral-700"
         >
           <Bot size={16} />
           {!isPending ? "Summarize current changes" : "Clanking"}
         </button>
       </div>
-      <div className="overflow-auto relative h-full">
+      <div className="relative h-full overflow-auto">
         <ViewerPanel />
         {/* {viewerMode === "commit" ? (
           commitLog != "" ? (

@@ -1,9 +1,19 @@
-import { createBranchTool, getCurrentBranchTool, listLocalBranchesTool, switchBranchTool } from "./git/branch";
+import {
+  createBranchTool,
+  getCurrentBranchTool,
+  listLocalBranchesTool,
+  switchBranchTool,
+} from "./git/branch";
 import { commitTool } from "./git/commit";
 import { gitDiffTool } from "./git/git-diff";
 import { gitDiffNumStatTool } from "./git/git-diff-numstat";
 import { gitStatusTool } from "./git/git-status";
-import { getRemotesTool, pullFromRemoteTool, pushToRemoteTool, fetchFromRemoteTool } from "./git/remote";
+import {
+  getRemotesTool,
+  pullFromRemoteTool,
+  pushToRemoteTool,
+  fetchFromRemoteTool,
+} from "./git/remote";
 import { stageAllTool, stageFilesTool, unstageFilesTool } from "./git/staging";
 
 class ToolRegistry {
@@ -50,10 +60,7 @@ export function initializeToolRegistry() {
 }
 
 export function getRegistry() {
-  if (!registry)
-    throw new Error(
-      "Registry not initialized — call initializeToolRegistry() first",
-    );
+  if (!registry) throw new Error("Registry not initialized — call initializeToolRegistry() first");
   return registry;
 }
 

@@ -10,7 +10,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "prettier --check src/",
+    "format": "prettier --write src/"
   },
   "keywords": [],
   "author": {
@@ -32,6 +33,8 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "electron": "41.3.0",
+    "prettier": "^3.9.6",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "^7.0.2",
     "vite": "^8.0.10"
   },

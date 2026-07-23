@@ -22,24 +22,19 @@ export const Tab = ({ repoName, tabId, handleCloseTab }) => {
 
   return (
     <div
-      className={`flex items-center gap-2 px-1 border border-neutral-800 justify-between overflow-hidden cursor-pointer hover:bg-neutral-800 ${
-        repoPath === repoName ? "bg-neutral-800  border-neutral-500" : ""
+      className={`flex cursor-pointer items-center justify-between gap-2 overflow-hidden border border-neutral-800 px-1 hover:bg-neutral-800 ${
+        repoPath === repoName ? "border-neutral-500 bg-neutral-800" : ""
       }`}
     >
-      <div className="flex items-center px-2 gap-2">
-        {repoPath === repoName && (
-          <span className="w-2 h-2 rounded-full bg-white" />
-        )}
-        <button
-          className="cursor-pointer font-bold truncate max-w-[16ch]"
-          onClick={handleClick}
-        >
+      <div className="flex items-center gap-2 px-2">
+        {repoPath === repoName && <span className="h-2 w-2 rounded-full bg-white" />}
+        <button className="max-w-[16ch] cursor-pointer truncate font-bold" onClick={handleClick}>
           {parsedName}
         </button>
       </div>
 
       <button
-        className="hover:bg-neutral-700 h-full px-1 rounded text-sm font-bold font-mono cursor-pointer"
+        className="h-full cursor-pointer rounded px-1 font-mono text-sm font-bold hover:bg-neutral-700"
         onClick={() => handleCloseTab(tabId)}
       >
         <X size={16} />

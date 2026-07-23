@@ -19,16 +19,14 @@ export function DiffViewer({ diff }: DiffViewerProps) {
   const filePatches = useMemo(() => splitGitPatches(diff), [diff]);
 
   if (filePatches.length === 0) {
-    return (
-      <div className="w-full text-center m-8 font-black">
-        ¯\_(ツ)_/¯
-      </div>
-    )
+    return <div className="m-8 w-full text-center font-black">¯\_(ツ)_/¯</div>;
   }
 
-
   return (
-    <Virtualizer className="p-2 flex flex-col gap-4 overflow-auto" contentClassName="flex flex-col gap-4">
+    <Virtualizer
+      className="flex flex-col gap-4 overflow-auto p-2"
+      contentClassName="flex flex-col gap-4"
+    >
       {filePatches.map((patch, i) => (
         <PatchDiff
           key={extractFileName(patch) ?? i}
@@ -37,10 +35,12 @@ export function DiffViewer({ diff }: DiffViewerProps) {
             diffStyle: "unified",
             theme,
           }}
-          style={{
-            '--diffs-font-family': 'Ioskeley Mono, monospace',
-            '--diffs-font-size': '13px'
-          } as React.CSSProperties}
+          style={
+            {
+              "--diffs-font-family": "Ioskeley Mono, monospace",
+              "--diffs-font-size": "13px",
+            } as React.CSSProperties
+          }
         />
       ))}
     </Virtualizer>

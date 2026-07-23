@@ -1,4 +1,4 @@
-import { appState } from "../../../main/app-state"
+import { appState } from "../../../main/app-state";
 import { stageAll, stageFiles, unstageFiles } from "../../../services/git/staging";
 
 export const stageFilesTool = {
@@ -15,15 +15,15 @@ export const stageFilesTool = {
         },
         required: ["files"],
       },
-    }
+    },
   },
 
   async execute({ files }) {
     const cwd = appState.getRepoPath();
 
-    return await stageFiles(cwd, files)
-  }
-}
+    return await stageFiles(cwd, files);
+  },
+};
 
 export const stageAllTool = {
   name: "stage_all_files",
@@ -32,15 +32,15 @@ export const stageAllTool = {
     function: {
       name: "stage_all_files",
       description: "Stage all updated/untracked files using git add .",
-    }
+    },
   },
 
   async execute(args) {
     const cwd = appState.getRepoPath();
 
     return await stageAll(cwd);
-  }
-}
+  },
+};
 
 export const unstageFilesTool = {
   name: "unstage_files",
@@ -56,12 +56,12 @@ export const unstageFilesTool = {
         },
         required: ["files"],
       },
-    }
+    },
   },
 
   async execute({ files }) {
     const cwd = appState.getRepoPath();
 
-    return await unstageFiles(cwd, files)
-  }
-}
+    return await unstageFiles(cwd, files);
+  },
+};

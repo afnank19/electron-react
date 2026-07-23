@@ -23,10 +23,9 @@ export const useTabStore = create(
 
           return {
             tabs: [...state.tabs, tab],
-            recentTabs: [
-              ...state.recentTabs.filter((t) => t.repoPath !== tab.repoPath),
-              tab,
-            ].slice(-10),
+            recentTabs: [...state.recentTabs.filter((t) => t.repoPath !== tab.repoPath), tab].slice(
+              -10,
+            ),
           };
         }),
 
@@ -74,10 +73,8 @@ export const useViewerStore = create((set) => ({
   commitHash: null,
   summary: null,
 
-  setFileDiff: (fileDiff, filePath) =>
-    set({ fileDiff: fileDiff, filePath: filePath }),
-  setCommitLog: (commitLog, commitHash) =>
-    set({ commitLog: commitLog, commitHash: commitHash }),
+  setFileDiff: (fileDiff, filePath) => set({ fileDiff: fileDiff, filePath: filePath }),
+  setCommitLog: (commitLog, commitHash) => set({ commitLog: commitLog, commitHash: commitHash }),
   setSummary: (summary) => set({ summary: summary }),
   setViewerMode: (viewerMode) => set({ viewerMode: viewerMode }),
   resetViewer: () =>

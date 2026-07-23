@@ -200,7 +200,7 @@ export async function handleAgentRequest(request, ctx) {
 }
 
 export async function generateCommitMessageV2() {
-  console.log("[AGENT REQUEST] Generate a commit msg my employee")
+  console.log("[AGENT REQUEST] Generate a commit msg my employee");
 
   const request = `You have to generate a commit message for the current changes. In order to achieve this do the following:
     Use the numstat diff tool to get an overview of the repository changes.
