@@ -18,6 +18,14 @@ export function DiffViewer({ diff }: DiffViewerProps) {
 
   const filePatches = useMemo(() => splitGitPatches(diff), [diff]);
 
+  if (filePatches.length === 0) {
+    return (
+      <div className="w-full text-center m-8 font-black">
+        ¯\_(ツ)_/¯
+      </div>
+    )
+  }
+
 
   return (
     <Virtualizer className="p-2 flex flex-col gap-4 overflow-auto" contentClassName="flex flex-col gap-4">

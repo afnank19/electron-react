@@ -117,6 +117,7 @@ export const GitRemote = () => {
 
   const isPending =
     pushMutation.isPending || pullMutation.isPending || fetchMutation.isPending;
+  const actionPrefix = selectedAction === "push" ? "To" : "From";
 
   return (
     <div className="border border-neutral-800 p-2 h-full">
@@ -178,14 +179,14 @@ export const GitRemote = () => {
               disabled={isPending}
               className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
             >
-              To Origin
+              {actionPrefix} Origin
             </button>
             <button
               onClick={() => executeAction(activeRemote)}
               disabled={isPending}
               className="font-bold text-xs border shadow-[3px_3px_0px_rgba(0,0,0,0.9)] px-2 border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600"
             >
-              To Remote
+              {actionPrefix} Remote
             </button>
           </div>
         </div>
