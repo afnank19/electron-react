@@ -15,6 +15,7 @@ contextBridge.exposeInMainWorld("gitAPI", {
   restoreFile: (repoPath, filePath) =>
     ipcRenderer.invoke("git:restoreFile", repoPath, filePath),
   branches: (repoPath) => ipcRenderer.invoke("git:branches", repoPath),
+  remoteBranches: (repoPath) => ipcRenderer.invoke("git:remoteBranches", repoPath),
   switchBranch: (repoPath, branch) =>
     ipcRenderer.invoke("git:switchBranch", repoPath, branch),
   createBranch: (repoPath, branch) =>

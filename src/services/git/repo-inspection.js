@@ -61,6 +61,12 @@ export async function getDiff(staged) {}
 // Placing this function here because it is repo inspection but
 // i havent decided how the diff function is going to look like,
 // so temporarily it is here
+export async function gitRemoteBranches(repoPath) {
+  return runGit(repoPath, ["branch", "-r", "--format=%(refname:short)"], {
+    raw: false,
+  });
+}
+
 export async function gitDiffNumstat(repoPath) {
   return runGit(repoPath, ["diff", "--numstat"]);
 }
