@@ -3,27 +3,18 @@ import { useRepoStore, useTabStore } from "../state/repo-store";
 import { Tab } from "./primitives/tab";
 import { OpenRepo } from "./open-repo";
 import { Plus } from "lucide-react";
+import { useTabHotkeys } from "../hooks/use-tab-hotkeys";
 
 const Tabs = () => {
   const tabs = useTabStore((state) => state.tabs);
   const removeTab = useTabStore((state) => state.removeTab);
+
+  const repoPath = useRepoStore((state) => state.repoPath);
   const setRepoPath = useRepoStore((state) => state.setRepoPath);
 
+  useTabHotkeys();
+
   const [pathErr, setPathErr] = useState("");
-
-  const handleTab1 = () => {
-    const path = "/home/afnan/Desktop/dev/gitsage-gui/app-test-repo";
-    console.log("hand coded");
-    localStorage.setItem("repo-path", path);
-    setRepoPath(path);
-  };
-
-  const handleTab2 = () => {
-    console.log("ai coded");
-    const path = "/home/afnan/Desktop/dev/gitsage-gui/my-app";
-    localStorage.setItem("repo-path", path);
-    setRepoPath(path);
-  };
 
   const handleCloseTab = (tabId) => {
     removeTab(tabId);
@@ -51,10 +42,8 @@ const Tabs = () => {
     <>
       <div className="flex items-center gap-1 px-2 py-1 select-none">
         <div className="mr-1 border-2 border-lime-200 px-1 py-0">
-          <p className="font-mono font-serif font-bold text-lime-200">Circe</p>
+          <p className="font-bold text-lime-200">Circe</p>
         </div>
-        {/* <button onClick={handleTab1} className="hover:bg-gray-600 border">app-test-repo</button>
-        <button onClick={handleTab2} className="hover:bg-gray-600 border">my-app</button>*/}
         <div className="flex gap-1 overflow-x-auto">
           {tabs.map((tab, idx) => {
             return (
