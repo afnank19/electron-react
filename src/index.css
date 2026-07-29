@@ -18,11 +18,14 @@
 @theme {
   --font-display: "Neuve Grotesque", sans-serif;
   --font-mono: "Ioskeley Mono", monospace;
+  --color-orange-700: #c25313; /* darkest */
+  --color-orange-600: #d46a2b;
+  --color-orange-500: #e2834a;
 }
 
 body {
-  background-color: #1a1a1a;
-  color: #e1e1e1;
+  background-color: #0f0f12;
+  color: #e0d9c1;
 }
 
 input[type="radio"] {
