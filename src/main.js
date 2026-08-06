@@ -94,22 +94,6 @@ app.on("window-all-closed", () => {
 // code. You can also put them in separate files and import them here.
 
 export function registerGitIPCV1() {
-  ipcMain.handle("git:status", (_, repoPath) => {
-    return git.gitStatus(repoPath);
-  });
-
-  ipcMain.handle("git:userEmail", (_, repoPath) => {
-    return git.gitUserLocalEmail(repoPath);
-  });
-
-  // ipcMain.handle("git:stageFile", (_, repoPath, filePath) => {
-  //   return git.stageFile(repoPath, filePath);
-  // });
-
-  // ipcMain.handle("git:restoreFile", (_, repoPath, filePath) => {
-  //   return git.restoreFileFromStaging(repoPath, filePath);
-  // });
-
   // Returns all branches
   ipcMain.handle("git:branches", (_, repoPath) => {
     return getLocalBranches(repoPath);
