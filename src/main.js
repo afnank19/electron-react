@@ -3,13 +3,6 @@ import path from "node:path";
 import started from "electron-squirrel-startup";
 import { exec, spawn } from "node:child_process";
 import { getRepoRoot } from "./services/git.service";
-import {
-  diffSummaryAgent,
-  generateCommitMessage,
-  generateCommitMessageV2,
-  handleAgentRequest,
-  summarizeCurrentChanges,
-} from "./services/llm.service.js";
 import { registerSettingsIPC } from "./ipc/settings.ipc.js";
 import { appState } from "./main/app-state.js";
 import { registerAppStateIPC } from "./ipc/app-state.ipc.js";
@@ -18,6 +11,7 @@ import { initializeAgent } from "./agent/agent.js";
 import { eventBus } from "./events/eventBus.js";
 import { initializeEventForwarder } from "./events/eventForwader.js";
 import { registerGitIPC } from "./ipc/git.ipc.js";
+import { registerLLMIPC } from "./ipc/llm.ipc.js";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -99,20 +93,5 @@ export function registerRepoIPC() {
     } catch {
       return { error: "Selected folder is not inside a git repo" };
     }
-  });
-}
-
-export function registerLLMIPC() {
-  ipcMain.handle("llm:commitMsg", (_) => {
-    return generateCommitMessageV2();
-  });
-
-  ipcMain.handle("llm:diffSummary", (_, repoPath) => {
-    // return diffSummaryAgent(repoPath);
-    return summarizeCurrentChanges();
-  });
-
-  ipcMain.handle("llm:agentRequest", (_, request, ctx) => {
-    return handleAgentRequest(request, ctx);
   });
 }
