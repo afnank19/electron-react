@@ -22,4 +22,4 @@ export const GIT_IPC_CHANNELS = {
   headDiff: "git:headDiff",
   diffStat: "git:diffStat",
   diffNumstat: "git:diffNumstat",
-}
+};

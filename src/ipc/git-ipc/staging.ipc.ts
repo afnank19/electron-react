@@ -6,7 +6,7 @@ import { gitAddFiles, gitRestoreFiles, gitRestoreStagedFiles } from "../../servi
 export function registerGitStagingIPC() {
   ipcMain.handle(GIT_IPC_CHANNELS.stageFile, (_, repoPath, filePaths) => {
     return gitAddFiles(repoPath, filePaths);
-  })
+  });
 
   ipcMain.handle(GIT_IPC_CHANNELS.restoreStagedFile, (_, repoPath, filePaths) => {
     return gitRestoreStagedFiles(repoPath, filePaths);
