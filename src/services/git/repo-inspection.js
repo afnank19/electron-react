@@ -62,13 +62,6 @@ export async function getLocalBranches(repoPath) {
 // so temporarily it is here
 export async function getDiff(staged) { }
 
-
-export async function gitRemoteBranches(repoPath) {
-  return runGit(repoPath, ["branch", "-r", "--format=%(refname:short)"], {
-    raw: false,
-  });
-}
-
 export async function gitDiffNumstat(repoPath) {
   return runGit(repoPath, ["diff", "--numstat"]);
 }

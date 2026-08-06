@@ -18,10 +18,8 @@ import { initializeToolRegistry } from "./agent/tools/registry.js";
 import { initializeAgent } from "./agent/agent.js";
 import {
   getCommitLog,
-  getLocalBranches,
   gitDiffNumstat,
   gitLog,
-  gitRemoteBranches,
 } from "./services/git/repo-inspection.js";
 import { gitPull, gitPush, gitRemoteAdd, gitFetch } from "./services/git/remote.js";
 import { eventBus } from "./events/eventBus.js";
@@ -94,27 +92,6 @@ app.on("window-all-closed", () => {
 // code. You can also put them in separate files and import them here.
 
 export function registerGitIPCV1() {
-  // Returns all branches
-  ipcMain.handle("git:branches", (_, repoPath) => {
-    return getLocalBranches(repoPath);
-  });
-
-  ipcMain.handle("git:switchBranch", (_, repoPath, branch) => {
-    return git.gitSwitchToBranch(repoPath, branch);
-  });
-
-  ipcMain.handle("git:createBranch", (_, repoPath, branch) => {
-    return git.gitCreateAndSwitchToBranch(repoPath, branch);
-  });
-
-  ipcMain.handle("git:branch", (_, repoPath) => {
-    return git.gitGetActiveBranch(repoPath);
-  });
-
-  ipcMain.handle("git:remoteBranches", (_, repoPath) => {
-    return gitRemoteBranches(repoPath);
-  });
-
   // Debugging with the app state path here
   // if this breaks, path are not synced
   ipcMain.handle("git:commits", (_, repoPath) => {

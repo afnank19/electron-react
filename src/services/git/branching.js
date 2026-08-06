@@ -93,6 +93,12 @@ export async function gitLocalBranches(repoPath) {
   });
 }
 
+export async function gitRemoteBranches(repoPath) {
+  return runGit(repoPath, ["branch", "-r", "--format=%(refname:short)"], {
+    raw: false,
+  });
+}
+
 // If this throws, then the branch has no upstream set up.
 export async function gitCheckBranchUpstream(repoPath) {
   return runGit(repoPath, ["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"]);
