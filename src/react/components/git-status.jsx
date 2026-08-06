@@ -76,7 +76,7 @@ const GitStatus = () => {
             <button
               className="border border-neutral-700 bg-neutral-800 px-2 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-600 hover:bg-neutral-700"
               onClick={() => {
-                stagingMutation.mutate({ repoPath: repoPath, filePath: "." });
+                stagingMutation.mutate({ repoPath: repoPath, filePath: ["."] });
               }}
             >
               Stage All
@@ -84,7 +84,7 @@ const GitStatus = () => {
             <button
               className="border border-neutral-700 bg-neutral-800 px-2 text-xs font-bold shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-600 hover:bg-neutral-700"
               onClick={() => {
-                restoringMutation.mutate({ repoPath: repoPath, filePath: "." });
+                restoringMutation.mutate({ repoPath: repoPath, filePath: ["."] });
               }}
             >
               Restore All
@@ -138,7 +138,7 @@ const GitStatus = () => {
                             onClick={() => {
                               restoringMutation.mutate({
                                 repoPath: repoPath,
-                                filePath: item.path,
+                                filePath: [item.path],
                               });
                             }}
                           >
@@ -152,7 +152,7 @@ const GitStatus = () => {
                               // handleStaging(item.path);
                               stagingMutation.mutate({
                                 repoPath: repoPath,
-                                filePath: item.path,
+                                filePath: [item.path],
                               });
                             }}
                           >

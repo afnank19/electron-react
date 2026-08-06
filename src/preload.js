@@ -10,8 +10,8 @@ contextBridge.exposeInMainWorld("app", {
 contextBridge.exposeInMainWorld("gitAPI", {
   status: (repoPath) => ipcRenderer.invoke("git:status", repoPath),
   userEmail: (repoPath) => ipcRenderer.invoke("git:userEmail", repoPath),
-  stageFile: (repoPath, filePath) => ipcRenderer.invoke("git:stageFile", repoPath, filePath),
-  restoreFile: (repoPath, filePath) => ipcRenderer.invoke("git:restoreFile", repoPath, filePath),
+  stageFile: (repoPath, filePaths) => ipcRenderer.invoke("git:stageFile", repoPath, filePaths),
+  restoreStagedFile: (repoPath, filePaths) => ipcRenderer.invoke("git:restoreStagedFile", repoPath, filePaths),
   branches: (repoPath) => ipcRenderer.invoke("git:branches", repoPath),
   remoteBranches: (repoPath) => ipcRenderer.invoke("git:remoteBranches", repoPath),
   switchBranch: (repoPath, branch) => ipcRenderer.invoke("git:switchBranch", repoPath, branch),

@@ -26,6 +26,7 @@ import {
 import { gitPull, gitPush, gitRemoteAdd, gitFetch } from "./services/git/remote.js";
 import { eventBus } from "./events/eventBus.js";
 import { initializeEventForwarder } from "./events/eventForwader.js";
+import { registerGitIPC } from "./ipc/git.ipc.js";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -60,7 +61,10 @@ const createWindow = () => {
 app.whenReady().then(() => {
   registerAppStateIPC();
   registerRepoIPC();
+  registerGitIPCV1();
+
   registerGitIPC();
+
   registerLLMIPC();
   registerSettingsIPC();
   initializeToolRegistry();
@@ -89,7 +93,7 @@ app.on("window-all-closed", () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-export function registerGitIPC() {
+export function registerGitIPCV1() {
   ipcMain.handle("git:status", (_, repoPath) => {
     return git.gitStatus(repoPath);
   });
@@ -98,13 +102,13 @@ export function registerGitIPC() {
     return git.gitUserLocalEmail(repoPath);
   });
 
-  ipcMain.handle("git:stageFile", (_, repoPath, filePath) => {
-    return git.stageFile(repoPath, filePath);
-  });
+  // ipcMain.handle("git:stageFile", (_, repoPath, filePath) => {
+  //   return git.stageFile(repoPath, filePath);
+  // });
 
-  ipcMain.handle("git:restoreFile", (_, repoPath, filePath) => {
-    return git.restoreFileFromStaging(repoPath, filePath);
-  });
+  // ipcMain.handle("git:restoreFile", (_, repoPath, filePath) => {
+  //   return git.restoreFileFromStaging(repoPath, filePath);
+  // });
 
   // Returns all branches
   ipcMain.handle("git:branches", (_, repoPath) => {

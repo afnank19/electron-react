@@ -60,6 +60,12 @@ export async function gitAddAllFiles(repoPath) {
   return runGit(repoPath, "add", ".", { raw: true });
 }
 
-export async function gitRestoreFiles(repoPath, filePaths) {
+// Unstages files, but does not discard the edits
+export async function gitRestoreStagedFiles(repoPath, filePaths) {
   return runGit(repoPath, ["restore", "--staged", ...filePaths]);
+}
+
+// This will discard your unstaged edits!
+export async function gitRestoreFiles(repoPath, filePaths) {
+  return runGit(repoPath, ["restore", ...filePaths])
 }
