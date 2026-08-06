@@ -22,7 +22,6 @@ contextBridge.exposeInMainWorld("gitAPI", {
   showFileDiff: (repoPath, filePath) => ipcRenderer.invoke("git:showFileDiff", repoPath, filePath),
   getCommitLog: (repoPath, commitHash) =>
     ipcRenderer.invoke("git:getCommitLog", repoPath, commitHash),
-  checkout: (repoPath, branch) => ipcRenderer.invoke("git:checkout", { repoPath, branch }),
   getRemotes: (repoPath) => ipcRenderer.invoke("git:getRemotes", repoPath),
   addRemote: (repoPath, remote, url) => ipcRenderer.invoke("git:addRemote", repoPath, remote, url),
   push: (repoPath, remote) => ipcRenderer.invoke("git:push", repoPath, remote),

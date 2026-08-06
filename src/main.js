@@ -88,25 +88,12 @@ app.on("window-all-closed", () => {
 // code. You can also put them in separate files and import them here.
 
 export function registerGitIPCV1() {
-  // Debugging with the app state path here
-  // if this breaks, path are not synced
-  ipcMain.handle("git:commits", (_, repoPath) => {
-    const electronPath = appState.getRepoPath();
-    console.log("repo path", repoPath);
-    console.log("elec path", electronPath);
-    return gitLog(electronPath, null);
-  });
-
   ipcMain.handle("git:showFileDiff", (_, repoPath, filePath) => {
     return git.getFileDiff(repoPath, filePath);
   });
 
   ipcMain.handle("git:getCommitLog", (_, repoPath, commitHash) => {
     return getCommitLog(repoPath, commitHash);
-  });
-
-  ipcMain.handle("git:checkout", (_, { repoPath, branch }) => {
-    return git.gitCheckout(repoPath, branch);
   });
 
   ipcMain.handle("git:getRemotes", (_, repoPath) => {
