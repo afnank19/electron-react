@@ -1,7 +1,6 @@
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
-import * as git from "./services/git.service.js";
 import { exec, spawn } from "node:child_process";
 import { getRepoRoot } from "./services/git.service";
 import {
@@ -16,16 +15,9 @@ import { appState } from "./main/app-state.js";
 import { registerAppStateIPC } from "./ipc/app-state.ipc.js";
 import { initializeToolRegistry } from "./agent/tools/registry.js";
 import { initializeAgent } from "./agent/agent.js";
-import {
-  getCommitLog,
-  getLocalBranches,
-  gitDiffNumstat,
-  gitLog,
-  gitRemoteBranches,
-} from "./services/git/repo-inspection.js";
-import { gitPull, gitPush, gitRemoteAdd, gitFetch } from "./services/git/remote.js";
 import { eventBus } from "./events/eventBus.js";
 import { initializeEventForwarder } from "./events/eventForwader.js";
+import { registerGitIPC } from "./ipc/git.ipc.js";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -88,103 +80,6 @@ app.on("window-all-closed", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-
-export function registerGitIPC() {
-  ipcMain.handle("git:status", (_, repoPath) => {
-    return git.gitStatus(repoPath);
-  });
-
-  ipcMain.handle("git:userEmail", (_, repoPath) => {
-    return git.gitUserLocalEmail(repoPath);
-  });
-
-  ipcMain.handle("git:stageFile", (_, repoPath, filePath) => {
-    return git.stageFile(repoPath, filePath);
-  });
-
-  ipcMain.handle("git:restoreFile", (_, repoPath, filePath) => {
-    return git.restoreFileFromStaging(repoPath, filePath);
-  });
-
-  // Returns all branches
-  ipcMain.handle("git:branches", (_, repoPath) => {
-    return getLocalBranches(repoPath);
-  });
-
-  ipcMain.handle("git:switchBranch", (_, repoPath, branch) => {
-    return git.gitSwitchToBranch(repoPath, branch);
-  });
-
-  ipcMain.handle("git:createBranch", (_, repoPath, branch) => {
-    return git.gitCreateAndSwitchToBranch(repoPath, branch);
-  });
-
-  ipcMain.handle("git:branch", (_, repoPath) => {
-    return git.gitGetActiveBranch(repoPath);
-  });
-
-  ipcMain.handle("git:remoteBranches", (_, repoPath) => {
-    return gitRemoteBranches(repoPath);
-  });
-
-  // Debugging with the app state path here
-  // if this breaks, path are not synced
-  ipcMain.handle("git:commits", (_, repoPath) => {
-    const electronPath = appState.getRepoPath();
-    console.log("repo path", repoPath);
-    console.log("elec path", electronPath);
-    return gitLog(electronPath, null);
-  });
-
-  ipcMain.handle("git:commitChange", (_, repoPath, message) => {
-    return git.commitChanges(repoPath, message);
-  });
-
-  ipcMain.handle("git:showFileDiff", (_, repoPath, filePath) => {
-    return git.getFileDiff(repoPath, filePath);
-  });
-
-  ipcMain.handle("git:getCommitLog", (_, repoPath, commitHash) => {
-    return getCommitLog(repoPath, commitHash);
-  });
-
-  ipcMain.handle("git:checkout", (_, { repoPath, branch }) => {
-    return git.gitCheckout(repoPath, branch);
-  });
-
-  ipcMain.handle("git:getRemotes", (_, repoPath) => {
-    return git.getRemotes(repoPath);
-  });
-
-  ipcMain.handle("git:addRemote", (_, repoPath, remote, url) => {
-    return gitRemoteAdd(repoPath, remote, url);
-  });
-
-  ipcMain.handle("git:push", (_, repoPath, remote) => {
-    // return git.pushToRemote(repoPath, remote);
-    return gitPush(repoPath, remote);
-  });
-
-  ipcMain.handle("git:pull", (_, repoPath, remote) => {
-    return gitPull(repoPath, remote);
-  });
-
-  ipcMain.handle("git:fetch", (_, repoPath, remote) => {
-    return gitFetch(repoPath, remote);
-  });
-
-  ipcMain.handle("git:headDiff", (_, repoPath) => {
-    return git.getHeadDiff(repoPath);
-  });
-
-  ipcMain.handle("git:diffStat", (_, repoPath) => {
-    return git.gitDiffStat(repoPath);
-  });
-
-  ipcMain.handle("git:diffNumstat", (_, repoPath) => {
-    return gitDiffNumstat(repoPath);
-  });
-}
 
 export function registerRepoIPC() {
   ipcMain.handle("repo:openDialog", async (event) => {

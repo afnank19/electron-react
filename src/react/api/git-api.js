@@ -12,10 +12,10 @@ export async function getStatus(repoPath) {
   return parsedStatus;
 }
 
-export async function stageFile(repoPath, filePath) {
-  await window.gitAPI.stageFile(repoPath, filePath);
+export async function stageFile(repoPath, filePaths) {
+  await window.gitAPI.stageFile(repoPath, filePaths);
 }
 
-export async function unstageFile(repoPath, filePath) {
-  await window.gitAPI.restoreFile(repoPath, filePath);
+export async function unstageFile(repoPath, filePaths) {
+  await window.gitAPI.restoreStagedFile(repoPath, filePaths);
 }

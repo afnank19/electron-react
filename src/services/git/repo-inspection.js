@@ -56,16 +56,11 @@ export async function getLocalBranches(repoPath) {
   });
 }
 
-export async function getDiff(staged) {}
 
 // Placing this function here because it is repo inspection but
 // i havent decided how the diff function is going to look like,
 // so temporarily it is here
-export async function gitRemoteBranches(repoPath) {
-  return runGit(repoPath, ["branch", "-r", "--format=%(refname:short)"], {
-    raw: false,
-  });
-}
+export async function getDiff(staged) { }
 
 export async function gitDiffNumstat(repoPath) {
   return runGit(repoPath, ["diff", "--numstat"]);
@@ -73,4 +68,8 @@ export async function gitDiffNumstat(repoPath) {
 
 export function getCommitLog(repoPath, commitHash) {
   return runGit(repoPath, ["show", commitHash], { raw: true, color: false });
+}
+
+export function gitConfigUserEmail(repoPath) {
+  return runGit(repoPath, ["config", "user.email"], { raw: false, color: false});
 }
