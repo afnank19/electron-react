@@ -17,7 +17,6 @@ import { registerAppStateIPC } from "./ipc/app-state.ipc.js";
 import { initializeToolRegistry } from "./agent/tools/registry.js";
 import { initializeAgent } from "./agent/agent.js";
 import { getCommitLog, gitDiffNumstat, gitLog } from "./services/git/repo-inspection.js";
-import { gitPull, gitPush, gitRemoteAdd, gitFetch } from "./services/git/remote.js";
 import { eventBus } from "./events/eventBus.js";
 import { initializeEventForwarder } from "./events/eventForwader.js";
 import { registerGitIPC } from "./ipc/git.ipc.js";
@@ -94,27 +93,6 @@ export function registerGitIPCV1() {
 
   ipcMain.handle("git:getCommitLog", (_, repoPath, commitHash) => {
     return getCommitLog(repoPath, commitHash);
-  });
-
-  ipcMain.handle("git:getRemotes", (_, repoPath) => {
-    return git.getRemotes(repoPath);
-  });
-
-  ipcMain.handle("git:addRemote", (_, repoPath, remote, url) => {
-    return gitRemoteAdd(repoPath, remote, url);
-  });
-
-  ipcMain.handle("git:push", (_, repoPath, remote) => {
-    // return git.pushToRemote(repoPath, remote);
-    return gitPush(repoPath, remote);
-  });
-
-  ipcMain.handle("git:pull", (_, repoPath, remote) => {
-    return gitPull(repoPath, remote);
-  });
-
-  ipcMain.handle("git:fetch", (_, repoPath, remote) => {
-    return gitFetch(repoPath, remote);
   });
 
   ipcMain.handle("git:headDiff", (_, repoPath) => {
