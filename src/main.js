@@ -16,11 +16,7 @@ import { appState } from "./main/app-state.js";
 import { registerAppStateIPC } from "./ipc/app-state.ipc.js";
 import { initializeToolRegistry } from "./agent/tools/registry.js";
 import { initializeAgent } from "./agent/agent.js";
-import {
-  getCommitLog,
-  gitDiffNumstat,
-  gitLog,
-} from "./services/git/repo-inspection.js";
+import { getCommitLog, gitDiffNumstat, gitLog } from "./services/git/repo-inspection.js";
 import { gitPull, gitPush, gitRemoteAdd, gitFetch } from "./services/git/remote.js";
 import { eventBus } from "./events/eventBus.js";
 import { initializeEventForwarder } from "./events/eventForwader.js";
@@ -99,10 +95,6 @@ export function registerGitIPCV1() {
     console.log("repo path", repoPath);
     console.log("elec path", electronPath);
     return gitLog(electronPath, null);
-  });
-
-  ipcMain.handle("git:commitChange", (_, repoPath, message) => {
-    return git.commitChanges(repoPath, message);
   });
 
   ipcMain.handle("git:showFileDiff", (_, repoPath, filePath) => {
