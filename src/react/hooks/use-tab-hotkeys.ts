@@ -20,7 +20,7 @@ export function useTabHotkeys() {
   useHotkeys("ctrl+t, cmd+t", async (e) => {
     e.preventDefault();
     const path = await window.repoAPI.openRepo();
-    if (!path || path.error) return;
+    if (!path || typeof path !== "string") return;
     localStorage.setItem("repo-path", path);
     setRepoPath(path);
     addTab({ id: crypto.randomUUID(), repoPath: path });

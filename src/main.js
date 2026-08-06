@@ -1,23 +1,16 @@
-import { app, BrowserWindow, dialog, ipcMain } from "electron";
+import { app, BrowserWindow } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
 import { exec, spawn } from "node:child_process";
-import { getRepoRoot } from "./services/git.service";
-import {
-  diffSummaryAgent,
-  generateCommitMessage,
-  generateCommitMessageV2,
-  handleAgentRequest,
-  summarizeCurrentChanges,
-} from "./services/llm.service.js";
 import { registerSettingsIPC } from "./ipc/settings.ipc.js";
-import { appState } from "./main/app-state.js";
 import { registerAppStateIPC } from "./ipc/app-state.ipc.js";
 import { initializeToolRegistry } from "./agent/tools/registry.js";
 import { initializeAgent } from "./agent/agent.js";
 import { eventBus } from "./events/eventBus.js";
 import { initializeEventForwarder } from "./events/eventForwader.js";
 import { registerGitIPC } from "./ipc/git.ipc.js";
+import { registerLLMIPC } from "./ipc/llm.ipc.js";
+import { registerRepoIPC } from "./ipc/repo.ipc.js";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -77,42 +70,3 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
-
-export function registerRepoIPC() {
-  ipcMain.handle("repo:openDialog", async (event) => {
-    const win = BrowserWindow.getFocusedWindow();
-
-    const result = await dialog.showOpenDialog(win, {
-      properties: ["openDirectory"],
-    });
-
-    if (result.canceled) return null;
-
-    let repoPath = result.filePaths[0];
-    try {
-      const repoRoot = await getRepoRoot(repoPath);
-      appState.setRepoPath(repoRoot);
-      return repoRoot;
-    } catch {
-      return { error: "Selected folder is not inside a git repo" };
-    }
-  });
-}
-
-export function registerLLMIPC() {
-  ipcMain.handle("llm:commitMsg", (_) => {
-    return generateCommitMessageV2();
-  });
-
-  ipcMain.handle("llm:diffSummary", (_, repoPath) => {
-    // return diffSummaryAgent(repoPath);
-    return summarizeCurrentChanges();
-  });
-
-  ipcMain.handle("llm:agentRequest", (_, request, ctx) => {
-    return handleAgentRequest(request, ctx);
-  });
-}
