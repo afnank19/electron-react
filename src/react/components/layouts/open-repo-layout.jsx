@@ -50,9 +50,11 @@ const OpenRepoLayout = () => {
         </div>*/}
       </div>
       {/* <OpenRepo pathErr={pathErr} setPathErr={setPathErr} />*/}
-      <button className="transition-all hover:rotate-45" onClick={() => setShowSettingsModal(true)}>
-        <SettingsIcon />
-      </button>
+      <div className="flex items-center overflow-hidden">
+        <button className="transition-all hover:rotate-45 hover:text-neutral-100" onClick={() => setShowSettingsModal(true)}>
+          <SettingsIcon />
+        </button>
+      </div>
 
       <Modal isOpen={showSettingsModal} onClose={() => setShowSettingsModal(false)}>
         <SettingsModal onClose={() => setShowSettingsModal(false)} />
