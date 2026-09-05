@@ -6,6 +6,11 @@
 }
 
 @font-face {
+  font-family: "Tex";
+  src: url("assets/fonts/Tex.otf");
+}
+
+@font-face {
   font-family: "DM Sans";
   src: url("assets/fonts/DMSans-Regular.ttf");
 }
@@ -16,16 +21,13 @@
 }
 
 @theme {
-  --font-display: "Neuve Grotesque", sans-serif;
+  --font-display: "Tex", sans-serif;
   --font-mono: "Ioskeley Mono", monospace;
-  --color-orange-700: #c25313; /* darkest */
-  --color-orange-600: #d46a2b;
-  --color-orange-500: #e2834a;
 }
 
 body {
-  background-color: #0f0f12;
-  color: #e0d9c1;
+  background-color: #0f0f0f;
+  color: #e0e0e0;
 }
 
 input[type="radio"] {

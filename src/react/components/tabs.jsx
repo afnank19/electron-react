@@ -41,8 +41,8 @@ const Tabs = () => {
   return (
     <>
       <div className="flex items-center gap-1 px-2 py-1 select-none">
-        <div className="mr-1 border-2 border-lime-200 px-1 py-0">
-          <p className="font-bold text-lime-200">Circe</p>
+        <div className="mr-1 border-2 border-orange-600 px-1 py-0">
+          <p className="font-bold text-orange-500">Circe</p>
         </div>
         <div className="flex gap-1 overflow-x-auto">
           {tabs.map((tab, idx) => {

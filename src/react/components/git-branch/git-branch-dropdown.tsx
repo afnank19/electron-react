@@ -93,6 +93,10 @@ export function GitBranchDropdown({ trigger }: ItemDropdownProps) {
     };
   }, []);
 
+  const filteredItems = items?.filter(item =>
+    item.toLowerCase().includes(inputValue.toLowerCase())
+  );
+
   return (
     <div ref={containerRef} className="relative z-50 inline-flex">
       <div
@@ -135,7 +139,7 @@ export function GitBranchDropdown({ trigger }: ItemDropdownProps) {
             {isLoading && <div>Loading...</div>}
 
             {!isLoading &&
-              items.map((branch) => (
+              filteredItems.map((branch) => (
                 <button
                   key={branch}
                   type="button"
