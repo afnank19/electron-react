@@ -3,7 +3,7 @@ export const Modal = ({ isOpen, onClose, children }) => {
 
   return (
     <div
-      className="bg-black/00 absolute top-0 left-0 z-1 flex h-full w-full items-center justify-center backdrop-blur-xs"
+      className="bg-black/00 absolute top-0 left-0 z-50 flex h-full w-full items-center justify-center backdrop-blur-xs"
       onClick={onClose}
     >
       <div

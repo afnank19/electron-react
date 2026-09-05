@@ -22,11 +22,6 @@ export const Logs = () => {
     <div className="h-full overflow-auto border border-neutral-800">
       <h1 className="flex items-center justify-between border-b border-neutral-800 p-2 font-bold">
         <span>Logs</span>
-        <div className="flex gap-1.5">
-          <span className="h-3 w-3 rounded-full bg-red-500" />
-          <span className="h-3 w-3 rounded-full bg-yellow-500" />
-          <span className="h-3 w-3 rounded-full bg-green-500" />
-        </div>
       </h1>
       <div className="">
         {gitLogs.map((log) => {
