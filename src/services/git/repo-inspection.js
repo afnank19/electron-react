@@ -73,3 +73,9 @@ export function getCommitLog(repoPath, commitHash) {
 export function gitConfigUserEmail(repoPath) {
   return runGit(repoPath, ["config", "user.email"], { raw: false, color: false});
 }
+
+// returns the ahead/behind count of a local branch
+// with the remote branch
+export function gitAheadBehindCount(repoPath) {
+  return runGit(repoPath, ["rev-list", "--left-right", "--count", "HEAD...@{upstream}"]);
+}
