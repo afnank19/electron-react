@@ -70,7 +70,7 @@ export const SettingsModal = ({ onClose }) => {
           Cancel
         </button>
         <button
-          className="border border-neutral-200 bg-neutral-100 px-1 py-0.5 text-xs font-bold text-neutral-800 shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-300 hover:bg-neutral-200"
+          className="border border-neutral-200 bg-neutral-100 px-1 py-0.5 text-xs text-neutral-800 shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-300 hover:bg-neutral-200"
           onClick={handleSave}
         >
           Save

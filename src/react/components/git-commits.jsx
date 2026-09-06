@@ -79,7 +79,7 @@ export const GitCommits = () => {
             {genCommitMsgMutation.isPending ? "Generating" : "Generate with LLM"}
           </button>
           <button
-            className="w-fit border border-neutral-200 bg-neutral-100 px-2 py-0.5 text-xs font-bold text-neutral-800 shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-300 hover:bg-neutral-200"
+            className="w-fit border border-neutral-200 bg-neutral-100 px-2 py-0.5 text-xs text-neutral-800 shadow-[3px_3px_0px_rgba(0,0,0,0.9)] hover:border-neutral-300 hover:bg-neutral-200"
             onClick={() => {
               commitMutation.mutate(commitMsg, {
                 onSuccess: (log) => {

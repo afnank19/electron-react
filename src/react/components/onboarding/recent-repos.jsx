@@ -54,10 +54,12 @@ export const RecentRepos = () => {
               onClick={() => {
                 handleRecentTabClick(recentTab.repoPath);
               }}
-              className="my-1.5 flex w-full items-center gap-2 rounded-lg border border-neutral-700 bg-neutral-800 px-2 text-left hover:border-neutral-300 hover:bg-neutral-100"
+              className="my-1.5 py-1 flex w-full items-center gap-2 rounded-lg border border-neutral-700 bg-neutral-800 px-2 text-left hover:border-neutral-300 hover:bg-neutral-100 hover:text-black"
             >
-              <div className="h-1 w-1 rounded bg-zinc-400" />
-              {recentTab.repoPath}
+              <div className="h-1 w-1 rounded-full bg-zinc-400" />
+              <p className="text-sm ">
+                {recentTab.repoPath}
+              </p>
             </button>
           );
         })}

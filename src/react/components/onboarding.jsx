@@ -19,7 +19,7 @@ export const Onboarding = () => {
             <p>You currently have NO REPOSITORY opened.</p>
           </div>
           <OpenRepo>
-            <p className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-neutral-100 px-2 py-1 text-sm font-bold text-neutral-800 shadow-xl hover:border-neutral-300 hover:bg-neutral-200">
+            <p className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-neutral-100 px-2 py-1 text-sm text-neutral-800 shadow-xl hover:border-neutral-300 hover:bg-neutral-200">
               <FolderGit size={18} />
               Open Repository
             </p>
