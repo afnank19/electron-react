@@ -54,7 +54,7 @@ export const RecentRepos = () => {
               onClick={() => {
                 handleRecentTabClick(recentTab.repoPath);
               }}
-              className="my-1.5 flex w-full items-center gap-2 rounded-lg border border-neutral-700 bg-neutral-800 px-2 text-left hover:border-orange-600 hover:bg-orange-700"
+              className="my-1.5 flex w-full items-center gap-2 rounded-lg border border-neutral-700 bg-neutral-800 px-2 text-left hover:border-neutral-300 hover:bg-neutral-100"
             >
               <div className="h-1 w-1 rounded bg-zinc-400" />
               {recentTab.repoPath}

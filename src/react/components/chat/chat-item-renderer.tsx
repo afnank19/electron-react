@@ -33,7 +33,7 @@ export function ChatItemRenderer({ item }: ChatItemRendererProps) {
     }
     case "log": {
       return (
-        <div className="m-1 border-l border-orange-500 px-2 font-mono text-sm">
+        <div className="m-1 border-l border-neutral-300 px-2 font-mono text-sm">
           <p>LOG: {item.message}</p>
         </div>
       );

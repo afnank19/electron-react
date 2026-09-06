@@ -28,7 +28,7 @@ export const Logs = () => {
           return (
             <div
               style={{ whiteSpace: "pre-wrap" }}
-              className="m-1 border-l border-orange-500 px-2 font-mono text-sm"
+              className="m-1 border-l border-neutral-300 px-2 font-mono text-sm"
             >
               {log}
             </div>

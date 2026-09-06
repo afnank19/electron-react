@@ -70,7 +70,7 @@ const GitBranch = () => {
           ></input>
           <button
             onClick={handleNewBranchCreationClick}
-            className="flex items-center gap-1 rounded-lg border border-orange-600 bg-orange-700 px-2 text-xs font-bold shadow-xl hover:border-orange-500 hover:bg-orange-600"
+            className="flex items-center gap-1 rounded-lg border border-neutral-200 bg-neutral-100 px-2 text-xs font-bold text-neutral-800 shadow-xl hover:border-neutral-300 hover:bg-neutral-200"
           >
             <GitBranchIcon size={16} />
             Create and Switch to Branch
