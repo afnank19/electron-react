@@ -30,6 +30,7 @@ contextBridge.exposeInMainWorld("gitAPI", {
   getHeadDiff: (repoPath) => ipcRenderer.invoke("git:headDiff", repoPath),
   diffStat: (repoPath) => ipcRenderer.invoke("git:diffStat", repoPath),
   diffNumstat: (repoPath) => ipcRenderer.invoke("git:diffNumstat", repoPath),
+  aheadBehindCount: (repoPath) => ipcRenderer.invoke("git:ABCount", repoPath)
 });
 
 contextBridge.exposeInMainWorld("repoAPI", {

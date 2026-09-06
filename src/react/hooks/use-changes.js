@@ -1,9 +1,10 @@
 // Not triggering a refresh on mutations here because staging doesn't really affect other parts
 // of the app
 
-import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
-import { getDiffNumstat, getStatus, stageFile, unstageFile } from "../api/git-api";
+import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getAheadBehindCount, getDiffNumstat, getStatus, stageFile, unstageFile } from "../api/git-api";
 import { useQueryInvalidation } from "../queries/use-query-invalidation";
+import { queryKeyStore } from "../queries/queryKeys";
 
 export function useChanges(repoPath) {
   // console.log("useChanges repoPath", repoPath);
@@ -100,4 +101,15 @@ export function useChanges(repoPath) {
     stagingMutation,
     restoringMutation,
   };
+}
+
+
+// Ahead behind count for the current branch you are on.
+export function useAheadBehindCount(repoPath) {
+  const aheadBehindQuery = useQuery({
+    queryKey: queryKeyStore.aheadBehind(repoPath),
+    queryFn: () => { return getAheadBehindCount(repoPath) },
+  })
+
+  return aheadBehindQuery;
 }

@@ -22,6 +22,7 @@ interface GitAPI {
   getHeadDiff(repoPath: string): Promise<string>;
   diffStat(repoPath: string): Promise<string>;
   diffNumstat(repoPath: string): Promise<string>;
+  aheadBehindCount(repoPath: string): Promise<string>;
 }
 
 interface AppAPI {

@@ -3,17 +3,20 @@ import { OpenRepo } from "../open-repo";
 import { useRepoStore } from "../../state/repo-store";
 import ErrorMsg from "../primitives/error-msg";
 import MaskedText from "../primitives/masked-text";
-import { FolderGit, SettingsIcon } from "lucide-react";
+import { ArrowDown, ArrowUp, FolderGit, MoveDownIcon, MoveUpIcon, SettingsIcon } from "lucide-react";
 import { Modal } from "../primitives/modal";
 import { SettingsModal } from "../modals/settings-modal";
 import { getFolderName } from "../../utils/utils";
 import { GitBranchDropdown } from "../git-branch/git-branch-dropdown";
 import { GitBranchDropdownTrigger } from "../git-branch/git-dropdown-trigger";
+import { useAheadBehindCount } from "../../hooks/use-changes";
 
 const OpenRepoLayout = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
   const [userEmail, setUserEmail] = useState("************");
   const [pathErr, setPathErr] = useState("");
+
+  const aheadBehindQuery = useAheadBehindCount(repoPath);
 
   const [showSettingsModal, setShowSettingsModal] = useState(false);
 
@@ -43,11 +46,25 @@ const OpenRepoLayout = () => {
         <div className="cursor-pointer border-r border-neutral-800 px-2 py-1 select-none hover:bg-neutral-800">
           <GitBranchDropdown trigger={<GitBranchDropdownTrigger />} />
         </div>
-        {/* <div>
-          <GitBranchDropdown
-            trigger={<div>Branching buddy</div>}
-          />
-        </div>*/}
+        {aheadBehindQuery.isLoading ? null :
+          aheadBehindQuery.isError ? null :
+            aheadBehindQuery.data[0] === "-1" ? null :
+              <div className="border-r border-neutral-800 px-2 py-1">
+                <p className="text-left text-xs text-neutral-400">Ahead / Behind</p>
+                <div>
+                  <div className="flex gap-4">
+                    <p className="flex items-center">
+                      {aheadBehindQuery.data[0]}
+                      <MoveUpIcon size={14} strokeWidth={1.5} className="text-neutral-400"/>
+                    </p>
+                    <p className="flex items-center">
+                      {aheadBehindQuery.data[1]}
+                      <MoveDownIcon size={14} strokeWidth={1.5} className="text-neutral-400"/>
+                    </p>
+                  </div>
+                </div>
+              </div>
+        }
       </div>
       {/* <OpenRepo pathErr={pathErr} setPathErr={setPathErr} />*/}
       <div className="flex items-center overflow-hidden">

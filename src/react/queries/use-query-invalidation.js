@@ -25,6 +25,12 @@ export function useQueryInvalidation() {
     });
   };
 
+  const invalidateAheadBehind = (repoPath) => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeyStore.aheadBehind(repoPath)
+    })
+  }
+
   const invalidateAll = (repoPath) => {
     invalidateCommits(repoPath);
     invalidateStatus(repoPath);
@@ -38,6 +44,7 @@ export function useQueryInvalidation() {
     });
 
     invalideRemotes(repoPath);
+    invalidateAheadBehind(repoPath);
   };
 
   return {
