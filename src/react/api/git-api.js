@@ -19,3 +19,9 @@ export async function stageFile(repoPath, filePaths) {
 export async function unstageFile(repoPath, filePaths) {
   await window.gitAPI.restoreStagedFile(repoPath, filePaths);
 }
+
+export async function getAheadBehindCount(repoPath) {
+  const res = await window.gitAPI.aheadBehindCount(repoPath);
+  const parsedCount = res.split("\t");
+  return parsedCount;
+}

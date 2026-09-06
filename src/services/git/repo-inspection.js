@@ -1,4 +1,5 @@
 import { appState } from "../../main/app-state";
+import { gitCheckBranchUpstream } from "./branching";
 import { runGit } from "./git-runner";
 
 // Intended as a function for the LLM to use as a tool
@@ -76,6 +77,12 @@ export function gitConfigUserEmail(repoPath) {
 
 // returns the ahead/behind count of a local branch
 // with the remote branch
-export function gitAheadBehindCount(repoPath) {
-  return runGit(repoPath, ["rev-list", "--left-right", "--count", "HEAD...@{upstream}"]);
+export async function gitAheadBehindCount(repoPath) {
+  try {
+    await gitCheckBranchUpstream(repoPath);
+    return runGit(repoPath, ["rev-list", "--left-right", "--count", "HEAD...@{upstream}"]);
+
+  } catch (e) {
+    return "-1\t-1";
+  }
 }

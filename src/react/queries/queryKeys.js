@@ -5,4 +5,5 @@ export const queryKeyStore = {
   branch: (repoPath) => ["branches", repoPath],
   activeBranch: (repoPath) => ["activeBranch", repoPath],
   remote: (repoPath) => ["remote", repoPath],
+  aheadBehind: (repoPath) => ["aheadBehind", repoPath]
 };
