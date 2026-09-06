@@ -10,7 +10,7 @@ module.exports = {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      platforms: ['windows'],
+      platforms: ['win32'],
       config: {},
     },
     {
