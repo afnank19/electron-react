@@ -1,7 +1,7 @@
 {
   "name": "circe",
   "productName": "Circe",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A Graphical user interface to speed up working with multiple repositories easier, powered by AI!",
   "main": ".vite/build/main.js",
   "private": true,
