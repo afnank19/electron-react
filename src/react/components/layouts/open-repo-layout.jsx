@@ -10,11 +10,14 @@ import { getFolderName } from "../../utils/utils";
 import { GitBranchDropdown } from "../git-branch/git-branch-dropdown";
 import { GitBranchDropdownTrigger } from "../git-branch/git-dropdown-trigger";
 import { AheadBehindIndicator } from "../git-branch/ahead-behind-indicator";
+import { useRepoFetchOnActivation } from "../../hooks/use-repo-fetch-on-activation";
 
 const OpenRepoLayout = () => {
   const repoPath = useRepoStore((state) => state.repoPath);
   const [userEmail, setUserEmail] = useState("************");
   const [pathErr, setPathErr] = useState("");
+
+  useRepoFetchOnActivation(repoPath);
 
   const [showSettingsModal, setShowSettingsModal] = useState(false);
 
