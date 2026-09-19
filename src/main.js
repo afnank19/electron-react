@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, dialog } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
 import { exec, spawn } from "node:child_process";
@@ -11,6 +11,7 @@ import { initializeEventForwarder } from "./events/eventForwader.js";
 import { registerGitIPC } from "./ipc/git.ipc.js";
 import { registerLLMIPC } from "./ipc/llm.ipc.js";
 import { registerRepoIPC } from "./ipc/repo.ipc.js";
+import { checkGitAvailability } from "./services/system/git-availability.js";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -38,6 +39,7 @@ if (!gotTheLock) {
     mainWindow = new BrowserWindow({
       width: 1200,
       height: 800,
+      title: "Circe",
       autoHideMenuBar: true,
       webPreferences: {
         preload: path.join(__dirname, "preload.js"),
@@ -54,7 +56,21 @@ if (!gotTheLock) {
     // mainWindow.webContents.openDevTools();
   };
 
-  app.whenReady().then(() => {
+  app.whenReady().then(async () => {
+    const gitStatus = await checkGitAvailability();
+
+    if (!gitStatus.installed) {
+      await dialog.showMessageBox({
+        type: "error",
+        title: "Git Required",
+        message: "Git could not be found on this system.",
+        detail: "Install Git and restart Circe.",
+      });
+
+      app.quit();
+      return;
+    }
+
     registerAppStateIPC();
     registerRepoIPC();
     registerGitIPC();
