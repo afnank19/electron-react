@@ -2,7 +2,13 @@
 // of the app
 
 import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAheadBehindCount, getDiffNumstat, getStatus, stageFile, unstageFile } from "../api/git-api";
+import {
+  getAheadBehindCount,
+  getDiffNumstat,
+  getStatus,
+  stageFile,
+  unstageFile,
+} from "../api/git-api";
 import { useQueryInvalidation } from "../queries/use-query-invalidation";
 import { queryKeyStore } from "../queries/queryKeys";
 
@@ -103,13 +109,13 @@ export function useChanges(repoPath) {
   };
 }
 
-
 // Ahead behind count for the current branch you are on.
 export function useAheadBehindCount(repoPath) {
   const aheadBehindQuery = useQuery({
     queryKey: queryKeyStore.aheadBehind(repoPath),
-    queryFn: () => { return getAheadBehindCount(repoPath) },
-  })
+    queryFn: () => getAheadBehindCount(repoPath),
+    enabled: Boolean(repoPath),
+  });
 
   return aheadBehindQuery;
 }
